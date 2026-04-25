@@ -1,0 +1,7 @@
+{
+  "name": "Agronova_Frontend",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
