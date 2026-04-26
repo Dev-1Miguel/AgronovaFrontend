@@ -30,9 +30,4 @@ export const DASHBOARD_MODULES: DashboardModule[] = [
     description: 'Gestiona la cosecha lista.',
     icon: 'basket',
   },
-  {
-    title: 'Mercado (Ventas)',
-    description: 'Registra las ventas.',
-    icon: 'storefront',
-  },
 ];
