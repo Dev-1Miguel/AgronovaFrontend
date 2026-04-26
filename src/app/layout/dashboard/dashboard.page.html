@@ -1,0 +1,27 @@
+<ion-header class="dashboard-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" aria-label="Abrir menu">
+        <ion-icon slot="icon-only" name="menu" aria-hidden="true"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>Dashboard - AgriGestor</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="dashboard-content">
+  <main class="dashboard-shell">
+    <h1>MÓDULOS OPERATIVOS</h1>
+
+    <section class="module-list" aria-label="Módulos operativos">
+      @for (module of modules; track module.title) {
+        <app-module-card
+          [title]="module.title"
+          [description]="module.description"
+          [icon]="module.icon"
+        />
+      }
+    </section>
+  </main>
+</ion-content>
