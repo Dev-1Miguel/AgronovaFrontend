@@ -2,6 +2,7 @@ export interface DashboardModule {
   title: string;
   description: string;
   icon: string;
+  route?: string;
 }
 
 export const DASHBOARD_MODULES: DashboardModule[] = [
@@ -9,6 +10,7 @@ export const DASHBOARD_MODULES: DashboardModule[] = [
     title: 'Cultivos',
     description: 'Gestiona tus cultivos activos.',
     icon: 'leaf',
+    route: '/cultivos',
   },
   {
     title: 'Tareas',

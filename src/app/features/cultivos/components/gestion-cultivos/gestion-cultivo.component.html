@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-title>Gestión de Cultivos</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="abrirFormulario()">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Nuevo
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="cultivos-content ion-padding">
+
+  <ion-searchbar
+    placeholder="Buscar cultivo"
+    [(ngModel)]="busqueda">
+  </ion-searchbar>
+
+  <ion-card
+    class="cultivo-card"
+    *ngFor="let cultivo of cultivosFiltrados()">
+
+    <ion-card-content>
+      <div class="cultivo-row">
+
+        <div class="icon-box">
+          <ion-icon name="leaf-outline"></ion-icon>
+        </div>
+
+        <div class="cultivo-info">
+          <h2>{{ cultivo.nombre }}</h2>
+          <p>{{ obtenerCategoria(cultivo) || 'Categoría no asignada' }}</p>
+          <p>{{ obtenerUbicacion(cultivo) || 'Ubicación no asignada' }}</p>
+        </div>
+
+        <ion-buttons>
+          <ion-button color="primary" (click)="editarCultivo(cultivo)">
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+
+          <ion-button color="danger" (click)="eliminarCultivo(cultivo)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+
+      </div>
+    </ion-card-content>
+
+  </ion-card>
+
+</ion-content>
