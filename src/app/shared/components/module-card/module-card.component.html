@@ -1,4 +1,11 @@
-<ion-item class="module-card" button detail lines="none" [attr.aria-label]="title">
+<ion-item
+  class="module-card"
+  button
+  detail
+  lines="none"
+  [routerLink]="route || null"
+  [attr.aria-label]="title"
+>
   <ion-icon slot="start" [name]="icon" aria-hidden="true"></ion-icon>
 
   <ion-label>
