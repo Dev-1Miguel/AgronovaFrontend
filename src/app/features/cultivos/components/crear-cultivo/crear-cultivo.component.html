@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="success">
     <ion-buttons slot="start">
-      <ion-button routerLink="/cultivos">
+      <ion-button (click)="volverAGestion()">
         <ion-icon name="arrow-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -69,7 +69,7 @@
     [disabled]="guardando || cargandoCatalogos || !formularioValido()"
     (click)="guardar()">
     <ion-icon name="checkmark-outline" slot="start"></ion-icon>
-    Guardar cultivo
+    Registrar cultivo
   </ion-button>
 
 </ion-content>

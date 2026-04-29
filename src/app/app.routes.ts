@@ -17,6 +17,11 @@ export const routes: Routes = [
       import('./features/cultivos/components/crear-cultivo/crear-cultivo.component').then((m) => m.CrearCultivoComponent),
   },
   {
+    path: 'cultivos/editar/:id',
+    loadComponent: () =>
+      import('./features/cultivos/components/editar-cultivo/editar-cultivo.component').then((m) => m.EditarCultivoComponent),
+  },
+  {
     path: 'home',
     redirectTo: 'dashboard',
     pathMatch: 'full',

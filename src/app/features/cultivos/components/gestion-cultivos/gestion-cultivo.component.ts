@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   IonButton,
   IonButtons,
@@ -49,7 +49,7 @@ import { CultivosService } from '../../../../core/service/cultivos.service';
     IonToolbar,
   ],
 })
-export class CultivosPage implements OnInit {
+export class CultivosPage {
 
   busqueda: string = '';
   cultivos: Cultivo[] = [];
@@ -70,7 +70,7 @@ export class CultivosPage implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  ionViewWillEnter(): void {
     this.cargarCultivos();
   }
 
@@ -100,7 +100,7 @@ export class CultivosPage implements OnInit {
   }
 
   editarCultivo(cultivo: Cultivo): void {
-    console.log('Editar', cultivo);
+    this.router.navigate(['/cultivos/editar', cultivo.id]);
   }
 
   eliminarCultivo(cultivo: Cultivo): void {

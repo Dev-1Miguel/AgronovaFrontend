@@ -1,7 +1,6 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
 import {
   IonButton,
   IonButtons,
@@ -39,7 +38,6 @@ import { CultivosService } from '../../../../core/service/cultivos.service';
   imports: [
     CommonModule,
     FormsModule,
-    RouterLink,
     IonButton,
     IonButtons,
     IonCard,
@@ -71,7 +69,7 @@ export class CrearCultivoComponent implements OnInit {
   constructor(
     private readonly catalogosService: CatalogosService,
     private readonly cultivosService: CultivosService,
-    private readonly router: Router,
+    private readonly location: Location,
   ) {
     addIcons({
       arrowBackOutline,
@@ -119,7 +117,7 @@ export class CrearCultivoComponent implements OnInit {
       .pipe(finalize(() => this.guardando = false))
       .subscribe({
         next: () => {
-          this.router.navigate(['/cultivos']);
+          this.volverAGestion();
         },
         error: (error) => {
           console.error('Error al crear cultivo', error);
@@ -133,5 +131,9 @@ export class CrearCultivoComponent implements OnInit {
         && this.cultivo.idCategoria
         && this.cultivo.idUbicacion
     );
+  }
+
+  volverAGestion(): void {
+    this.location.back();
   }
 }
