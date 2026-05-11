@@ -22,6 +22,21 @@ export const routes: Routes = [
       import('./features/cultivos/components/editar-cultivo/editar-cultivo.component').then((m) => m.EditarCultivoComponent),
   },
   {
+    path: 'agricultores',
+    loadComponent: () =>
+      import('./features/agricultores/components/gestion-agricultores/gestion-agricultores.component').then((m) => m.GestionAgricultoresComponent),
+  },
+  {
+    path: 'agricultores/crear',
+    loadComponent: () =>
+      import('./features/agricultores/components/crear-agricultor/crear-agricultor.component').then((m) => m.CrearAgricultorComponent),
+  },
+  {
+    path: 'agricultores/editar/:id',
+    loadComponent: () =>
+      import('./features/agricultores/components/editar-agricultor/editar-agricultor.component').then((m) => m.EditarAgricultorComponent),
+  },
+  {
     path: 'home',
     redirectTo: 'dashboard',
     pathMatch: 'full',

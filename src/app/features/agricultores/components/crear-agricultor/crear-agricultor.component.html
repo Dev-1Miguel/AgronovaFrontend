@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-buttons slot="start">
+      <ion-button (click)="volverAGestion()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>Nuevo Agricultor</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="form-content ion-padding">
+
+  <ion-card class="form-card">
+    <ion-card-content>
+
+      <h2 class="form-title">Informaci&oacute;n del agricultor</h2>
+
+      <ion-item class="form-item" lines="none">
+        <ion-icon name="person-outline" slot="start"></ion-icon>
+        <ion-input
+          placeholder="Nombre del agricultor"
+          [(ngModel)]="agricultor.nombre">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="form-item" lines="none">
+        <ion-icon name="calendar-outline" slot="start"></ion-icon>
+        <ion-input
+          type="number"
+          placeholder="Edad"
+          [(ngModel)]="agricultor.edad">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="form-item" lines="none">
+        <ion-icon name="location-outline" slot="start"></ion-icon>
+        <ion-input
+          placeholder="Zona"
+          [(ngModel)]="agricultor.zona">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="form-item" lines="none">
+        <ion-icon name="briefcase-outline" slot="start"></ion-icon>
+        <ion-input
+          placeholder="Experiencia"
+          [(ngModel)]="agricultor.experiencia">
+        </ion-input>
+      </ion-item>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button
+    expand="block"
+    class="btn-guardar"
+    [disabled]="guardando || !formularioValido()"
+    (click)="guardar()">
+    <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+    Registrar agricultor
+  </ion-button>
+
+</ion-content>

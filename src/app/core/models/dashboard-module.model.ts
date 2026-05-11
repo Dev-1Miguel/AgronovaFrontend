@@ -26,6 +26,7 @@ export const DASHBOARD_MODULES: DashboardModule[] = [
     title: 'Agricultores',
     description: 'Administra tu personal.',
     icon: 'people',
+    route: '/agricultores',
   },
   {
     title: 'Productos',

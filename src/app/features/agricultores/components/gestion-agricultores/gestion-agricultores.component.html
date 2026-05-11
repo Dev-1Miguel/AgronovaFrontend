@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-title>Gesti&oacute;n de Agricultores</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="abrirFormulario()">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Nuevo
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="agricultores-content ion-padding">
+
+  <ion-searchbar
+    placeholder="Buscar agricultor"
+    [(ngModel)]="busqueda">
+  </ion-searchbar>
+
+  <ion-card
+    class="agricultor-card"
+    *ngFor="let agricultor of agricultoresFiltrados()">
+
+    <ion-card-content>
+      <div class="agricultor-row">
+
+        <div class="icon-box">
+          <ion-icon name="people-outline"></ion-icon>
+        </div>
+
+        <div class="agricultor-info">
+          <h2>{{ agricultor.nombre }}</h2>
+          <p>Edad: {{ agricultor.edad }} a&ntilde;os</p>
+          <p>Zona: {{ agricultor.zona }}</p>
+          <p>Experiencia: {{ agricultor.experiencia }}</p>
+        </div>
+
+        <ion-buttons>
+          <ion-button color="primary" (click)="editarAgricultor(agricultor)">
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+
+          <ion-button color="danger" (click)="eliminarAgricultor(agricultor)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+
+      </div>
+    </ion-card-content>
+
+  </ion-card>
+
+</ion-content>
