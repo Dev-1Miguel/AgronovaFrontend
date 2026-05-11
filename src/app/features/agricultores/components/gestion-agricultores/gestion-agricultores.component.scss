@@ -1,0 +1,61 @@
+ion-content.agricultores-content {
+  --background: #f4f8ef;
+}
+
+ion-toolbar {
+  --background: #2f8f3a;
+  --color: #fff;
+}
+
+ion-searchbar {
+  --background: #ffffff;
+  --color: #222;
+  --placeholder-color: #777;
+  --icon-color: #777;
+  margin-bottom: 12px;
+  border-radius: 10px;
+}
+
+.agricultor-card {
+  --background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.agricultor-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.icon-box {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #c8f7d2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-box ion-icon {
+  font-size: 26px;
+  color: #2e7d32;
+}
+
+.agricultor-info {
+  flex: 1;
+}
+
+.agricultor-info h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #222;
+}
+
+.agricultor-info p {
+  margin: 4px 0;
+  color: #666;
+  font-size: 14px;
+}
