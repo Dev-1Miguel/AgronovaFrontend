@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-title>Gestión de Tareas</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="abrirFormulario()">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Nueva
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="tareas-content ion-padding">
+  <ion-searchbar
+    placeholder="Buscar tarea"
+    [(ngModel)]="busqueda">
+  </ion-searchbar>
+
+  <ion-card
+    class="tarea-card"
+    *ngFor="let tarea of tareasFiltradas()">
+
+    <ion-card-content>
+      <div class="tarea-row">
+        <div class="icon-box">
+          <ion-icon name="reader-outline"></ion-icon>
+        </div>
+
+        <div class="tarea-info">
+          <h2>{{ tarea.nombre }}</h2>
+          <p>{{ obtenerTipoTarea(tarea) }}</p>
+          <p>{{ obtenerCultivo(tarea) }}</p>
+          <p>{{ tarea.fechaInicio }} - {{ tarea.fechaFin }}</p>
+          <p>{{ obtenerAgricultores(tarea) }}</p>
+          <p class="estado">{{ tarea.estado || 'Activo' }}</p>
+        </div>
+
+        <ion-buttons>
+          <ion-button
+            color="success"
+            *ngIf="puedeCompletar(tarea)"
+            (click)="completarTarea(tarea)">
+            <ion-icon name="checkmark-done-outline"></ion-icon>
+          </ion-button>
+
+          <ion-button color="primary" (click)="editarTarea(tarea)">
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+
+          <ion-button color="danger" (click)="eliminarTarea(tarea)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

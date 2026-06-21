@@ -20,4 +20,8 @@ export class CatalogosService {
   getUbicaciones(): Observable<CatalogoReferencia[]> {
     return this.http.get<CatalogoReferencia[]>(`${this.endpoint}/ubicaciones`);
   }
+
+  getTiposTarea(): Observable<CatalogoReferencia[]> {
+    return this.http.get<CatalogoReferencia[]>(`${this.endpoint}/tipos-tarea`);
+  }
 }

@@ -16,6 +16,7 @@ export const DASHBOARD_MODULES: DashboardModule[] = [
     title: 'Tareas',
     description: 'Asigna y completa tareas.',
     icon: 'reader-outline',
+    route: '/tareas',
   },
   {
     title: 'Inventario',
