@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-title>Gestión de Insumos</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="abrirFormulario()">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Nuevo
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="insumos-content ion-padding">
+  <ion-searchbar
+    placeholder="Buscar insumo"
+    [(ngModel)]="busqueda">
+  </ion-searchbar>
+
+  <ion-card
+    class="insumo-card"
+    *ngFor="let insumo of insumosFiltrados()">
+    <ion-card-content>
+      <div class="insumo-row">
+        <div class="icon-box">
+          <ion-icon name="archive-outline"></ion-icon>
+        </div>
+
+        <div class="insumo-info">
+          <h2>{{ insumo.descripcion }}</h2>
+          <p>{{ obtenerTipoInsumo(insumo) }}</p>
+          <p>{{ insumo.cantidad }} {{ insumo.unidadMedida }}</p>
+        </div>
+
+        <ion-buttons>
+          <ion-button color="primary" (click)="editarInsumo(insumo)">
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+
+          <ion-button color="danger" (click)="eliminarInsumo(insumo)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
