@@ -1,0 +1,104 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-buttons slot="start">
+      <ion-button (click)="volverAGestion()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>Editar Tarea</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="form-content ion-padding">
+  <ion-card class="form-card">
+    <ion-card-content>
+      <h2 class="form-title">Información de la tarea</h2>
+
+      <ion-item class="form-item" lines="none">
+        <ion-icon name="reader-outline" slot="start"></ion-icon>
+        <ion-input
+          placeholder="Nombre de la tarea"
+          [(ngModel)]="tarea.nombre">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="form-item" lines="none">
+        <ion-icon name="reorder-three-outline" slot="start"></ion-icon>
+        <ion-select
+          placeholder="Seleccionar tipo de tarea"
+          [(ngModel)]="tarea.idTipoTarea">
+          <ion-select-option
+            *ngFor="let tipo of tiposTarea"
+            [value]="tipo.id">
+            {{ tipo.nombre }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item class="form-item" lines="none">
+        <ion-icon name="leaf-outline" slot="start"></ion-icon>
+        <ion-select
+          placeholder="Seleccionar cultivo"
+          [(ngModel)]="tarea.idCultivo">
+          <ion-select-option
+            *ngFor="let cultivo of cultivos"
+            [value]="cultivo.id">
+            {{ cultivo.nombre }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item class="form-item" lines="none">
+        <ion-icon name="people-outline" slot="start"></ion-icon>
+        <ion-select
+          interface="popover"
+          placeholder="Seleccionar agricultores"
+          [(ngModel)]="tarea.idAgricultores"
+          [multiple]="true">
+          <ion-select-option
+            *ngFor="let agricultor of agricultores"
+            [value]="agricultor.id">
+            {{ agricultor.nombre }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item class="form-item" lines="none">
+        <ion-icon name="calendar-outline" slot="start"></ion-icon>
+        <ion-input
+          type="date"
+          placeholder="Fecha de inicio"
+          [(ngModel)]="tarea.fechaInicio">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="form-item" lines="none">
+        <ion-icon name="calendar-outline" slot="start"></ion-icon>
+        <ion-input
+          type="date"
+          placeholder="Fecha de fin"
+          [(ngModel)]="tarea.fechaFin">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="form-item textarea-item" lines="none">
+        <ion-icon name="reader-outline" slot="start"></ion-icon>
+        <ion-textarea
+          placeholder="Descripción de la tarea"
+          auto-grow="true"
+          [(ngModel)]="tarea.descripcion">
+        </ion-textarea>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button
+    expand="block"
+    class="btn-guardar"
+    [disabled]="guardando || cargando || !formularioValido()"
+    (click)="guardar()">
+    <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+    Actualizar tarea
+  </ion-button>
+</ion-content>
