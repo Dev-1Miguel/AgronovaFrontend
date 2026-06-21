@@ -22,6 +22,7 @@ export const DASHBOARD_MODULES: DashboardModule[] = [
     title: 'Inventario',
     description: 'Controla tus insumos.',
     icon: 'file-tray-full',
+    route: '/insumos',
   },
   {
     title: 'Agricultores',

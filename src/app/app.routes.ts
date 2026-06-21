@@ -22,6 +22,21 @@ export const routes: Routes = [
       import('./features/cultivos/components/editar-cultivo/editar-cultivo.component').then((m) => m.EditarCultivoComponent),
   },
   {
+    path: 'insumos',
+    loadComponent: () =>
+      import('./features/insumos/components/gestion-insumos/gestion-insumos.component').then((m) => m.GestionInsumosComponent),
+  },
+  {
+    path: 'insumos/crear',
+    loadComponent: () =>
+      import('./features/insumos/components/crear-insumo/crear-insumo.component').then((m) => m.CrearInsumoComponent),
+  },
+  {
+    path: 'insumos/editar/:id',
+    loadComponent: () =>
+      import('./features/insumos/components/editar-insumo/editar-insumo.component').then((m) => m.EditarInsumoComponent),
+  },
+  {
     path: 'tareas',
     loadComponent: () =>
       import('./features/tareas/components/gestion-tareas/gestion-tareas.component').then((m) => m.GestionTareasComponent),
