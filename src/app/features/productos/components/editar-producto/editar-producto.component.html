@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-buttons slot="start">
+      <ion-button (click)="volverAGestion()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>Editar Producto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="form-content ion-padding">
+  <ion-card class="form-card">
+    <ion-card-content>
+      <h2 class="form-title">Información del producto</h2>
+
+      <ion-item class="form-item" lines="none">
+        <ion-icon name="basket-outline" slot="start"></ion-icon>
+        <ion-input
+          placeholder="Nombre del producto"
+          [(ngModel)]="producto.nombre">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="form-item" lines="none">
+        <ion-icon name="leaf-outline" slot="start"></ion-icon>
+        <ion-input
+          placeholder="Descripción"
+          [(ngModel)]="producto.descripcion">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="form-item" lines="none">
+        <ion-icon name="basket-outline" slot="start"></ion-icon>
+        <ion-input
+          type="number"
+          placeholder="Stock"
+          [(ngModel)]="producto.cantidadStock">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="form-item" lines="none">
+        <ion-icon name="basket-outline" slot="start"></ion-icon>
+        <ion-input
+          type="number"
+          step="0.01"
+          placeholder="Precio por caja"
+          [(ngModel)]="producto.precioCaja">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="form-item" lines="none">
+        <ion-icon name="leaf-outline" slot="start"></ion-icon>
+        <ion-select
+          placeholder="Seleccionar cultivo"
+          [(ngModel)]="producto.idCultivo">
+          <ion-select-option
+            *ngFor="let cultivo of cultivos"
+            [value]="cultivo.id">
+            {{ cultivo.nombre }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button
+    expand="block"
+    class="btn-guardar"
+    [disabled]="guardando || cargando || !formularioValido()"
+    (click)="guardar()">
+    <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+    Actualizar producto
+  </ion-button>
+</ion-content>

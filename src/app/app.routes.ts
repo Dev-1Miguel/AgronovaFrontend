@@ -37,6 +37,21 @@ export const routes: Routes = [
       import('./features/insumos/components/editar-insumo/editar-insumo.component').then((m) => m.EditarInsumoComponent),
   },
   {
+    path: 'productos',
+    loadComponent: () =>
+      import('./features/productos/components/gestion-productos/gestion-productos.component').then((m) => m.GestionProductosComponent),
+  },
+  {
+    path: 'productos/crear',
+    loadComponent: () =>
+      import('./features/productos/components/crear-producto/crear-producto.component').then((m) => m.CrearProductoComponent),
+  },
+  {
+    path: 'productos/editar/:id',
+    loadComponent: () =>
+      import('./features/productos/components/editar-producto/editar-producto.component').then((m) => m.EditarProductoComponent),
+  },
+  {
     path: 'tareas',
     loadComponent: () =>
       import('./features/tareas/components/gestion-tareas/gestion-tareas.component').then((m) => m.GestionTareasComponent),

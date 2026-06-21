@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-title>Gestión de Productos</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="abrirFormulario()">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Nuevo
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="productos-content ion-padding">
+  <ion-searchbar
+    placeholder="Buscar producto"
+    [(ngModel)]="busqueda">
+  </ion-searchbar>
+
+  <ion-card
+    class="producto-card"
+    *ngFor="let producto of productosFiltrados()">
+    <ion-card-content>
+      <div class="producto-row">
+        <div class="icon-box">
+          <ion-icon name="basket-outline"></ion-icon>
+        </div>
+
+        <div class="producto-info">
+          <h2>{{ producto.nombre }}</h2>
+          <p>{{ producto.descripcion || 'Sin descripción' }}</p>
+          <p>{{ obtenerCultivo(producto) }}</p>
+          <p>Stock: {{ producto.cantidadStock }}</p>
+          <p>${{ producto.precioCaja.toFixed(2) }} / caja</p>
+        </div>
+
+        <ion-buttons>
+          <ion-button color="primary" (click)="editarProducto(producto)">
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+
+          <ion-button color="danger" (click)="eliminarProducto(producto)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
