@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-title>Gestión de Ventas</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="crearVenta()">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Nueva
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ventas-content ion-padding">
+  <div *ngIf="cargando" class="empty-state">
+    Cargando ventas...
+  </div>
+
+  <div *ngIf="!cargando && ventas.length === 0" class="empty-state">
+    No hay ventas registradas.
+  </div>
+
+  <ion-card class="venta-card" *ngFor="let venta of ventas">
+    <ion-card-content>
+      <div class="venta-row">
+        <div class="icon-box">
+          <ion-icon name="receipt-outline"></ion-icon>
+        </div>
+
+        <div class="venta-info">
+          <div class="venta-header">
+            <h2>{{ venta.cliente }}</h2>
+            <ion-badge [color]="esAnulada(venta) ? 'danger' : 'success'">
+              {{ venta.estado }}
+            </ion-badge>
+          </div>
+
+          <p>
+            <ion-icon name="calendar-outline"></ion-icon>
+            {{ formatearFecha(venta.fecha) }}
+          </p>
+          <p>
+            <ion-icon name="cash-outline"></ion-icon>
+            {{ formatearTotal(venta.total) }}
+          </p>
+          <p>
+            <ion-icon name="person-outline"></ion-icon>
+            {{ venta.detalles.length }} productos
+          </p>
+        </div>
+
+        <ion-buttons>
+          <ion-button
+            color="danger"
+            [disabled]="anulandoId === venta.id || esAnulada(venta)"
+            (click)="anularVenta(venta)">
+            <ion-icon name="close-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+

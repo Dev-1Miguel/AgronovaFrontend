@@ -22,6 +22,46 @@ export const routes: Routes = [
       import('./features/cultivos/components/editar-cultivo/editar-cultivo.component').then((m) => m.EditarCultivoComponent),
   },
   {
+    path: 'insumos',
+    loadComponent: () =>
+      import('./features/insumos/components/gestion-insumos/gestion-insumos.component').then((m) => m.GestionInsumosComponent),
+  },
+  {
+    path: 'insumos/crear',
+    loadComponent: () =>
+      import('./features/insumos/components/crear-insumo/crear-insumo.component').then((m) => m.CrearInsumoComponent),
+  },
+  {
+    path: 'insumos/editar/:id',
+    loadComponent: () =>
+      import('./features/insumos/components/editar-insumo/editar-insumo.component').then((m) => m.EditarInsumoComponent),
+  },
+  {
+    path: 'productos',
+    loadComponent: () =>
+      import('./features/productos/components/gestion-productos/gestion-productos.component').then((m) => m.GestionProductosComponent),
+  },
+  {
+    path: 'productos/crear',
+    loadComponent: () =>
+      import('./features/productos/components/crear-producto/crear-producto.component').then((m) => m.CrearProductoComponent),
+  },
+  {
+    path: 'productos/editar/:id',
+    loadComponent: () =>
+      import('./features/productos/components/editar-producto/editar-producto.component').then((m) => m.EditarProductoComponent),
+  },
+  {
+    path: 'ventas',
+    loadComponent: () =>
+      import('./features/ventas/components/gestion-ventas/gestion-ventas.component').then((m) => m.GestionVentasComponent),
+  },
+  {
+    path: 'ventas/crear',
+    loadComponent: () =>
+      import('./features/ventas/components/crear-venta/crear-venta.component').then((m) => m.CrearVentaComponent),
+  },
+  {
     path: 'tareas',
     loadComponent: () =>
       import('./features/tareas/components/gestion-tareas/gestion-tareas.component').then((m) => m.GestionTareasComponent),

@@ -1,0 +1,143 @@
+.form-content {
+  --background: #f4f8ef;
+}
+
+ion-toolbar {
+  --background: #2f8f3a;
+  --color: #fff;
+}
+
+.form-card,
+.details-card {
+  --background: #ffffff;
+  background: #ffffff;
+  border-radius: 18px;
+  color: #1f2a1f;
+  margin-top: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #2f8f3a;
+}
+
+.section-gap {
+  margin-top: 24px;
+}
+
+.form-item {
+  --background: #ffffff;
+  --color: #1f2a1f;
+  --highlight-color-focused: #2f8f3a;
+  --inner-padding-end: 12px;
+  --min-height: 49px;
+  --padding-start: 12px;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  padding: 4px 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.form-item ion-icon {
+  color: #2f8f3a;
+  font-size: 20px;
+}
+
+ion-input,
+ion-select {
+  --color: #1f2a1f;
+  --placeholder-color: #6f766f;
+  --placeholder-opacity: 1;
+  color: #1f2a1f;
+  width: 100%;
+}
+
+ion-select::part(icon) {
+  color: #6f766f;
+  opacity: 1;
+}
+
+ion-select::part(placeholder),
+ion-select::part(text) {
+  color: #1f2a1f;
+}
+
+.btn-agregar,
+.btn-guardar {
+  --background: #2f8f3a;
+  --background-activated: #267832;
+  --border-radius: 16px;
+  --color: #ffffff;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.btn-agregar {
+  margin-top: 8px;
+}
+
+.btn-guardar {
+  margin-top: 28px;
+  height: 52px;
+  box-shadow: 0 6px 14px rgba(47, 143, 58, 0.28);
+}
+
+.empty-state {
+  color: #5d6a5d;
+  font-weight: 600;
+  padding: 12px 0;
+  text-align: center;
+}
+
+.detail-item {
+  align-items: center;
+  border-bottom: 1px solid #e7efe7;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 12px 0;
+}
+
+.detail-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.detail-main strong {
+  color: #1f2a1f;
+}
+
+.detail-main span,
+.detail-actions span {
+  color: #5d6a5d;
+  font-size: 14px;
+}
+
+.detail-actions {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.total-row {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding-top: 12px;
+}
+
+.total-row span {
+  color: #4f5c4f;
+  font-weight: 700;
+}
+
+.total-row strong {
+  color: #2f8f3a;
+  font-size: 20px;
+}
+
