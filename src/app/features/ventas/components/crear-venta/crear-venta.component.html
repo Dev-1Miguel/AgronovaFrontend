@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-buttons slot="start">
+      <ion-button (click)="volverAGestion()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>Nueva Venta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="form-content ion-padding">
+  <ion-card class="form-card">
+    <ion-card-content>
+      <h2 class="form-title">Datos de la venta</h2>
+
+      <ion-item class="form-item" lines="none">
+        <ion-icon name="person-outline" slot="start"></ion-icon>
+        <ion-input
+          placeholder="Cliente"
+          [(ngModel)]="venta.cliente">
+        </ion-input>
+      </ion-item>
+
+      <h2 class="form-title section-gap">Agregar productos</h2>
+
+      <ion-item class="form-item" lines="none">
+        <ion-icon name="receipt-outline" slot="start"></ion-icon>
+        <ion-select
+          placeholder="Seleccionar producto"
+          [(ngModel)]="productoSeleccionado">
+          <ion-select-option
+            *ngFor="let producto of productos"
+            [value]="producto">
+            {{ producto.nombre }} - {{ producto.precioCaja | currency:'USD':'symbol':'1.2-2' }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item class="form-item" lines="none">
+        <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+        <ion-input
+          type="number"
+          placeholder="Cantidad"
+          [(ngModel)]="cantidad">
+        </ion-input>
+      </ion-item>
+
+      <ion-button
+        expand="block"
+        class="btn-agregar"
+        [disabled]="!productoSeleccionado || cantidad === null || cantidad <= 0"
+        (click)="agregarDetalle()">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Agregar producto
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="details-card">
+    <ion-card-content>
+      <h2 class="form-title">Productos en la venta</h2>
+
+      <div *ngIf="detalles.length === 0" class="empty-state">
+        Aún no hay productos en la venta.
+      </div>
+
+      <div class="detail-item" *ngFor="let detalle of detalles; let i = index">
+        <div class="detail-main">
+          <strong>{{ detalle.nombreProducto || detalle.idProducto }}</strong>
+          <span>{{ detalle.cantidad }} x {{ detalle.precioUnitario | currency:'USD':'symbol':'1.2-2' }}</span>
+        </div>
+
+        <div class="detail-actions">
+          <span>{{ formatearSubtotal(detalle.subtotal) }}</span>
+          <ion-button fill="clear" color="danger" (click)="eliminarDetalle(i)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+
+      <div class="total-row">
+        <span>TOTAL</span>
+        <strong>{{ formatearTotal() }}</strong>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button
+    expand="block"
+    class="btn-guardar"
+    [disabled]="guardando || cargandoProductos || !formularioValido()"
+    (click)="guardar()">
+    <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+    Registrar venta
+  </ion-button>
+</ion-content>
+

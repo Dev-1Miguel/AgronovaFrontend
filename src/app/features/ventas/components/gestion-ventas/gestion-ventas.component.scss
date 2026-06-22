@@ -1,0 +1,80 @@
+.ventas-content {
+  --background: #f4f8ef;
+}
+
+ion-toolbar {
+  --background: #2f8f3a;
+  --color: #fff;
+}
+
+.empty-state {
+  color: #5d6a5d;
+  font-weight: 600;
+  margin: 18px 6px;
+  text-align: center;
+}
+
+.venta-card {
+  --background: #ffffff;
+  background: #ffffff;
+  border-radius: 18px;
+  color: #1f2a1f;
+  margin-top: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.venta-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.icon-box {
+  align-items: center;
+  background: #e9f5ea;
+  border-radius: 16px;
+  color: #2f8f3a;
+  display: flex;
+  flex: 0 0 52px;
+  font-size: 24px;
+  height: 52px;
+  justify-content: center;
+  width: 52px;
+}
+
+.venta-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.venta-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.venta-header h2 {
+  color: #2f8f3a;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.venta-info p {
+  align-items: center;
+  color: #4f5c4f;
+  display: flex;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+.venta-info ion-icon {
+  color: #2f8f3a;
+}
+
+ion-button {
+  margin-top: 2px;
+}
+

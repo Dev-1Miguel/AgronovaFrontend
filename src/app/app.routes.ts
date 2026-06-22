@@ -52,6 +52,16 @@ export const routes: Routes = [
       import('./features/productos/components/editar-producto/editar-producto.component').then((m) => m.EditarProductoComponent),
   },
   {
+    path: 'ventas',
+    loadComponent: () =>
+      import('./features/ventas/components/gestion-ventas/gestion-ventas.component').then((m) => m.GestionVentasComponent),
+  },
+  {
+    path: 'ventas/crear',
+    loadComponent: () =>
+      import('./features/ventas/components/crear-venta/crear-venta.component').then((m) => m.CrearVentaComponent),
+  },
+  {
     path: 'tareas',
     loadComponent: () =>
       import('./features/tareas/components/gestion-tareas/gestion-tareas.component').then((m) => m.GestionTareasComponent),
