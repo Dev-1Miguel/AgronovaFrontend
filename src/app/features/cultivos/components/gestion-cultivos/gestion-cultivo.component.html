@@ -1,9 +1,9 @@
 <ion-header>
-  <ion-toolbar color="success">
-    <ion-title>Gestión de Cultivos</ion-title>
+  <ion-toolbar class="cultivos-toolbar">
+    <ion-title>Cultivos</ion-title>
 
     <ion-buttons slot="end">
-      <ion-button (click)="abrirFormulario()">
+      <ion-button class="nuevo-button" (click)="abrirFormulario()">
         <ion-icon name="add-outline" slot="start"></ion-icon>
         Nuevo
       </ion-button>
@@ -12,42 +12,93 @@
 </ion-header>
 
 <ion-content class="cultivos-content ion-padding">
-
   <ion-searchbar
+    class="cultivos-searchbar"
     placeholder="Buscar cultivo"
     [(ngModel)]="busqueda">
   </ion-searchbar>
 
-  <ion-card
-    class="cultivo-card"
-    *ngFor="let cultivo of cultivosFiltrados()">
+  <section class="cultivos-section">
+    <div class="section-heading">
+      <div class="section-icon">
+        <ion-icon name="leaf-outline"></ion-icon>
+      </div>
 
-    <ion-card-content>
-      <div class="cultivo-row">
+      <div class="section-copy">
+        <h2>Mis cultivos</h2>
+        <p>Gestiona tus cultivos registrados</p>
+      </div>
+    </div>
 
-        <div class="icon-box">
+    <div class="list-state" *ngIf="!cargandoCultivos; else loadingState">
+      <div class="empty-state" *ngIf="!cultivos.length">
+        <div class="empty-icon">
           <ion-icon name="leaf-outline"></ion-icon>
         </div>
-
-        <div class="cultivo-info">
-          <h2>{{ cultivo.nombre }}</h2>
-          <p>{{ obtenerCategoria(cultivo) || 'Categoría no asignada' }}</p>
-          <p>{{ obtenerUbicacion(cultivo) || 'Ubicación no asignada' }}</p>
-        </div>
-
-        <ion-buttons>
-          <ion-button color="primary" (click)="editarCultivo(cultivo)">
-            <ion-icon name="create-outline"></ion-icon>
-          </ion-button>
-
-          <ion-button color="danger" (click)="eliminarCultivo(cultivo)">
-            <ion-icon name="trash-outline"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-
+        <h3>No hay cultivos registrados</h3>
+        <p>Cuando agregues un cultivo, aparecera aqui con su categoria y ubicacion.</p>
+        <ion-button class="empty-cta" (click)="abrirFormulario()">
+          <ion-icon name="add-outline" slot="start"></ion-icon>
+          Nuevo cultivo
+        </ion-button>
       </div>
-    </ion-card-content>
 
-  </ion-card>
+      <div class="empty-state" *ngIf="cultivos.length && !cultivosFiltrados().length">
+        <div class="empty-icon">
+          <ion-icon name="leaf-outline"></ion-icon>
+        </div>
+        <h3>Sin resultados</h3>
+        <p>Prueba con otro nombre para encontrar el cultivo que buscas.</p>
+      </div>
 
+      <ion-card class="cultivo-card" *ngFor="let cultivo of cultivosFiltrados()">
+        <ion-card-content>
+          <div class="card-icon" aria-hidden="true">
+            <ion-icon name="flower-outline"></ion-icon>
+          </div>
+
+          <div class="card-body">
+            <div class="card-main">
+              <h3>{{ cultivo.nombre }}</h3>
+
+              <div class="card-middle-row">
+                <span class="categoria-chip">{{ obtenerCategoria(cultivo) || 'Categoria no asignada' }}</span>
+              </div>
+
+              <div class="card-bottom-row">
+                <ion-icon name="location-outline"></ion-icon>
+                <span>{{ obtenerUbicacion(cultivo) || 'Ubicacion no asignada' }}</span>
+              </div>
+            </div>
+
+            <ion-buttons class="acciones-grupo">
+              <ion-button class="accion-button editar-button" (click)="editarCultivo(cultivo)">
+                <ion-icon name="create-outline"></ion-icon>
+              </ion-button>
+
+              <ion-button class="accion-button eliminar-button" (click)="eliminarCultivo(cultivo)">
+                <ion-icon name="trash-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </section>
+
+  <ng-template #loadingState>
+    <div class="loading-state">
+      <div class="loading-card" *ngFor="let item of [1, 2, 3]">
+        <div class="loading-card-row">
+          <div class="loading-icon"></div>
+          <div class="loading-copy">
+            <div class="loading-line loading-line-title"></div>
+            <div class="loading-line loading-line-chip"></div>
+            <div class="loading-line loading-line-text"></div>
+          </div>
+          <div class="loading-actions"></div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
 </ion-content>

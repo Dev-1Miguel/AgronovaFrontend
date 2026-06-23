@@ -20,7 +20,9 @@ import { addIcons } from 'ionicons';
 import {
   addOutline,
   createOutline,
+  flowerOutline,
   leafOutline,
+  locationOutline,
   trashOutline
 } from 'ionicons/icons';
 import { finalize, forkJoin } from 'rxjs';
@@ -65,7 +67,9 @@ export class CultivosPage {
     addIcons({
       addOutline,
       createOutline,
+      flowerOutline,
       leafOutline,
+      locationOutline,
       trashOutline
     });
   }
