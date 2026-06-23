@@ -1,0 +1,41 @@
+.insumos-card {
+  margin: 0 0 16px;
+}
+
+.insumos-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+.insumos-loading,
+.insumos-empty {
+  color: var(--ion-color-medium);
+  font-size: 0.95rem;
+  margin: 12px 0;
+}
+
+.insumo-item {
+  --padding-start: 0;
+  margin-bottom: 12px;
+}
+
+.insumos-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.insumo-row {
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 12px;
+}
+
+.insumo-text {
+  display: grid;
+  gap: 4px;
+}

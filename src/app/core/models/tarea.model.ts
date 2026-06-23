@@ -1,3 +1,8 @@
+export interface InsumoAsignado {
+  idInsumo: string;
+  cantidad: number;
+}
+
 export interface Tarea {
   id: string;
   nombre: string;
@@ -6,6 +11,7 @@ export interface Tarea {
   idCultivo: string;
   idTipoTarea: string;
   idAgricultores?: string[];
+  insumosAsignados?: InsumoAsignado[];
   descripcion: string;
   estado?: string;
 }
@@ -18,6 +24,7 @@ export interface CreateTareaDto {
   idTipoTarea: string;
   descripcion: string;
   idAgricultores?: string[];
+  insumosAsignados?: InsumoAsignado[];
 }
 
 export interface UpdateTareaDto {
@@ -28,6 +35,7 @@ export interface UpdateTareaDto {
   idTipoTarea?: string;
   descripcion?: string;
   idAgricultores?: string[];
+  insumosAsignados?: InsumoAsignado[];
 }
 
 export interface UpdateTareaEstadoDto {

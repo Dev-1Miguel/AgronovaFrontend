@@ -27,10 +27,12 @@ import { finalize, forkJoin } from 'rxjs';
 
 import { Agricultor } from '../../../../core/models/agricultor.model';
 import { CatalogoReferencia, Cultivo } from '../../../../core/models/cultivo.model';
+import { Insumo } from '../../../../core/models/insumo.model';
 import { Tarea } from '../../../../core/models/tarea.model';
 import { AgricultoresService } from '../../../../core/service/agricultores.service';
 import { CatalogosService } from '../../../../core/service/catalogos.service';
 import { CultivosService } from '../../../../core/service/cultivos.service';
+import { InsumosService } from '../../../../core/service/insumos.service';
 import { TareasService } from '../../../../core/service/tareas.service';
 
 @Component({
@@ -60,11 +62,13 @@ export class GestionTareasComponent {
   private tiposTareaPorId = new Map<string, string>();
   private cultivosPorId = new Map<string, string>();
   private agricultoresPorId = new Map<string, string>();
+  private insumosPorId = new Map<string, string>();
 
   constructor(
     private readonly tareasService: TareasService,
     private readonly catalogosService: CatalogosService,
     private readonly cultivosService: CultivosService,
+    private readonly insumosService: InsumosService,
     private readonly agricultoresService: AgricultoresService,
     private readonly router: Router,
   ) {
@@ -89,13 +93,15 @@ export class GestionTareasComponent {
       tareas: this.tareasService.getTareas(),
       tiposTarea: this.catalogosService.getTiposTarea(),
       cultivos: this.cultivosService.getCultivos(),
+      insumos: this.insumosService.getInsumos(),
       agricultores: this.agricultoresService.getAgricultores(),
     })
       .pipe(finalize(() => this.cargandoTareas = false))
       .subscribe({
-        next: ({ tareas, tiposTarea, cultivos, agricultores }) => {
+        next: ({ tareas, tiposTarea, cultivos, insumos, agricultores }) => {
           this.tiposTareaPorId = this.crearMapaCatalogo(tiposTarea);
           this.cultivosPorId = this.crearMapaEntidades(cultivos);
+          this.insumosPorId = this.crearMapaInsumos(insumos);
           this.agricultoresPorId = this.crearMapaEntidades(agricultores);
           this.tareas = tareas;
         },
@@ -171,6 +177,27 @@ export class GestionTareasComponent {
     return nombres.length ? nombres.join(', ') : 'Sin agricultores asignados';
   }
 
+  obtenerResumenInsumos(tarea: Tarea): string {
+    const insumosAsignados = tarea.insumosAsignados ?? [];
+
+    if (!insumosAsignados.length) {
+      return 'Sin insumos asignados';
+    }
+
+    const resumen = insumosAsignados
+      .slice(0, 2)
+      .map((item) => {
+        const nombre = this.insumosPorId.get(item.idInsumo) ?? 'Insumo no encontrado';
+        return `${nombre} x ${item.cantidad}`;
+      });
+
+    const restante = insumosAsignados.length - resumen.length;
+
+    return restante > 0
+      ? `${resumen.join(', ')} +${restante} más`
+      : resumen.join(', ');
+  }
+
   puedeCompletar(tarea: Tarea): boolean {
     return tarea.estado !== 'Completada';
   }
@@ -188,4 +215,10 @@ export class GestionTareasComponent {
   private crearMapaEntidades<T extends { id: string; nombre: string }>(items: T[]): Map<string, string> {
     return new Map(items.map((item) => [item.id, item.nombre]));
   }
+
+  private crearMapaInsumos(items: Insumo[]): Map<string, string> {
+    return new Map(items.map((item) => [item.id, item.descripcion]));
+  }
 }
+
+
