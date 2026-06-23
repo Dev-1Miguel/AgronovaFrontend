@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+﻿import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -34,6 +34,7 @@ import { CatalogosService } from '../../../../core/service/catalogos.service';
 import { CultivosService } from '../../../../core/service/cultivos.service';
 import { InsumosService } from '../../../../core/service/insumos.service';
 import { TareasService } from '../../../../core/service/tareas.service';
+import { TareasGanttComponent } from '../tareas-gantt/tareas-gantt.component';
 
 @Component({
   selector: 'app-gestion-tareas',
@@ -53,10 +54,12 @@ import { TareasService } from '../../../../core/service/tareas.service';
     IonSearchbar,
     IonTitle,
     IonToolbar,
+    TareasGanttComponent,
   ],
 })
 export class GestionTareasComponent {
   busqueda = '';
+  vistaActual: 'lista' | 'gantt' = 'lista';
   tareas: Tarea[] = [];
   cargandoTareas = false;
   private tiposTareaPorId = new Map<string, string>();
@@ -143,6 +146,10 @@ export class GestionTareasComponent {
     });
   }
 
+  cambiarVista(vista: 'lista' | 'gantt'): void {
+    this.vistaActual = vista;
+  }
+
   tareasFiltradas(): Tarea[] {
     const termino = this.busqueda.trim().toLowerCase();
 
@@ -194,7 +201,7 @@ export class GestionTareasComponent {
     const restante = insumosAsignados.length - resumen.length;
 
     return restante > 0
-      ? `${resumen.join(', ')} +${restante} más`
+      ? `${resumen.join(', ')} +${restante} mas`
       : resumen.join(', ');
   }
 
@@ -220,5 +227,3 @@ export class GestionTareasComponent {
     return new Map(items.map((item) => [item.id, item.descripcion]));
   }
 }
-
-

@@ -1,4 +1,4 @@
-ion-content.tareas-content {
+﻿ion-content.tareas-content {
   --background: #f4f8ef;
 }
 
@@ -14,6 +14,32 @@ ion-searchbar {
   --icon-color: #777;
   margin-bottom: 12px;
   border-radius: 10px;
+}
+
+.vista-selector {
+  display: inline-flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 6px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.vista-button {
+  border: 0;
+  background: transparent;
+  color: #58705c;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.vista-button.is-active {
+  background: #2f8f3a;
+  color: #ffffff;
 }
 
 .tarea-card {
@@ -63,4 +89,19 @@ ion-searchbar {
 .tarea-info .estado {
   color: #2e7d32;
   font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .vista-selector {
+    display: flex;
+  }
+
+  .vista-button {
+    flex: 1;
+  }
+
+  .tarea-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
