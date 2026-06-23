@@ -36,4 +36,10 @@ export const DASHBOARD_MODULES: DashboardModule[] = [
     icon: 'basket',
     route: '/productos',
   },
+  {
+    title: 'Ventas',
+    description: 'Registra y consulta ventas activas.',
+    icon: 'cash-outline',
+    route: '/ventas',
+  },
 ];
