@@ -22,6 +22,11 @@ export const routes: Routes = [
       import('./features/cultivos/components/editar-cultivo/editar-cultivo.component').then((m) => m.EditarCultivoComponent),
   },
   {
+    path: 'categorias-cultivo',
+    loadComponent: () =>
+      import('./features/catalogos/components/gestion-categorias-cultivo/gestion-categorias-cultivo.component').then((m) => m.GestionCategoriasCultivoComponent),
+  },
+  {
     path: 'insumos',
     loadComponent: () =>
       import('./features/insumos/components/gestion-insumos/gestion-insumos.component').then((m) => m.GestionInsumosComponent),

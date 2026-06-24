@@ -17,6 +17,18 @@ export class CatalogosService {
     return this.http.get<CatalogoReferencia[]>(`${this.endpoint}/categorias-cultivo`);
   }
 
+  createCategoriaCultivo(categoria: { nombre: string }): Observable<CatalogoReferencia> {
+    return this.http.post<CatalogoReferencia>(`${this.endpoint}/categorias-cultivo`, categoria);
+  }
+
+  updateCategoriaCultivo(id: string, categoria: { nombre?: string }): Observable<CatalogoReferencia> {
+    return this.http.put<CatalogoReferencia>(`${this.endpoint}/categorias-cultivo/${id}`, categoria);
+  }
+
+  deleteCategoriaCultivo(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.endpoint}/categorias-cultivo/${id}`);
+  }
+
   getUbicaciones(): Observable<CatalogoReferencia[]> {
     return this.http.get<CatalogoReferencia[]>(`${this.endpoint}/ubicaciones`);
   }

@@ -4,7 +4,7 @@ ion-content.cultivos-content {
 
 .cultivos-toolbar {
   --background: linear-gradient(135deg, #234f31 0%, #2f7a42 100%);
-  --color: #ffffff;
+  --color: #fff;
   --border-width: 0;
   --min-height: 58px;
   --padding-end: 10px;
@@ -12,7 +12,7 @@ ion-content.cultivos-content {
 }
 
 .cultivos-toolbar ion-title {
-  color: #ffffff;
+  color: #fff;
   font-size: 18px;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -21,7 +21,7 @@ ion-content.cultivos-content {
 
 .nuevo-button {
   --background: rgba(255, 255, 255, 0.14);
-  --color: #ffffff;
+  --color: #fff;
   --border-radius: 999px;
   --padding-start: 14px;
   --padding-end: 14px;
@@ -31,7 +31,7 @@ ion-content.cultivos-content {
 }
 
 .cultivos-searchbar {
-  --background: #ffffff;
+  --background: #fff;
   --color: #111827;
   --placeholder-color: #6b7280;
   --icon-color: #6b7280;
@@ -41,15 +41,44 @@ ion-content.cultivos-content {
   padding: 0;
 }
 
-.cultivos-section {
+.cultivos-section,
+.list-state,
+.loading-state,
+.card-body {
   display: grid;
+}
+
+.cultivos-section {
   gap: 16px;
 }
 
+.list-state,
+.loading-state,
+.card-body {
+  gap: 14px;
+}
+
 .section-heading {
-  display: flex;
   align-items: center;
+  display: flex;
   gap: 12px;
+}
+
+.section-label {
+  color: #5c745f;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  margin: 0 0 6px;
+}
+
+.section-icon,
+.card-icon,
+.empty-icon,
+.loading-icon {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
 }
 
 .section-icon {
@@ -58,9 +87,6 @@ ion-content.cultivos-content {
   border-radius: 999px;
   background: #dcfce7;
   color: #166534;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   flex: 0 0 auto;
   box-shadow: inset 0 0 0 1px rgba(40, 95, 58, 0.06);
 }
@@ -69,51 +95,57 @@ ion-content.cultivos-content {
   font-size: 22px;
 }
 
-.section-copy h2 {
-  margin: 0 0 4px;
+.section-copy h2,
+.card-main h3,
+.empty-state h3 {
   color: #18241b;
+  margin: 0;
+}
+
+.section-copy h2 {
   font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.03em;
 }
 
-.section-copy p {
-  margin: 0;
+.section-copy p,
+.card-bottom-row,
+.empty-state p {
   color: #637364;
   font-size: 14px;
 }
 
-.list-state,
-.loading-state {
-  display: grid;
-  gap: 14px;
+.cultivo-card,
+.empty-state,
+.loading-card {
+  border: 1px solid rgba(40, 95, 58, 0.09);
+  border-radius: 24px;
 }
 
 .cultivo-card {
-  --background: #ffffff;
+  --background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), #fbfcf8);
   margin: 0;
-  border: 1px solid rgba(40, 95, 58, 0.09);
-  border-radius: 24px;
-  box-shadow: 0 10px 22px rgba(27, 47, 31, 0.07);
 }
 
-.cultivo-card ion-card-content {
+.cultivo-card ion-card-content,
+.loading-card {
   padding: 22px 20px 18px;
-  display: grid;
-  grid-template-columns: 56px minmax(0, 1fr);
-  align-items: start;
-  gap: 16px;
 }
 
-.card-icon {
+.cultivo-card ion-card-content,
+.loading-card-row {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 56px minmax(0, 1fr);
+}
+
+.card-icon,
+.loading-icon {
   width: 56px;
   height: 56px;
   border-radius: 999px;
   background: rgba(118, 185, 92, 0.18);
   color: #285f3a;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   box-shadow: inset 0 0 0 1px rgba(40, 95, 58, 0.06);
 }
 
@@ -121,32 +153,12 @@ ion-content.cultivos-content {
   font-size: 24px;
 }
 
-.card-body {
-  min-width: 0;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 12px;
-}
-
-.card-main {
-  min-width: 0;
-  display: grid;
-  gap: 12px;
-}
-
 .card-main h3 {
-  margin: 0;
-  color: #18241b;
   font-size: 20px;
-  line-height: 1.2;
   font-weight: 700;
   letter-spacing: -0.03em;
+  line-height: 1.2;
   word-break: break-word;
-}
-
-.card-middle-row {
-  display: flex;
-  align-items: center;
 }
 
 .categoria-chip {
@@ -162,18 +174,9 @@ ion-content.cultivos-content {
 }
 
 .card-bottom-row {
-  display: flex;
   align-items: center;
+  display: flex;
   gap: 8px;
-  color: #637364;
-  font-size: 14px;
-  line-height: 1.35;
-}
-
-.card-bottom-row ion-icon {
-  font-size: 16px;
-  color: #49634d;
-  flex: 0 0 auto;
 }
 
 .acciones-grupo {
@@ -181,7 +184,6 @@ ion-content.cultivos-content {
   justify-content: flex-end;
   gap: 10px;
   width: 100%;
-  margin: 2px 0 0;
 }
 
 .accion-button {
@@ -204,15 +206,8 @@ ion-content.cultivos-content {
   color: #dc2626;
 }
 
-.empty-state,
-.loading-card {
-  border-radius: 24px;
-  background: #ffffff;
-  border: 1px solid rgba(40, 95, 58, 0.09);
-  box-shadow: 0 10px 22px rgba(27, 47, 31, 0.07);
-}
-
 .empty-state {
+  background: #fff;
   padding: 24px 20px;
   text-align: center;
 }
@@ -223,9 +218,6 @@ ion-content.cultivos-content {
   margin: 0 auto 12px;
   border-radius: 16px;
   background: #dcfce7;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   color: #166534;
 }
 
@@ -234,46 +226,25 @@ ion-content.cultivos-content {
 }
 
 .empty-state h3 {
-  margin: 0 0 8px;
-  color: #18241b;
-  font-size: 18px;
+  margin-bottom: 8px;
 }
 
 .empty-state p {
   margin: 0;
-  color: #637364;
-  font-size: 14px;
   line-height: 1.45;
 }
 
 .empty-cta {
   margin-top: 16px;
   --background: #234f31;
-  --color: #ffffff;
+  --color: #fff;
   --border-radius: 14px;
   text-transform: none;
   font-weight: 700;
 }
 
 .loading-card {
-  padding: 22px 20px 18px;
-}
-
-.loading-card-row {
-  display: grid;
-  grid-template-columns: 56px minmax(0, 1fr);
-  gap: 16px;
-}
-
-.loading-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 999px;
-  background: rgba(118, 185, 92, 0.14);
-}
-
-.loading-copy {
-  min-width: 0;
+  background: #fff;
 }
 
 .loading-actions {
@@ -281,7 +252,6 @@ ion-content.cultivos-content {
   height: 42px;
   margin-top: 16px;
   margin-left: auto;
-  border-radius: 14px;
   background: #f3f4f6;
 }
 
@@ -319,10 +289,6 @@ ion-content.cultivos-content {
 }
 
 @media (max-width: 576px) {
-  .cultivos-toolbar ion-title {
-    font-size: 18px;
-  }
-
   .nuevo-button {
     --padding-start: 12px;
     --padding-end: 12px;
@@ -330,8 +296,8 @@ ion-content.cultivos-content {
 
   .cultivo-card ion-card-content,
   .loading-card-row {
-    grid-template-columns: 48px minmax(0, 1fr);
     gap: 14px;
+    grid-template-columns: 48px minmax(0, 1fr);
   }
 
   .card-icon,
@@ -344,11 +310,7 @@ ion-content.cultivos-content {
     font-size: 18px;
   }
 
-  .acciones-grupo {
-    gap: 8px;
-  }
-
-  .loading-actions {
-    width: 92px;
-  }
 }
+
+
+
