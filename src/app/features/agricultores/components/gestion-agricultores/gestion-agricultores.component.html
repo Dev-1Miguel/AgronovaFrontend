@@ -1,54 +1,47 @@
 <ion-header>
-  <ion-toolbar color="success">
-    <ion-title>Gesti&oacute;n de Agricultores</ion-title>
-
-    <ion-buttons slot="end">
-      <ion-button (click)="abrirFormulario()">
-        <ion-icon name="add-outline" slot="start"></ion-icon>
-        Nuevo
-      </ion-button>
-    </ion-buttons>
+  <ion-toolbar class="agricultores-toolbar">
+    <ion-title>Agricultores</ion-title>
+    <ion-buttons slot="end"><ion-button class="nuevo-button" (click)="abrirFormulario()"><ion-icon name="add-outline" slot="start"></ion-icon>Nuevo</ion-button></ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="agricultores-content ion-padding">
+  <ion-searchbar class="agricultores-searchbar" placeholder="Buscar agricultor" [(ngModel)]="busqueda"></ion-searchbar>
 
-  <ion-searchbar
-    placeholder="Buscar agricultor"
-    [(ngModel)]="busqueda">
-  </ion-searchbar>
-
-  <ion-card
-    class="agricultor-card"
-    *ngFor="let agricultor of agricultoresFiltrados()">
-
-    <ion-card-content>
-      <div class="agricultor-row">
-
-        <div class="icon-box">
-          <ion-icon name="people-outline"></ion-icon>
-        </div>
-
-        <div class="agricultor-info">
-          <h2>{{ agricultor.nombre }}</h2>
-          <p>Edad: {{ agricultor.edad }} a&ntilde;os</p>
-          <p>Zona: {{ agricultor.zona }}</p>
-          <p>Experiencia: {{ agricultor.experiencia }}</p>
-        </div>
-
-        <ion-buttons>
-          <ion-button color="primary" (click)="editarAgricultor(agricultor)">
-            <ion-icon name="create-outline"></ion-icon>
-          </ion-button>
-
-          <ion-button color="danger" (click)="eliminarAgricultor(agricultor)">
-            <ion-icon name="trash-outline"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-
+  <section class="agricultores-section">
+    <div class="section-heading">
+      <div class="section-icon"><ion-icon name="people-outline"></ion-icon></div>
+      <div class="section-copy">
+        <p class="section-label">MODULO</p>
+        <h2>Equipo agricola</h2>
+        <p>Administra el personal registrado con una vista clara para zona, edad y experiencia.</p>
       </div>
-    </ion-card-content>
+    </div>
 
-  </ion-card>
+    <ion-card class="agricultor-card" *ngFor="let agricultor of agricultoresFiltrados(); else emptyStateBlock">
+      <ion-card-content>
+        <div class="card-icon" aria-hidden="true"><ion-icon name="people-outline"></ion-icon></div>
+        <div class="card-body">
+          <div class="card-main">
+            <h3>{{ agricultor.nombre }}</h3>
+            <div class="card-middle-row"><span class="zona-chip">{{ agricultor.zona || 'Zona no asignada' }}</span></div>
+            <div class="card-meta-grid"><p>Edad: {{ agricultor.edad }} anos</p><p>Experiencia: {{ agricultor.experiencia }}</p></div>
+          </div>
+          <ion-buttons class="acciones-grupo">
+            <ion-button class="accion-button editar-button" (click)="editarAgricultor(agricultor)"><ion-icon name="create-outline"></ion-icon></ion-button>
+            <ion-button class="accion-button eliminar-button" (click)="eliminarAgricultor(agricultor)"><ion-icon name="trash-outline"></ion-icon></ion-button>
+          </ion-buttons>
+        </div>
+      </ion-card-content>
+    </ion-card>
 
+    <ng-template #emptyStateBlock>
+      <div class="empty-state">
+        <div class="empty-icon"><ion-icon name="people-outline"></ion-icon></div>
+        <h3>No hay agricultores registrados</h3>
+        <p>Cuando agregues un agricultor, aparecera aqui con su zona, edad y experiencia.</p>
+        <ion-button class="empty-cta" (click)="abrirFormulario()"><ion-icon name="add-outline" slot="start"></ion-icon>Nuevo agricultor</ion-button>
+      </div>
+    </ng-template>
+  </section>
 </ion-content>

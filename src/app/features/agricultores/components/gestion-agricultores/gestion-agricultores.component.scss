@@ -1,61 +1,12 @@
-ion-content.agricultores-content {
-  --background: #f4f8ef;
-}
-
-ion-toolbar {
-  --background: #2f8f3a;
-  --color: #fff;
-}
-
-ion-searchbar {
-  --background: #ffffff;
-  --color: #222;
-  --placeholder-color: #777;
-  --icon-color: #777;
-  margin-bottom: 12px;
-  border-radius: 10px;
-}
-
-.agricultor-card {
-  --background: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-}
-
-.agricultor-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.icon-box {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: #c8f7d2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.icon-box ion-icon {
-  font-size: 26px;
-  color: #2e7d32;
-}
-
-.agricultor-info {
-  flex: 1;
-}
-
-.agricultor-info h2 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 700;
-  color: #222;
-}
-
-.agricultor-info p {
-  margin: 4px 0;
-  color: #666;
-  font-size: 14px;
-}
+ion-content.agricultores-content{--background:linear-gradient(180deg,#eef4e8 0%,#f3f6ef 40%,#f8faf6 100%)}
+.agricultores-toolbar{--background:linear-gradient(135deg,#234f31 0%,#2f7a42 100%);--color:#fff;--border-width:0;--min-height:58px;--padding-end:10px;--padding-start:4px}.agricultores-toolbar ion-title{color:#fff;font-size:18px;font-weight:700;letter-spacing:-.02em;padding-inline:12px}.nuevo-button{--background:rgba(255,255,255,.14);--color:#fff;--border-radius:999px;--padding-start:14px;--padding-end:14px;--box-shadow:none;font-weight:700;text-transform:none}
+.agricultores-searchbar{--background:#fff;--color:#111827;--placeholder-color:#6b7280;--icon-color:#6b7280;--box-shadow:0 8px 22px rgba(15,23,42,.06);--border-radius:18px;margin-bottom:22px;padding:0}
+.agricultores-section,.card-body{display:grid;gap:16px}.section-heading{align-items:center;display:flex;gap:12px}.section-label{color:#5c745f;font-size:12px;font-weight:700;letter-spacing:.12em;margin:0 0 6px}
+.section-icon,.card-icon,.empty-icon{align-items:center;display:inline-flex;justify-content:center}.section-icon{width:48px;height:48px;border-radius:999px;background:#dcfce7;color:#166534;flex:0 0 auto;box-shadow:inset 0 0 0 1px rgba(40,95,58,.06)}.section-icon ion-icon{font-size:22px}
+.section-copy h2,.card-main h3,.empty-state h3{color:#18241b;margin:0}.section-copy h2{font-size:22px;font-weight:700;letter-spacing:-.03em}.section-copy p,.card-meta-grid p,.empty-state p{color:#637364;font-size:14px}
+.agricultor-card,.empty-state{border:1px solid rgba(40,95,58,.09);border-radius:24px}.agricultor-card{--background:linear-gradient(180deg,rgba(255,255,255,.98),#fbfcf8);margin:0}
+.agricultor-card ion-card-content{display:grid;gap:16px;grid-template-columns:56px minmax(0,1fr);padding:22px 20px 18px}.card-icon{width:56px;height:56px;border-radius:999px;background:rgba(118,185,92,.18);color:#285f3a;box-shadow:inset 0 0 0 1px rgba(40,95,58,.06)}.card-icon ion-icon{font-size:24px}
+.card-main{display:grid;gap:12px}.card-main h3{font-size:20px;font-weight:700;letter-spacing:-.03em;line-height:1.2;word-break:break-word}.zona-chip{display:inline-flex;align-items:center;min-height:28px;padding:0 12px;border-radius:999px;background:#dcfce7;color:#166534;font-size:12px;font-weight:700}.card-meta-grid{display:grid;gap:6px}.card-meta-grid p{margin:0}
+.acciones-grupo{display:flex;justify-content:flex-end;gap:10px;width:100%}.accion-button{--background:transparent;--border-radius:14px;--padding-start:0;--padding-end:0;min-width:42px;min-height:42px;margin:0}.editar-button{--background:#e8f8ed;color:#15803d}.eliminar-button{--background:#fee2e2;color:#dc2626}
+.empty-state{background:#fff;padding:24px 20px;text-align:center}.empty-icon{width:52px;height:52px;margin:0 auto 12px;border-radius:16px;background:#dcfce7;color:#166534}.empty-icon ion-icon{font-size:26px}.empty-state h3{margin-bottom:8px}.empty-state p{margin:0;line-height:1.45}.empty-cta{margin-top:16px;--background:#234f31;--color:#fff;--border-radius:14px;text-transform:none;font-weight:700}
+@media (max-width:576px){.nuevo-button{--padding-start:12px;--padding-end:12px}.agricultor-card ion-card-content{gap:14px;grid-template-columns:48px minmax(0,1fr)}.card-icon{width:48px;height:48px}.card-main h3{font-size:18px}}
