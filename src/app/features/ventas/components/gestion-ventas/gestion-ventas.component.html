@@ -1,9 +1,9 @@
 <ion-header>
-  <ion-toolbar color="success">
-    <ion-title>Gestión de Ventas</ion-title>
+  <ion-toolbar class="ventas-toolbar">
+    <ion-title>Ventas</ion-title>
 
     <ion-buttons slot="end">
-      <ion-button (click)="crearVenta()">
+      <ion-button class="nuevo-button" (click)="crearVenta()">
         <ion-icon name="add-outline" slot="start"></ion-icon>
         Nueva
       </ion-button>
@@ -12,53 +12,91 @@
 </ion-header>
 
 <ion-content class="ventas-content ion-padding">
-  <div *ngIf="cargando" class="empty-state">
-    Cargando ventas...
-  </div>
+  <section class="ventas-section">
+    <div class="section-heading">
+      <div class="section-icon">
+        <ion-icon name="receipt-outline"></ion-icon>
+      </div>
 
-  <div *ngIf="!cargando && ventas.length === 0" class="empty-state">
-    No hay ventas registradas.
-  </div>
+      <div class="section-copy">
+        <p class="section-label">MODULO</p>
+        <h2>Registro de ventas</h2>
+        <p>Consulta las ventas registradas con una lectura mas clara de cliente, fecha, total y estado.</p>
+      </div>
+    </div>
 
-  <ion-card class="venta-card" *ngFor="let venta of ventas">
-    <ion-card-content>
-      <div class="venta-row">
-        <div class="icon-box">
+    <div class="list-state" *ngIf="!cargando; else loadingState">
+      <div class="empty-state" *ngIf="!ventas.length">
+        <div class="empty-icon">
           <ion-icon name="receipt-outline"></ion-icon>
         </div>
+        <h3>No hay ventas registradas</h3>
+        <p>Cuando registres una venta, aparecera aqui con su cliente, total, fecha y cantidad de productos.</p>
+        <ion-button class="empty-cta" (click)="crearVenta()">
+          <ion-icon name="add-outline" slot="start"></ion-icon>
+          Nueva venta
+        </ion-button>
+      </div>
 
-        <div class="venta-info">
-          <div class="venta-header">
-            <h2>{{ venta.cliente }}</h2>
-            <ion-badge [color]="esAnulada(venta) ? 'danger' : 'success'">
-              {{ venta.estado }}
-            </ion-badge>
+      <ion-card class="venta-card" *ngFor="let venta of ventas">
+        <ion-card-content>
+          <div class="card-icon" aria-hidden="true">
+            <ion-icon name="receipt-outline"></ion-icon>
           </div>
 
-          <p>
-            <ion-icon name="calendar-outline"></ion-icon>
-            {{ formatearFecha(venta.fecha) }}
-          </p>
-          <p>
-            <ion-icon name="cash-outline"></ion-icon>
-            {{ formatearTotal(venta.total) }}
-          </p>
-          <p>
-            <ion-icon name="person-outline"></ion-icon>
-            {{ venta.detalles.length }} productos
-          </p>
+          <div class="card-body">
+            <div class="card-main">
+              <div class="card-top-row">
+                <h3>{{ venta.cliente }}</h3>
+                <ion-badge class="estado-badge" [color]="esAnulada(venta) ? 'danger' : 'success'">
+                  {{ venta.estado }}
+                </ion-badge>
+              </div>
+
+              <div class="card-middle-row">
+                <span class="total-chip">{{ formatearTotal(venta.total) }}</span>
+              </div>
+
+              <div class="card-meta-grid">
+                <div class="meta-item">
+                  <ion-icon name="calendar-outline"></ion-icon>
+                  <span>{{ formatearFecha(venta.fecha) }}</span>
+                </div>
+
+                <div class="meta-item">
+                  <ion-icon name="person-outline"></ion-icon>
+                  <span>{{ venta.detalles.length }} productos</span>
+                </div>
+              </div>
+            </div>
+
+            <ion-buttons class="acciones-grupo">
+              <ion-button
+                class="accion-button anular-button"
+                [disabled]="anulandoId === venta.id || esAnulada(venta)"
+                (click)="anularVenta(venta)">
+                <ion-icon name="close-circle-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </section>
+
+  <ng-template #loadingState>
+    <div class="loading-state">
+      <div class="loading-card" *ngFor="let item of [1, 2, 3]">
+        <div class="loading-card-row">
+          <div class="loading-icon"></div>
+          <div class="loading-copy">
+            <div class="loading-line loading-line-title"></div>
+            <div class="loading-line loading-line-chip"></div>
+            <div class="loading-line loading-line-text"></div>
+          </div>
+          <div class="loading-actions"></div>
         </div>
-
-        <ion-buttons>
-          <ion-button
-            color="danger"
-            [disabled]="anulandoId === venta.id || esAnulada(venta)"
-            (click)="anularVenta(venta)">
-            <ion-icon name="close-circle-outline"></ion-icon>
-          </ion-button>
-        </ion-buttons>
       </div>
-    </ion-card-content>
-  </ion-card>
+    </div>
+  </ng-template>
 </ion-content>
-
