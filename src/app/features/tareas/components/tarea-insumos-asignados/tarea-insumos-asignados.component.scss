@@ -1,41 +1,141 @@
 .insumos-card {
-  margin: 0 0 16px;
+  --background: transparent;
+  background: transparent;
+  box-shadow: none;
+  margin: 0;
+}
+
+.insumos-card ion-card-content {
+  padding: 0;
+}
+
+.insumos-heading {
+  margin-bottom: 16px;
+}
+
+.section-label {
+  color: #5c745f;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  margin: 0 0 8px;
 }
 
 .insumos-title {
-  font-size: 1rem;
+  color: #18241b;
+  font-size: 20px;
   font-weight: 700;
-  margin: 0 0 12px;
+  letter-spacing: -0.03em;
+  margin: 0 0 6px;
 }
 
-.insumos-loading,
-.insumos-empty {
-  color: var(--ion-color-medium);
-  font-size: 0.95rem;
-  margin: 12px 0;
+.insumos-copy,
+.inline-state,
+.empty-state,
+.insumo-text span {
+  color: #637364;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.insumos-form,
+.insumos-list,
+.insumo-text {
+  display: grid;
+}
+
+.insumos-form,
+.insumos-list {
+  gap: 12px;
+}
+
+.field-shell {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(40, 95, 58, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 8px 18px rgba(25, 43, 29, 0.05);
+  display: grid;
+  min-height: 72px;
+  padding: 10px 12px;
 }
 
 .insumo-item {
+  --background: transparent;
+  --color: #18241b;
+  --highlight-color-focused: #2f7a42;
+  --inner-border-width: 0;
+  --inner-padding-end: 0;
+  --min-height: 48px;
   --padding-start: 0;
-  margin-bottom: 12px;
+  margin: 0;
+}
+
+ion-input,
+ion-select {
+  --color: #18241b;
+  --placeholder-color: #6c786b;
+  --placeholder-opacity: 1;
+  color: #18241b;
+  font-size: 15px;
+  width: 100%;
+}
+
+ion-select::part(icon) {
+  color: #6c786b;
+  opacity: 1;
+}
+
+ion-select::part(placeholder),
+ion-select::part(text) {
+  color: #18241b;
+}
+
+.agregar-button {
+  --background: linear-gradient(135deg, #234f31 0%, #2f7a42 100%);
+  --color: #ffffff;
+  --border-radius: 16px;
+  font-weight: 700;
+  margin-top: 14px;
+  text-transform: none;
+}
+
+.empty-state {
+  margin-top: 14px;
+  padding: 18px 16px;
+  border: 1px dashed rgba(40, 95, 58, 0.16);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  text-align: center;
 }
 
 .insumos-list {
-  display: grid;
-  gap: 8px;
-  margin-top: 14px;
+  margin-top: 16px;
 }
 
 .insumo-row {
   align-items: center;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(40, 95, 58, 0.08);
+  border-radius: 18px;
   display: flex;
   justify-content: space-between;
-  padding: 10px 12px;
+  gap: 12px;
+  padding: 12px 14px;
 }
 
 .insumo-text {
-  display: grid;
   gap: 4px;
+}
+
+.insumo-text strong {
+  color: #18241b;
+  font-size: 15px;
+}
+
+.delete-button {
+  --background: #fee2e2;
+  --border-radius: 14px;
+  color: #dc2626;
+  margin: 0;
 }

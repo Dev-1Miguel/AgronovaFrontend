@@ -1,9 +1,9 @@
-﻿<ion-header>
-  <ion-toolbar color="success">
-    <ion-title>Gestion de Tareas</ion-title>
+<ion-header>
+  <ion-toolbar class="tareas-toolbar">
+    <ion-title>Tareas</ion-title>
 
     <ion-buttons slot="end">
-      <ion-button (click)="abrirFormulario()">
+      <ion-button class="nuevo-button" (click)="abrirFormulario()">
         <ion-icon name="add-outline" slot="start"></ion-icon>
         Nueva
       </ion-button>
@@ -12,73 +12,153 @@
 </ion-header>
 
 <ion-content class="tareas-content ion-padding">
-  <div class="vista-selector">
-    <button
-      type="button"
-      class="vista-button"
-      [class.is-active]="vistaActual === 'lista'"
-      (click)="cambiarVista('lista')">
-      Lista
-    </button>
+  <section class="tareas-section">
+    <div class="section-heading">
+      <div class="section-icon">
+        <ion-icon name="reader-outline"></ion-icon>
+      </div>
 
-    <button
-      type="button"
-      class="vista-button"
-      [class.is-active]="vistaActual === 'gantt'"
-      (click)="cambiarVista('gantt')">
-      Gantt
-    </button>
-  </div>
+      <div class="section-copy">
+        <p class="section-label">MODULO</p>
+        <h2>Gestion de tareas</h2>
+        <p>Organiza tareas, revisa su avance y alterna entre la vista lista y Gantt sin cambiar el flujo actual.</p>
+      </div>
+    </div>
 
-  <ion-searchbar
-    *ngIf="vistaActual === 'lista'"
-    placeholder="Buscar tarea"
-    [(ngModel)]="busqueda">
-  </ion-searchbar>
+    <div class="vista-selector" role="tablist" aria-label="Vista de tareas">
+      <button
+        type="button"
+        class="vista-button"
+        [class.is-active]="vistaActual === 'lista'"
+        (click)="cambiarVista('lista')">
+        Lista
+      </button>
 
-  <ng-container *ngIf="vistaActual === 'lista'; else ganttView">
-    <ion-card
-      class="tarea-card"
-      *ngFor="let tarea of tareasFiltradas()">
+      <button
+        type="button"
+        class="vista-button"
+        [class.is-active]="vistaActual === 'gantt'"
+        (click)="cambiarVista('gantt')">
+        Gantt
+      </button>
+    </div>
 
-      <ion-card-content>
-        <div class="tarea-row">
-          <div class="icon-box">
+    <ion-searchbar
+      *ngIf="vistaActual === 'lista'"
+      class="tareas-searchbar"
+      placeholder="Buscar tarea"
+      [(ngModel)]="busqueda">
+    </ion-searchbar>
+
+    <ng-container *ngIf="vistaActual === 'lista'; else ganttView">
+      <div class="list-state" *ngIf="!cargandoTareas; else loadingState">
+        <div class="empty-state" *ngIf="!tareas.length">
+          <div class="empty-icon">
             <ion-icon name="reader-outline"></ion-icon>
           </div>
-
-          <div class="tarea-info">
-            <h2>{{ tarea.nombre }}</h2>
-            <p>{{ obtenerTipoTarea(tarea) }}</p>
-            <p>{{ obtenerCultivo(tarea) }}</p>
-            <p>{{ tarea.fechaInicio }} - {{ tarea.fechaFin }}</p>
-            <p>{{ obtenerAgricultores(tarea) }}</p>
-            <p>{{ obtenerResumenInsumos(tarea) }}</p>
-            <p class="estado">{{ tarea.estado || 'Activo' }}</p>
-          </div>
-
-          <ion-buttons>
-            <ion-button
-              color="success"
-              *ngIf="puedeCompletar(tarea)"
-              (click)="completarTarea(tarea)">
-              <ion-icon name="checkmark-done-outline"></ion-icon>
-            </ion-button>
-
-            <ion-button color="primary" (click)="editarTarea(tarea)">
-              <ion-icon name="create-outline"></ion-icon>
-            </ion-button>
-
-            <ion-button color="danger" (click)="eliminarTarea(tarea)">
-              <ion-icon name="trash-outline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
+          <h3>No hay tareas registradas</h3>
+          <p>Cuando agregues una tarea, aparecera aqui con su tipo, cultivo, responsables e insumos.</p>
+          <ion-button class="empty-cta" (click)="abrirFormulario()">
+            <ion-icon name="add-outline" slot="start"></ion-icon>
+            Nueva tarea
+          </ion-button>
         </div>
-      </ion-card-content>
-    </ion-card>
-  </ng-container>
+
+        <div class="empty-state" *ngIf="tareas.length && !tareasFiltradas().length">
+          <div class="empty-icon">
+            <ion-icon name="reader-outline"></ion-icon>
+          </div>
+          <h3>Sin resultados</h3>
+          <p>Prueba con otro termino para encontrar la tarea que buscas.</p>
+        </div>
+
+        <ion-card class="tarea-card" *ngFor="let tarea of tareasFiltradas()">
+          <ion-card-content>
+            <div class="card-icon" aria-hidden="true">
+              <ion-icon name="reader-outline"></ion-icon>
+            </div>
+
+            <div class="card-body">
+              <div class="card-main">
+                <div class="card-header-row">
+                  <h3>{{ tarea.nombre }}</h3>
+                  <span
+                    class="estado-chip"
+                    [class.is-completada]="(tarea.estado || '').toLowerCase() === 'completada'"
+                    [class.is-activa]="!tarea.estado || (tarea.estado || '').toLowerCase() === 'activo'"
+                    [class.is-inactiva]="(tarea.estado || '').toLowerCase() === 'inactivo'">
+                    {{ tarea.estado || 'Activo' }}
+                  </span>
+                </div>
+
+                <div class="card-middle-row">
+                  <span class="tipo-chip">{{ obtenerTipoTarea(tarea) }}</span>
+                </div>
+
+                <div class="meta-list">
+                  <div class="meta-row">
+                    <span class="meta-label">Cultivo</span>
+                    <span>{{ obtenerCultivo(tarea) }}</span>
+                  </div>
+
+                  <div class="meta-row">
+                    <span class="meta-label">Fechas</span>
+                    <span>{{ tarea.fechaInicio }} - {{ tarea.fechaFin }}</span>
+                  </div>
+
+                  <div class="meta-row">
+                    <span class="meta-label">Agricultores</span>
+                    <span>{{ obtenerAgricultores(tarea) }}</span>
+                  </div>
+
+                  <div class="meta-row">
+                    <span class="meta-label">Insumos</span>
+                    <span>{{ obtenerResumenInsumos(tarea) }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <ion-buttons class="acciones-grupo">
+                <ion-button
+                  class="accion-button completar-button"
+                  *ngIf="puedeCompletar(tarea)"
+                  (click)="completarTarea(tarea)">
+                  <ion-icon name="checkmark-done-outline"></ion-icon>
+                </ion-button>
+
+                <ion-button class="accion-button editar-button" (click)="editarTarea(tarea)">
+                  <ion-icon name="create-outline"></ion-icon>
+                </ion-button>
+
+                <ion-button class="accion-button eliminar-button" (click)="eliminarTarea(tarea)">
+                  <ion-icon name="trash-outline"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ng-container>
+  </section>
 
   <ng-template #ganttView>
     <app-tareas-gantt [tareas]="tareas"></app-tareas-gantt>
+  </ng-template>
+
+  <ng-template #loadingState>
+    <div class="loading-state">
+      <div class="loading-card" *ngFor="let item of [1, 2, 3]">
+        <div class="loading-card-row">
+          <div class="loading-icon"></div>
+          <div class="loading-copy">
+            <div class="loading-line loading-line-title"></div>
+            <div class="loading-line loading-line-chip"></div>
+            <div class="loading-line loading-line-text"></div>
+            <div class="loading-line loading-line-text short"></div>
+          </div>
+          <div class="loading-actions"></div>
+        </div>
+      </div>
+    </div>
   </ng-template>
 </ion-content>

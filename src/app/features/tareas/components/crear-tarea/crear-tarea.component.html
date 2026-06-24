@@ -1,7 +1,7 @@
-<ion-header>
-  <ion-toolbar color="success">
+<ion-header class="form-header">
+  <ion-toolbar class="form-toolbar">
     <ion-buttons slot="start">
-      <ion-button (click)="volverAGestion()">
+      <ion-button class="back-button" (click)="volverAGestion()">
         <ion-icon name="arrow-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -10,99 +10,162 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="form-content ion-padding">
-  <ion-card class="form-card">
-    <ion-card-content>
-      <h2 class="form-title">Información de la tarea</h2>
+<ion-content class="form-content">
+  <div class="form-shell ion-padding">
+    <section class="hero-section">
+      <p class="hero-eyebrow">TAREAS</p>
+      <h1>Nueva tarea</h1>
+      <p class="hero-copy">
+        Registra una tarea con una presentacion clara, manteniendo el flujo actual de cultivo, responsables e insumos.
+      </p>
+    </section>
 
-      <ion-item class="form-item" lines="none">
-        <ion-icon name="reader-outline" slot="start"></ion-icon>
-        <ion-input
-          placeholder="Nombre de la tarea"
-          [(ngModel)]="tarea.nombre">
-        </ion-input>
-      </ion-item>
+    <ion-card class="form-card">
+      <ion-card-content>
+        <div class="section-heading">
+          <div class="section-icon" aria-hidden="true">
+            <ion-icon name="reader-outline"></ion-icon>
+          </div>
 
-      <ion-item class="form-item" lines="none">
-        <ion-icon name="reorder-three-outline" slot="start"></ion-icon>
-        <ion-select
-          placeholder="Seleccionar tipo de tarea"
-          [(ngModel)]="tarea.idTipoTarea">
-          <ion-select-option
-            *ngFor="let tipo of tiposTarea"
-            [value]="tipo.id">
-            {{ tipo.nombre }}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
+          <div class="section-copy">
+            <p class="section-label">FORMULARIO</p>
+            <h2 class="form-title">Informacion de la tarea</h2>
+            <p>Completa los datos principales, selecciona responsables y asigna insumos antes de guardar.</p>
+          </div>
+        </div>
 
-      <ion-item class="form-item" lines="none">
-        <ion-icon name="leaf-outline" slot="start"></ion-icon>
-        <ion-select
-          placeholder="Seleccionar cultivo"
-          [(ngModel)]="tarea.idCultivo">
-          <ion-select-option
-            *ngFor="let cultivo of cultivos"
-            [value]="cultivo.id">
-            {{ cultivo.nombre }}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
+        <div class="inline-state" *ngIf="cargandoDatos">
+          Cargando catalogos...
+        </div>
 
-      <ion-item class="form-item" lines="none">
-        <ion-icon name="people-outline" slot="start"></ion-icon>
-        <ion-select
-          interface="popover"
-          placeholder="Seleccionar agricultores"
-          [(ngModel)]="tarea.idAgricultores"
-          [multiple]="true">
-          <ion-select-option
-            *ngFor="let agricultor of agricultores"
-            [value]="agricultor.id">
-            {{ agricultor.nombre }}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
+        <div class="fields-grid" *ngIf="!cargandoDatos">
+          <div class="field-shell">
+            <div class="field-icon" aria-hidden="true">
+              <ion-icon name="reader-outline"></ion-icon>
+            </div>
 
-      <app-tarea-insumos-asignados
-        [(asignaciones)]="tarea.insumosAsignados">
-      </app-tarea-insumos-asignados>
+            <ion-item class="form-item" lines="none">
+              <ion-input
+                placeholder="Nombre de la tarea"
+                [(ngModel)]="tarea.nombre">
+              </ion-input>
+            </ion-item>
+          </div>
 
-      <ion-item class="form-item" lines="none">
-        <ion-icon name="calendar-outline" slot="start"></ion-icon>
-        <ion-input
-          type="date"
-          placeholder="Fecha de inicio"
-          [(ngModel)]="tarea.fechaInicio">
-        </ion-input>
-      </ion-item>
+          <div class="field-shell">
+            <div class="field-icon" aria-hidden="true">
+              <ion-icon name="reorder-three-outline"></ion-icon>
+            </div>
 
-      <ion-item class="form-item" lines="none">
-        <ion-icon name="calendar-outline" slot="start"></ion-icon>
-        <ion-input
-          type="date"
-          placeholder="Fecha de fin"
-          [(ngModel)]="tarea.fechaFin">
-        </ion-input>
-      </ion-item>
+            <ion-item class="form-item" lines="none">
+              <ion-select
+                placeholder="Seleccionar tipo de tarea"
+                [(ngModel)]="tarea.idTipoTarea">
+                <ion-select-option
+                  *ngFor="let tipo of tiposTarea"
+                  [value]="tipo.id">
+                  {{ tipo.nombre }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </div>
 
-      <ion-item class="form-item textarea-item" lines="none">
-        <ion-icon name="reader-outline" slot="start"></ion-icon>
-        <ion-textarea
-          placeholder="Descripción de la tarea"
-          auto-grow="true"
-          [(ngModel)]="tarea.descripcion">
-        </ion-textarea>
-      </ion-item>
-    </ion-card-content>
-  </ion-card>
+          <div class="field-shell">
+            <div class="field-icon" aria-hidden="true">
+              <ion-icon name="leaf-outline"></ion-icon>
+            </div>
 
-  <ion-button
-    expand="block"
-    class="btn-guardar"
-    [disabled]="guardando || cargandoDatos || !formularioValido()"
-    (click)="guardar()">
-    <ion-icon name="checkmark-outline" slot="start"></ion-icon>
-    Registrar tarea
-  </ion-button>
+            <ion-item class="form-item" lines="none">
+              <ion-select
+                placeholder="Seleccionar cultivo"
+                [(ngModel)]="tarea.idCultivo">
+                <ion-select-option
+                  *ngFor="let cultivo of cultivos"
+                  [value]="cultivo.id">
+                  {{ cultivo.nombre }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </div>
+
+          <div class="field-shell">
+            <div class="field-icon" aria-hidden="true">
+              <ion-icon name="people-outline"></ion-icon>
+            </div>
+
+            <ion-item class="form-item" lines="none">
+              <ion-select
+                interface="popover"
+                placeholder="Seleccionar agricultores"
+                [(ngModel)]="tarea.idAgricultores"
+                [multiple]="true">
+                <ion-select-option
+                  *ngFor="let agricultor of agricultores"
+                  [value]="agricultor.id">
+                  {{ agricultor.nombre }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </div>
+
+          <div class="field-shell">
+            <div class="field-icon" aria-hidden="true">
+              <ion-icon name="calendar-outline"></ion-icon>
+            </div>
+
+            <ion-item class="form-item" lines="none">
+              <ion-input
+                type="date"
+                placeholder="Fecha de inicio"
+                [(ngModel)]="tarea.fechaInicio">
+              </ion-input>
+            </ion-item>
+          </div>
+
+          <div class="field-shell">
+            <div class="field-icon" aria-hidden="true">
+              <ion-icon name="calendar-outline"></ion-icon>
+            </div>
+
+            <ion-item class="form-item" lines="none">
+              <ion-input
+                type="date"
+                placeholder="Fecha de fin"
+                [(ngModel)]="tarea.fechaFin">
+              </ion-input>
+            </ion-item>
+          </div>
+
+          <div class="field-shell field-shell--textarea">
+            <div class="field-icon" aria-hidden="true">
+              <ion-icon name="reader-outline"></ion-icon>
+            </div>
+
+            <ion-item class="form-item textarea-item" lines="none">
+              <ion-textarea
+                placeholder="Descripcion de la tarea"
+                auto-grow="true"
+                [(ngModel)]="tarea.descripcion">
+              </ion-textarea>
+            </ion-item>
+          </div>
+        </div>
+
+        <div class="embedded-section">
+          <app-tarea-insumos-asignados
+            [(asignaciones)]="tarea.insumosAsignados">
+          </app-tarea-insumos-asignados>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-button
+      expand="block"
+      class="btn-guardar"
+      [disabled]="guardando || cargandoDatos || !formularioValido()"
+      (click)="guardar()">
+      <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+      Registrar tarea
+    </ion-button>
+  </div>
 </ion-content>
