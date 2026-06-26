@@ -16,6 +16,7 @@ import {
 import { addIcons } from 'ionicons';
 import {
   addOutline,
+  arrowBackOutline,
   calendarOutline,
   cashOutline,
   closeCircleOutline,
@@ -63,6 +64,7 @@ export class GestionVentasComponent {
   ) {
     addIcons({
       addOutline,
+      arrowBackOutline,
       calendarOutline,
       cashOutline,
       closeCircleOutline,
@@ -93,6 +95,10 @@ export class GestionVentasComponent {
 
   crearVenta(): void {
     this.router.navigate(['/ventas/crear']);
+  }
+
+  volverAlDashboard(): void {
+    this.router.navigate(['/dashboard']);
   }
 
   anularVenta(venta: Venta): void {

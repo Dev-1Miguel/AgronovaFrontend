@@ -1,6 +1,13 @@
 <ion-header>
   <ion-toolbar class="tareas-toolbar">
-    <ion-title>Tareas</ion-title>
+    <ion-title>
+      <span style="display:inline-flex;align-items:center;gap:8px;">
+        <ion-button fill="clear" (click)="volverAlDashboard()" aria-label="Volver al Dashboard" style="--color:#fff;--padding-start:0;--padding-end:0;--background-hover:rgba(255,255,255,.12);min-width:40px;min-height:40px;width:40px;height:40px;margin:0;cursor:pointer;">
+          <ion-icon name="arrow-back-outline" style="font-size:16px;"></ion-icon>
+        </ion-button>
+        <span>Tareas</span>
+      </span>
+    </ion-title>
 
     <ion-buttons slot="end">
       <ion-button class="nuevo-button" (click)="abrirFormulario()">

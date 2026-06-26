@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   IonButton,
   IonButtons,
@@ -17,6 +18,7 @@ import {
 import { addIcons } from 'ionicons';
 import {
   addOutline,
+  arrowBackOutline,
   checkmarkOutline,
   closeOutline,
   createOutline,
@@ -59,9 +61,13 @@ export class GestionCategoriasCultivoComponent {
   guardando = false;
   eliminandoId: string | null = null;
 
-  constructor(private readonly catalogosService: CatalogosService) {
+  constructor(
+    private readonly catalogosService: CatalogosService,
+    private readonly router: Router,
+  ) {
     addIcons({
       addOutline,
+      arrowBackOutline,
       checkmarkOutline,
       closeOutline,
       createOutline,
@@ -88,6 +94,10 @@ export class GestionCategoriasCultivoComponent {
           console.error('Error al cargar categorias de cultivo', error);
         },
       });
+  }
+
+  volverAlDashboard(): void {
+    this.router.navigate(['/dashboard']);
   }
 
   crearCategoria(): void {
@@ -153,7 +163,7 @@ export class GestionCategoriasCultivoComponent {
       return;
     }
 
-    if (!window.confirm(`Se desactivara "${nombre}". ¿Deseas continuar?`)) {
+    if (!window.confirm(`Se desactivara "${nombre}". ï¿½Deseas continuar?`)) {
       return;
     }
 

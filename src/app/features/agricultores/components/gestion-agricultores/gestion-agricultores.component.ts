@@ -15,7 +15,7 @@ import {
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { addOutline, createOutline, peopleOutline, trashOutline } from 'ionicons/icons';
+import { addOutline, arrowBackOutline, createOutline, peopleOutline, trashOutline } from 'ionicons/icons';
 import { finalize } from 'rxjs';
 
 import { Agricultor } from '../../../../core/models/agricultor.model';
@@ -50,7 +50,7 @@ export class GestionAgricultoresComponent {
     private readonly agricultoresService: AgricultoresService,
     private readonly router: Router,
   ) {
-    addIcons({ addOutline, createOutline, peopleOutline, trashOutline });
+    addIcons({ addOutline, arrowBackOutline, createOutline, peopleOutline, trashOutline });
   }
 
   ionViewWillEnter(): void {
@@ -74,6 +74,10 @@ export class GestionAgricultoresComponent {
 
   abrirFormulario(): void {
     this.router.navigate(['/agricultores/crear']);
+  }
+
+  volverAlDashboard(): void {
+    this.router.navigate(['/dashboard']);
   }
 
   editarAgricultor(agricultor: Agricultor): void {
@@ -105,3 +109,4 @@ export class GestionAgricultoresComponent {
     );
   }
 }
+

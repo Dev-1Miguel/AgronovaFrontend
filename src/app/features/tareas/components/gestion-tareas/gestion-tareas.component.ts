@@ -17,6 +17,7 @@ import {
 import { addIcons } from 'ionicons';
 import {
   addOutline,
+  arrowBackOutline,
   checkmarkDoneOutline,
   createOutline,
   peopleOutline,
@@ -77,6 +78,7 @@ export class GestionTareasComponent {
   ) {
     addIcons({
       addOutline,
+      arrowBackOutline,
       checkmarkDoneOutline,
       createOutline,
       peopleOutline,
@@ -116,6 +118,10 @@ export class GestionTareasComponent {
 
   abrirFormulario(): void {
     this.router.navigate(['/tareas/crear']);
+  }
+
+  volverAlDashboard(): void {
+    this.router.navigate(['/dashboard']);
   }
 
   editarTarea(tarea: Tarea): void {
