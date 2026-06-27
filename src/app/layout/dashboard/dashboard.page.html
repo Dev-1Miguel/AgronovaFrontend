@@ -12,17 +12,55 @@
 
 <ion-content class="dashboard-content">
   <main class="dashboard-shell">
-    <h1>MÓDULOS OPERATIVOS</h1>
+    <section class="kpi-section" aria-label="Indicadores clave">
+      <div class="section-heading compact">
+        <div>
+          <p class="section-label">INDICADORES</p>
+          <h2>Panorama actual</h2>
+        </div>
+      </div>
 
-    <section class="module-list" aria-label="Módulos operativos">
-      @for (module of modules; track module.title) {
-        <app-module-card
-          [title]="module.title"
-          [description]="module.description"
-          [icon]="module.icon"
-          [route]="module.route"
-        />
+      @if (errorResumen) {
+        <div class="dashboard-message error">
+          No se pudo cargar el resumen operativo. La navegacion del Dashboard sigue disponible.
+        </div>
       }
+
+      <div class="kpi-grid kpi-grid--compact">
+        @for (kpi of kpis.slice(0, 2); track kpi.label) {
+          <article class="kpi-card kpi-card--compact" [class.loading]="cargandoResumen" [class]="kpi.accentClass">
+            <p class="kpi-label">{{ kpi.label }}</p>
+            <p class="kpi-value">{{ cargandoResumen ? '...' : kpi.value }}</p>
+            <p class="kpi-hint">{{ kpi.hint }}</p>
+          </article>
+        }
+      </div>
+    </section>
+
+    <section class="modules-section" aria-label="Modulos operativos">
+      <div class="section-heading compact">
+        <div>
+          <p class="section-label">MODULOS</p>
+          <h2>Navegacion operativa</h2>
+        </div>
+      </div>
+
+      @if (!errorResumen && cargandoResumen) {
+        <div class="dashboard-message">
+          Actualizando resumen del dashboard...
+        </div>
+      }
+
+      <section class="module-list" aria-label="Modulos operativos">
+        @for (module of modules; track module.title) {
+          <app-module-card
+            [title]="module.title"
+            [description]="module.description"
+            [icon]="module.icon"
+            [route]="module.route"
+          />
+        }
+      </section>
     </section>
   </main>
 </ion-content>

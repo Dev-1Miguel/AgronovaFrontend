@@ -1,49 +1,55 @@
 <ion-header>
-  <ion-toolbar color="success">
-    <ion-title>Gestión de Productos</ion-title>
-
-    <ion-buttons slot="end">
-      <ion-button (click)="abrirFormulario()">
-        <ion-icon name="add-outline" slot="start"></ion-icon>
-        Nuevo
-      </ion-button>
-    </ion-buttons>
+  <ion-toolbar class="productos-toolbar">
+    <ion-title>
+      <span style="display:inline-flex;align-items:center;gap:8px;">
+        <ion-button fill="clear" (click)="volverAlDashboard()" aria-label="Volver al Dashboard" style="--color:#fff;--padding-start:0;--padding-end:0;--background-hover:rgba(255,255,255,.12);min-width:40px;min-height:40px;width:40px;height:40px;margin:0;cursor:pointer;">
+          <ion-icon name="arrow-back-outline" style="font-size:16px;"></ion-icon>
+        </ion-button>
+        <span>Productos</span>
+      </span>
+    </ion-title>
+    <ion-buttons slot="end"><ion-button class="nuevo-button" (click)="abrirFormulario()"><ion-icon name="add-outline" slot="start"></ion-icon>Nuevo</ion-button></ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="productos-content ion-padding">
-  <ion-searchbar
-    placeholder="Buscar producto"
-    [(ngModel)]="busqueda">
-  </ion-searchbar>
+  <ion-searchbar class="productos-searchbar" placeholder="Buscar producto" [(ngModel)]="busqueda"></ion-searchbar>
 
-  <ion-card
-    class="producto-card"
-    *ngFor="let producto of productosFiltrados()">
-    <ion-card-content>
-      <div class="producto-row">
-        <div class="icon-box">
-          <ion-icon name="basket-outline"></ion-icon>
-        </div>
-
-        <div class="producto-info">
-          <h2>{{ producto.nombre }}</h2>
-          <p>{{ producto.descripcion || 'Sin descripción' }}</p>
-          <p>{{ obtenerCultivo(producto) }}</p>
-          <p>Stock: {{ producto.cantidadStock }}</p>
-          <p>${{ producto.precioCaja.toFixed(2) }} / caja</p>
-        </div>
-
-        <ion-buttons>
-          <ion-button color="primary" (click)="editarProducto(producto)">
-            <ion-icon name="create-outline"></ion-icon>
-          </ion-button>
-
-          <ion-button color="danger" (click)="eliminarProducto(producto)">
-            <ion-icon name="trash-outline"></ion-icon>
-          </ion-button>
-        </ion-buttons>
+  <section class="productos-section">
+    <div class="section-heading">
+      <div class="section-icon"><ion-icon name="basket-outline"></ion-icon></div>
+      <div class="section-copy">
+        <p class="section-label">MODULO</p>
+        <h2>Catalogo de productos</h2>
+        <p>Gestiona la cosecha disponible con una vista clara para stock, precio y cultivo asociado.</p>
       </div>
-    </ion-card-content>
-  </ion-card>
+    </div>
+
+    <ion-card class="producto-card" *ngFor="let producto of productosFiltrados(); else emptyStateBlock">
+      <ion-card-content>
+        <div class="card-icon" aria-hidden="true"><ion-icon name="basket-outline"></ion-icon></div>
+        <div class="card-body">
+          <div class="card-main">
+            <h3>{{ producto.nombre }}</h3>
+            <div class="card-middle-row"><span class="cultivo-chip">{{ obtenerCultivo(producto) || 'Cultivo no asignado' }}</span></div>
+            <p class="card-description">{{ producto.descripcion || 'Sin descripcion' }}</p>
+            <div class="card-bottom-row"><span>Stock: {{ producto.cantidadStock }}</span><span>${{ producto.precioCaja.toFixed(2) }} / caja</span></div>
+          </div>
+          <ion-buttons class="acciones-grupo">
+            <ion-button class="accion-button editar-button" (click)="editarProducto(producto)"><ion-icon name="create-outline"></ion-icon></ion-button>
+            <ion-button class="accion-button eliminar-button" (click)="eliminarProducto(producto)"><ion-icon name="trash-outline"></ion-icon></ion-button>
+          </ion-buttons>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ng-template #emptyStateBlock>
+      <div class="empty-state">
+        <div class="empty-icon"><ion-icon name="basket-outline"></ion-icon></div>
+        <h3>No hay productos registrados</h3>
+        <p>Cuando agregues un producto, aparecera aqui con su descripcion, cultivo y precio.</p>
+        <ion-button class="empty-cta" (click)="abrirFormulario()"><ion-icon name="add-outline" slot="start"></ion-icon>Nuevo producto</ion-button>
+      </div>
+    </ng-template>
+  </section>
 </ion-content>

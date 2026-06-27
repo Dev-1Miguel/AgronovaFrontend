@@ -1,46 +1,56 @@
 <ion-card class="insumos-card">
   <ion-card-content>
-    <h2 class="insumos-title">Insumos asignados</h2>
+    <div class="insumos-heading">
+      <p class="section-label">INSUMOS</p>
+      <h2 class="insumos-title">Insumos asignados</h2>
+      <p class="insumos-copy">Agrega los insumos necesarios para esta tarea y controla la cantidad de cada uno.</p>
+    </div>
 
-    <div *ngIf="cargando" class="insumos-loading">
+    <div *ngIf="cargando" class="inline-state">
       Cargando insumos...
     </div>
 
     <ng-container *ngIf="!cargando">
-      <ion-item class="insumo-item" lines="none">
-        <ion-select
-          placeholder="Seleccionar insumo"
-          [(ngModel)]="insumoSeleccionado">
-          <ion-select-option
-            *ngFor="let insumo of insumos"
-            [value]="insumo.id"
-            [disabled]="!insumoDisponible(insumo.id)">
-            {{ insumo.descripcion }}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
+      <div class="insumos-form">
+        <div class="field-shell">
+          <ion-item class="insumo-item" lines="none">
+            <ion-select
+              placeholder="Seleccionar insumo"
+              [(ngModel)]="insumoSeleccionado">
+              <ion-select-option
+                *ngFor="let insumo of insumos"
+                [value]="insumo.id"
+                [disabled]="!insumoDisponible(insumo.id)">
+                {{ insumo.descripcion }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
 
-      <ion-item class="insumo-item" lines="none">
-        <ion-input
-          type="number"
-          min="0.01"
-          step="0.01"
-          placeholder="Cantidad"
-          [(ngModel)]="cantidad">
-        </ion-input>
-      </ion-item>
+        <div class="field-shell">
+          <ion-item class="insumo-item" lines="none">
+            <ion-input
+              type="number"
+              min="0.01"
+              step="0.01"
+              placeholder="Cantidad"
+              [(ngModel)]="cantidad">
+            </ion-input>
+          </ion-item>
+        </div>
+      </div>
 
       <ion-button
         expand="block"
-        color="success"
+        class="agregar-button"
         [disabled]="!insumoSeleccionado || cantidad === null || cantidad <= 0 || !insumoDisponible(insumoSeleccionado)"
         (click)="agregarInsumo()">
         <ion-icon name="add-outline" slot="start"></ion-icon>
         Agregar insumo
       </ion-button>
 
-      <div *ngIf="asignaciones.length === 0" class="insumos-empty">
-        Aún no hay insumos asignados.
+      <div *ngIf="asignaciones.length === 0" class="empty-state">
+        Aun no hay insumos asignados.
       </div>
 
       <div class="insumos-list" *ngIf="asignaciones.length > 0">
@@ -50,7 +60,7 @@
             <span>Cantidad: {{ asignacion.cantidad }}</span>
           </div>
 
-          <ion-button fill="clear" color="danger" size="small" (click)="eliminarInsumo(i)">
+          <ion-button class="delete-button" fill="clear" size="small" (click)="eliminarInsumo(i)">
             <ion-icon name="trash-outline"></ion-icon>
           </ion-button>
         </div>

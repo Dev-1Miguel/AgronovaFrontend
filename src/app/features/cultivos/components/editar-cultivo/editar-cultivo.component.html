@@ -1,7 +1,7 @@
-<ion-header>
-  <ion-toolbar color="success">
+<ion-header class="form-header">
+  <ion-toolbar class="form-toolbar">
     <ion-buttons slot="start">
-      <ion-button (click)="volverAGestion()">
+      <ion-button class="back-button" (click)="volverAGestion()">
         <ion-icon name="arrow-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -10,63 +10,90 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="form-content ion-padding">
+<ion-content class="form-content">
+  <div class="form-shell ion-padding">
+    <section class="hero-section">
+      <p class="hero-eyebrow">CULTIVOS</p>
+      <h1>Editar cultivo</h1>
+      <p class="hero-copy">
+        Ajusta la informacion del cultivo con la misma experiencia visual clara y sobria del modulo.
+      </p>
+    </section>
 
-  <ion-card class="form-card">
-    <ion-card-content>
+    <ion-card class="form-card">
+      <ion-card-content>
+        <div class="section-heading">
+          <div class="section-icon" aria-hidden="true">
+            <ion-icon name="leaf-outline"></ion-icon>
+          </div>
 
-      <h2 class="form-title">Información del cultivo</h2>
+          <div class="section-copy">
+            <p class="section-label">FORMULARIO</p>
+            <h2 class="form-title">Informacion del cultivo</h2>
+            <p>Actualiza nombre, categoria y ubicacion sin alterar el flujo actual.</p>
+          </div>
+        </div>
 
-      <ion-item class="form-item" lines="none">
-        <ion-icon name="leaf-outline" slot="start"></ion-icon>
-        <ion-input
-          placeholder="Nombre del cultivo"
-          [(ngModel)]="cultivo.nombre">
-        </ion-input>
-      </ion-item>
+        <div class="fields-grid">
+          <div class="field-shell">
+            <div class="field-icon" aria-hidden="true">
+              <ion-icon name="leaf-outline"></ion-icon>
+            </div>
 
-      <ion-item class="form-item" lines="none">
-        <ion-icon name="grid-outline" slot="start"></ion-icon>
+            <ion-item class="form-item" lines="none">
+              <ion-input
+                placeholder="Nombre del cultivo"
+                [(ngModel)]="cultivo.nombre">
+              </ion-input>
+            </ion-item>
+          </div>
 
-        <ion-select
-          placeholder="Seleccionar categoría"
-          [(ngModel)]="cultivo.idCategoria">
+          <div class="field-shell">
+            <div class="field-icon" aria-hidden="true">
+              <ion-icon name="grid-outline"></ion-icon>
+            </div>
 
-          <ion-select-option
-            *ngFor="let cat of categorias"
-            [value]="cat.id">
-            {{ cat.nombre }}
-          </ion-select-option>
+            <ion-item class="form-item" lines="none">
+              <ion-select
+                placeholder="Seleccionar categoria"
+                [(ngModel)]="cultivo.idCategoria">
+                <ion-select-option
+                  *ngFor="let cat of categorias"
+                  [value]="cat.id">
+                  {{ cat.nombre }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </div>
 
-        </ion-select>
-      </ion-item>
+          <div class="field-shell">
+            <div class="field-icon" aria-hidden="true">
+              <ion-icon name="location-outline"></ion-icon>
+            </div>
 
-      <ion-item class="form-item" lines="none">
-        <ion-icon name="location-outline" slot="start"></ion-icon>
+            <ion-item class="form-item" lines="none">
+              <ion-select
+                placeholder="Seleccionar ubicacion"
+                [(ngModel)]="cultivo.idUbicacion">
+                <ion-select-option
+                  *ngFor="let ubi of ubicaciones"
+                  [value]="ubi.id">
+                  {{ ubi.nombre }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
 
-        <ion-select
-          placeholder="Seleccionar ubicación"
-          [(ngModel)]="cultivo.idUbicacion">
-
-          <ion-select-option
-            *ngFor="let ubi of ubicaciones"
-            [value]="ubi.id">
-            {{ ubi.nombre }}
-          </ion-select-option>
-
-        </ion-select>
-      </ion-item>
-
-    </ion-card-content>
-  </ion-card>
-
-  <ion-button
-    expand="block"
-    class="btn-guardar"
-    [disabled]="guardando || cargando || !formularioValido()"
-    (click)="guardar()">
-    <ion-icon name="checkmark-outline" slot="start"></ion-icon>
-    Actualizar cultivo
-  </ion-button>
-
+    <ion-button
+      expand="block"
+      class="btn-guardar"
+      [disabled]="guardando || cargando || !formularioValido()"
+      (click)="guardar()">
+      <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+      Actualizar cultivo
+    </ion-button>
+  </div>
 </ion-content>

@@ -1,15 +1,19 @@
-<ion-item
+<a
   class="module-card"
-  button
-  detail
-  lines="none"
   [routerLink]="route || null"
   [attr.aria-label]="title"
 >
-  <ion-icon slot="start" [name]="icon" aria-hidden="true"></ion-icon>
+  <div class="module-card__icon">
+    <ion-icon [name]="icon" aria-hidden="true"></ion-icon>
+  </div>
 
-  <ion-label>
-    <h2>{{ title }}</h2>
-    <p>{{ description }}</p>
-  </ion-label>
-</ion-item>
+  <div class="module-card__copy">
+    <p class="module-card__eyebrow">Modulo</p>
+    <h3>{{ title }}</h3>
+    <p class="module-card__description">{{ description }}</p>
+  </div>
+
+  <div class="module-card__arrow" aria-hidden="true">
+    <ion-icon name="arrow-forward-outline"></ion-icon>
+  </div>
+</a>

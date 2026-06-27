@@ -1,16 +1,20 @@
 :host {
-  --agronova-green: #2d7f34;
-  --agronova-green-strong: #25742d;
-  --agronova-page-bg: #f7fcf1;
+  --agronova-green: #285f3a;
+  --agronova-green-strong: #1d4f2d;
+  --agronova-page-bg: #f3f6ef;
+  --agronova-ink: #18241b;
+  --agronova-muted: #637364;
+  --agronova-card: #fbfcf8;
 }
 
 .dashboard-header {
   ion-toolbar {
-    --background: var(--agronova-green);
+    --background: linear-gradient(135deg, #234f31 0%, #2f7a42 100%);
     --border-width: 0;
-    --min-height: 54px;
+    --min-height: 58px;
     --padding-end: 10px;
     --padding-start: 4px;
+    color: #ffffff;
   }
 
   ion-button {
@@ -26,34 +30,191 @@
   }
 
   ion-title {
-    color: #050805;
-    font-size: 20px;
+    color: #ffffff;
+    font-size: 18px;
     font-weight: 700;
-    letter-spacing: 0;
+    letter-spacing: -0.02em;
     padding-inline: 12px;
   }
 }
 
 .dashboard-content {
-  --background: var(--agronova-page-bg);
+  --background: linear-gradient(180deg, #eef4e8 0%, var(--agronova-page-bg) 40%, #f8faf6 100%);
 }
 
 .dashboard-shell {
   margin: 0 auto;
-  max-width: 560px;
-  padding: 17px 12px 24px;
+  max-width: 1120px;
+  padding: 14px 14px 28px;
 }
 
-h1 {
-  color: var(--agronova-green-strong);
-  font-size: 14px;
+.kpi-section,
+.modules-section {
+  margin-top: 8px;
+}
+
+.section-heading {
+  align-items: end;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.section-heading.compact {
+  margin-bottom: 12px;
+}
+
+.section-label {
+  color: #5c745f;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0;
-  line-height: 1.2;
-  margin: 0 0 15px 4px;
+  letter-spacing: 0.12em;
+  margin: 0 0 6px;
+}
+
+.section-heading h2 {
+  color: var(--agronova-ink);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+.dashboard-message {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(40, 95, 58, 0.1);
+  border-radius: 16px;
+  color: var(--agronova-muted);
+  font-size: 14px;
+  margin-bottom: 12px;
+  padding: 12px 14px;
+}
+
+.dashboard-message.error {
+  background: rgba(120, 38, 38, 0.06);
+  border-color: rgba(120, 38, 38, 0.12);
+  color: #7d2b2b;
+}
+
+.kpi-grid,
+.module-list {
+  display: grid;
+  gap: 14px;
+}
+
+.kpi-grid,
+.kpi-grid--compact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.kpi-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), var(--agronova-card));
+  border: 1px solid rgba(40, 95, 58, 0.09);
+  border-radius: 20px;
+  box-shadow: 0 10px 22px rgba(27, 47, 31, 0.07);
+  overflow: hidden;
+  padding: 16px;
+  position: relative;
+}
+
+.kpi-card::before {
+  border-radius: 999px;
+  content: '';
+  height: 130px;
+  opacity: 0.9;
+  position: absolute;
+  right: -45px;
+  top: -82px;
+  width: 130px;
+}
+
+.kpi-card--compact {
+  min-height: 136px;
+}
+
+.kpi-card.loading .kpi-value {
+  opacity: 0.75;
+}
+
+.accent-cultivos::before {
+  background: rgba(118, 185, 92, 0.18);
+}
+
+.accent-tareas::before {
+  background: rgba(88, 142, 216, 0.16);
+}
+
+.kpi-label,
+.kpi-value,
+.kpi-hint {
+  position: relative;
+  z-index: 1;
+}
+
+.kpi-label {
+  color: #49634d;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.kpi-value {
+  color: var(--agronova-ink);
+  font-size: clamp(30px, 4vw, 44px);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  margin: 14px 0 10px;
+}
+
+.kpi-hint {
+  color: var(--agronova-muted);
+  font-size: 12px;
+  line-height: 1.45;
+  margin: 0;
+  max-width: 22ch;
 }
 
 .module-list {
-  display: grid;
-  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 900px) {
+  .module-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-shell {
+    padding: 12px 12px 24px;
+  }
+
+  .section-heading h2 {
+    font-size: 20px;
+  }
+
+  .kpi-grid,
+  .kpi-grid--compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .kpi-card--compact {
+    min-height: 126px;
+    padding: 14px;
+  }
+
+  .kpi-value {
+    font-size: 32px;
+  }
+
+  .kpi-hint {
+    font-size: 11px;
+  }
+
+  .module-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
