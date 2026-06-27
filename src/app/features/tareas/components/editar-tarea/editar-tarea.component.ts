@@ -32,11 +32,12 @@ import { finalize, forkJoin } from 'rxjs';
 
 import { Agricultor } from '../../../../core/models/agricultor.model';
 import { CatalogoReferencia, Cultivo } from '../../../../core/models/cultivo.model';
-import { Tarea, UpdateTareaDto } from '../../../../core/models/tarea.model';
+import { InsumoAsignado, Tarea, UpdateTareaDto } from '../../../../core/models/tarea.model';
 import { AgricultoresService } from '../../../../core/service/agricultores.service';
 import { CatalogosService } from '../../../../core/service/catalogos.service';
 import { CultivosService } from '../../../../core/service/cultivos.service';
 import { TareasService } from '../../../../core/service/tareas.service';
+import { TareaInsumosAsignadosComponent } from '../tarea-insumos-asignados/tarea-insumos-asignados.component';
 
 interface TareaForm {
   nombre: string;
@@ -46,6 +47,7 @@ interface TareaForm {
   idTipoTarea: string;
   descripcion: string;
   idAgricultores: string[];
+  insumosAsignados: InsumoAsignado[];
 }
 
 @Component({
@@ -70,6 +72,7 @@ interface TareaForm {
     IonTextarea,
     IonTitle,
     IonToolbar,
+    TareaInsumosAsignadosComponent,
   ],
 })
 export class EditarTareaComponent implements OnInit {
@@ -81,6 +84,7 @@ export class EditarTareaComponent implements OnInit {
     idTipoTarea: '',
     descripcion: '',
     idAgricultores: [],
+    insumosAsignados: [],
   };
 
   tiposTarea: CatalogoReferencia[] = [];
@@ -157,6 +161,7 @@ export class EditarTareaComponent implements OnInit {
       idTipoTarea: this.tarea.idTipoTarea,
       descripcion: this.tarea.descripcion.trim(),
       ...(this.tarea.idAgricultores.length ? { idAgricultores: this.tarea.idAgricultores } : {}),
+      insumosAsignados: this.tarea.insumosAsignados.map((item) => ({ ...item })),
     };
 
     this.guardando = true;
@@ -197,6 +202,9 @@ export class EditarTareaComponent implements OnInit {
       idTipoTarea: tarea.idTipoTarea,
       descripcion: tarea.descripcion,
       idAgricultores: tarea.idAgricultores ? [...tarea.idAgricultores] : [],
+      insumosAsignados: Array.isArray(tarea.insumosAsignados)
+        ? tarea.insumosAsignados.map((item) => ({ ...item }))
+        : [],
     };
   }
 }

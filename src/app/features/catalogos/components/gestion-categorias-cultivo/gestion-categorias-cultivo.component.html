@@ -1,0 +1,142 @@
+<ion-header>
+  <ion-toolbar class="categorias-toolbar">
+    <ion-title>
+      <span style="display:inline-flex;align-items:center;gap:8px;">
+        <ion-button fill="clear" (click)="volverAlDashboard()" aria-label="Volver al Dashboard" style="--color:#fff;--padding-start:0;--padding-end:0;--background-hover:rgba(255,255,255,.12);min-width:40px;min-height:40px;width:40px;height:40px;margin:0;cursor:pointer;">
+          <ion-icon name="arrow-back-outline" style="font-size:16px;"></ion-icon>
+        </ion-button>
+        <span>Categorias de Cultivo</span>
+      </span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="categorias-content ion-padding">
+  <section class="categorias-section">
+    <div class="section-heading">
+      <div class="section-icon">
+        <ion-icon name="leaf-outline"></ion-icon>
+      </div>
+
+      <div class="section-copy">
+        <p class="section-label">CATALOGO</p>
+        <h2>Gestion de categorias</h2>
+        <p>Administra las categorias que usan los formularios y listados de cultivos.</p>
+      </div>
+    </div>
+
+    <ion-card class="form-card">
+      <ion-card-content>
+        <div class="section-heading compact">
+          <div class="card-icon" aria-hidden="true">
+            <ion-icon name="add-outline"></ion-icon>
+          </div>
+
+          <div class="section-copy">
+            <p class="section-label">NUEVA CATEGORIA</p>
+            <h3>Registrar categoria</h3>
+            <p>Agrega una nueva categoria de cultivo sin salir de esta pantalla.</p>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <ion-item class="form-item" lines="none">
+            <ion-input
+              placeholder="Nombre de la categoria"
+              [(ngModel)]="nombreNuevaCategoria"
+              [disabled]="guardando">
+            </ion-input>
+          </ion-item>
+
+          <ion-button
+            class="guardar-button"
+            [disabled]="guardando || !nombreNuevaCategoria.trim()"
+            (click)="crearCategoria()">
+            <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+            Guardar
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="list-state" *ngIf="!cargando; else loadingState">
+      <div class="empty-state" *ngIf="!categorias.length">
+        <div class="empty-icon">
+          <ion-icon name="leaf-outline"></ion-icon>
+        </div>
+        <h3>No hay categorias registradas</h3>
+        <p>Cuando agregues una categoria, aparecera aqui para usarla desde Cultivos.</p>
+      </div>
+
+      <ion-card class="categoria-card" *ngFor="let categoria of categorias">
+        <ion-card-content>
+          <div class="card-icon" aria-hidden="true">
+            <ion-icon name="leaf-outline"></ion-icon>
+          </div>
+
+          <div class="card-body">
+            <div class="card-main" *ngIf="!estaEditando(categoria); else editState">
+              <span class="categoria-chip">Categoria activa</span>
+              <h3>{{ categoria.nombre || 'Sin nombre' }}</h3>
+            </div>
+
+            <ng-template #editState>
+              <div class="card-main editing">
+                <span class="categoria-chip editing-chip">Editando</span>
+
+                <ion-item class="form-item inline-edit-item" lines="none">
+                  <ion-input
+                    placeholder="Actualizar nombre"
+                    [(ngModel)]="nombreEdicion"
+                    [disabled]="guardando">
+                  </ion-input>
+                </ion-item>
+              </div>
+            </ng-template>
+
+            <ion-buttons class="acciones-grupo" *ngIf="!estaEditando(categoria)">
+              <ion-button class="accion-button editar-button" (click)="iniciarEdicion(categoria)">
+                <ion-icon name="create-outline"></ion-icon>
+              </ion-button>
+
+              <ion-button
+                class="accion-button eliminar-button"
+                [disabled]="eliminandoId === categoria.id"
+                (click)="eliminarCategoria(categoria)">
+                <ion-icon name="trash-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+
+            <ion-buttons class="acciones-grupo" *ngIf="estaEditando(categoria)">
+              <ion-button
+                class="accion-button guardar-inline-button"
+                [disabled]="guardando || !nombreEdicion.trim()"
+                (click)="guardarEdicion(categoria)">
+                <ion-icon name="save-outline"></ion-icon>
+              </ion-button>
+
+              <ion-button class="accion-button cancelar-button" [disabled]="guardando" (click)="cancelarEdicion()">
+                <ion-icon name="close-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </section>
+
+  <ng-template #loadingState>
+    <div class="loading-state">
+      <div class="loading-card" *ngFor="let item of [1, 2, 3]">
+        <div class="loading-card-row">
+          <div class="loading-icon"></div>
+          <div class="loading-copy">
+            <div class="loading-line loading-line-chip"></div>
+            <div class="loading-line loading-line-title"></div>
+          </div>
+          <div class="loading-actions"></div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</ion-content>

@@ -1,0 +1,74 @@
+<div class="gantt-shell">
+  <div class="gantt-toolbar">
+    <div class="gantt-toolbar-copy">
+      <p class="gantt-label">CRONOGRAMA</p>
+      <h3>Vista Gantt</h3>
+      <p>Filtra por fecha para ver las tareas activas en ese dia y mantener contexto visual del calendario.</p>
+    </div>
+
+    <div class="gantt-toolbar-actions">
+      <label class="date-filter">
+        <span>Fecha</span>
+        <input
+          type="date"
+          [(ngModel)]="fechaSeleccionada"
+          (ngModelChange)="onFechaSeleccionadaChange()">
+      </label>
+
+      <button
+        *ngIf="fechaSeleccionada"
+        type="button"
+        class="clear-button"
+        (click)="limpiarFiltroFecha()">
+        Limpiar
+      </button>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="!ganttItems.length">
+    <p>{{ mensajeSinResultados }}</p>
+  </div>
+
+  <div class="gantt-table" *ngIf="ganttItems.length">
+    <div class="gantt-side">
+      <div class="gantt-side-header">Tarea</div>
+
+      <div
+        class="gantt-side-row"
+        *ngFor="let item of ganttItems; trackBy: trackByTarea">
+        <div class="gantt-title">{{ item.tarea.nombre }}</div>
+        <div class="gantt-meta">{{ item.fechaInicioLabel }} - {{ item.fechaFinLabel }}</div>
+        <span class="gantt-state" [ngClass]="item.estadoClase">{{ item.estadoLabel }}</span>
+      </div>
+    </div>
+
+    <div class="gantt-timeline">
+      <div class="gantt-timeline-inner" [style.width.px]="timelineWidthPx">
+        <div class="gantt-days">
+          <div
+            class="gantt-day"
+            *ngFor="let day of timelineDays; trackBy: trackByDay">
+            <span class="gantt-day-number">{{ formatearDiaNumero(day) }}</span>
+            <span class="gantt-day-month">{{ formatearDiaMes(day) }}</span>
+          </div>
+        </div>
+
+        <div
+          class="gantt-track"
+          *ngFor="let item of ganttItems; trackBy: trackByTarea">
+          <div
+            class="gantt-grid-cell"
+            *ngFor="let day of timelineDays; trackBy: trackByDay"></div>
+
+          <div
+            class="gantt-bar"
+            [ngClass]="item.estadoClase"
+            [style.left.px]="item.offsetPx"
+            [style.width.px]="item.widthPx">
+            <span>{{ item.tarea.nombre }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

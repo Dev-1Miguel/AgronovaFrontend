@@ -19,8 +19,11 @@ import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import {
   addOutline,
+  arrowBackOutline,
   createOutline,
+  flowerOutline,
   leafOutline,
+  locationOutline,
   trashOutline
 } from 'ionicons/icons';
 import { finalize, forkJoin } from 'rxjs';
@@ -64,8 +67,11 @@ export class CultivosPage {
   ) {
     addIcons({
       addOutline,
+      arrowBackOutline,
       createOutline,
+      flowerOutline,
       leafOutline,
+      locationOutline,
       trashOutline
     });
   }
@@ -97,6 +103,10 @@ export class CultivosPage {
 
   abrirFormulario(): void {
     this.router.navigate(['/cultivos/crear']);
+  }
+
+  volverAlDashboard(): void {
+    this.router.navigate(['/dashboard']);
   }
 
   editarCultivo(cultivo: Cultivo): void {

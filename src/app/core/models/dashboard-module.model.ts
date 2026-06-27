@@ -13,6 +13,12 @@ export const DASHBOARD_MODULES: DashboardModule[] = [
     route: '/cultivos',
   },
   {
+    title: 'Categorias',
+    description: 'Administra categorias de cultivo.',
+    icon: 'leaf',
+    route: '/categorias-cultivo',
+  },
+  {
     title: 'Tareas',
     description: 'Asigna y completa tareas.',
     icon: 'reader-outline',
@@ -35,5 +41,11 @@ export const DASHBOARD_MODULES: DashboardModule[] = [
     description: 'Gestiona la cosecha lista.',
     icon: 'basket',
     route: '/productos',
+  },
+  {
+    title: 'Ventas',
+    description: 'Registra y consulta ventas activas.',
+    icon: 'cash-outline',
+    route: '/ventas',
   },
 ];

@@ -1,9 +1,16 @@
 <ion-header>
-  <ion-toolbar color="success">
-    <ion-title>Gestión de Insumos</ion-title>
+  <ion-toolbar class="insumos-toolbar">
+    <ion-title>
+      <span style="display:inline-flex;align-items:center;gap:8px;">
+        <ion-button fill="clear" (click)="volverAlDashboard()" aria-label="Volver al Dashboard" style="--color:#fff;--padding-start:0;--padding-end:0;--background-hover:rgba(255,255,255,.12);min-width:40px;min-height:40px;width:40px;height:40px;margin:0;cursor:pointer;">
+          <ion-icon name="arrow-back-outline" style="font-size:16px;"></ion-icon>
+        </ion-button>
+        <span>Insumos</span>
+      </span>
+    </ion-title>
 
     <ion-buttons slot="end">
-      <ion-button (click)="abrirFormulario()">
+      <ion-button class="nuevo-button" (click)="abrirFormulario()">
         <ion-icon name="add-outline" slot="start"></ion-icon>
         Nuevo
       </ion-button>
@@ -12,36 +19,42 @@
 </ion-header>
 
 <ion-content class="insumos-content ion-padding">
-  <ion-searchbar
-    placeholder="Buscar insumo"
-    [(ngModel)]="busqueda">
-  </ion-searchbar>
+  <ion-searchbar class="insumos-searchbar" placeholder="Buscar insumo" [(ngModel)]="busqueda"></ion-searchbar>
 
-  <ion-card
-    class="insumo-card"
-    *ngFor="let insumo of insumosFiltrados()">
-    <ion-card-content>
-      <div class="insumo-row">
-        <div class="icon-box">
-          <ion-icon name="archive-outline"></ion-icon>
-        </div>
-
-        <div class="insumo-info">
-          <h2>{{ insumo.descripcion }}</h2>
-          <p>{{ obtenerTipoInsumo(insumo) }}</p>
-          <p>{{ insumo.cantidad }} {{ insumo.unidadMedida }}</p>
-        </div>
-
-        <ion-buttons>
-          <ion-button color="primary" (click)="editarInsumo(insumo)">
-            <ion-icon name="create-outline"></ion-icon>
-          </ion-button>
-
-          <ion-button color="danger" (click)="eliminarInsumo(insumo)">
-            <ion-icon name="trash-outline"></ion-icon>
-          </ion-button>
-        </ion-buttons>
+  <section class="insumos-section">
+    <div class="section-heading">
+      <div class="section-icon"><ion-icon name="archive-outline"></ion-icon></div>
+      <div class="section-copy">
+        <p class="section-label">MODULO</p>
+        <h2>Inventario de insumos</h2>
+        <p>Consulta y organiza los insumos registrados con una vista clara y consistente con el resto del sistema.</p>
       </div>
-    </ion-card-content>
-  </ion-card>
+    </div>
+
+    <ion-card class="insumo-card" *ngFor="let insumo of insumosFiltrados(); else emptyStateBlock">
+      <ion-card-content>
+        <div class="card-icon" aria-hidden="true"><ion-icon name="archive-outline"></ion-icon></div>
+        <div class="card-body">
+          <div class="card-main">
+            <h3>{{ insumo.descripcion }}</h3>
+            <div class="card-middle-row"><span class="tipo-chip">{{ obtenerTipoInsumo(insumo) || 'Tipo no asignado' }}</span></div>
+            <div class="card-bottom-row"><ion-icon name="cube-outline"></ion-icon><span>{{ insumo.cantidad }} {{ insumo.unidadMedida }}</span></div>
+          </div>
+          <ion-buttons class="acciones-grupo">
+            <ion-button class="accion-button editar-button" (click)="editarInsumo(insumo)"><ion-icon name="create-outline"></ion-icon></ion-button>
+            <ion-button class="accion-button eliminar-button" (click)="eliminarInsumo(insumo)"><ion-icon name="trash-outline"></ion-icon></ion-button>
+          </ion-buttons>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ng-template #emptyStateBlock>
+      <div class="empty-state">
+        <div class="empty-icon"><ion-icon name="archive-outline"></ion-icon></div>
+        <h3>No hay insumos registrados</h3>
+        <p>Cuando agregues un insumo, aparecera aqui con su tipo, cantidad y unidad de medida.</p>
+        <ion-button class="empty-cta" (click)="abrirFormulario()"><ion-icon name="add-outline" slot="start"></ion-icon>Nuevo insumo</ion-button>
+      </div>
+    </ng-template>
+  </section>
 </ion-content>

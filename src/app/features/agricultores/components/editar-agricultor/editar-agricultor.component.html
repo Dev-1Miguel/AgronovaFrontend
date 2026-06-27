@@ -1,65 +1,22 @@
-<ion-header>
-  <ion-toolbar color="success">
-    <ion-buttons slot="start">
-      <ion-button (click)="volverAGestion()">
-        <ion-icon name="arrow-back-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-
+<ion-header class="form-header">
+  <ion-toolbar class="form-toolbar">
+    <ion-buttons slot="start"><ion-button class="back-button" (click)="volverAGestion()"><ion-icon name="arrow-back-outline"></ion-icon></ion-button></ion-buttons>
     <ion-title>Editar Agricultor</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="form-content ion-padding">
-
-  <ion-card class="form-card">
-    <ion-card-content>
-
-      <h2 class="form-title">Informaci&oacute;n del agricultor</h2>
-
-      <ion-item class="form-item" lines="none">
-        <ion-icon name="person-outline" slot="start"></ion-icon>
-        <ion-input
-          placeholder="Nombre del agricultor"
-          [(ngModel)]="agricultor.nombre">
-        </ion-input>
-      </ion-item>
-
-      <ion-item class="form-item" lines="none">
-        <ion-icon name="calendar-outline" slot="start"></ion-icon>
-        <ion-input
-          type="number"
-          placeholder="Edad"
-          [(ngModel)]="agricultor.edad">
-        </ion-input>
-      </ion-item>
-
-      <ion-item class="form-item" lines="none">
-        <ion-icon name="location-outline" slot="start"></ion-icon>
-        <ion-input
-          placeholder="Zona"
-          [(ngModel)]="agricultor.zona">
-        </ion-input>
-      </ion-item>
-
-      <ion-item class="form-item" lines="none">
-        <ion-icon name="briefcase-outline" slot="start"></ion-icon>
-        <ion-input
-          placeholder="Experiencia"
-          [(ngModel)]="agricultor.experiencia">
-        </ion-input>
-      </ion-item>
-
-    </ion-card-content>
-  </ion-card>
-
-  <ion-button
-    expand="block"
-    class="btn-guardar"
-    [disabled]="guardando || cargando || !formularioValido()"
-    (click)="guardar()">
-    <ion-icon name="checkmark-outline" slot="start"></ion-icon>
-    Actualizar agricultor
-  </ion-button>
-
+<ion-content class="form-content">
+  <div class="form-shell ion-padding">
+    <section class="hero-section"><p class="hero-eyebrow">AGRICULTORES</p><h1>Editar agricultor</h1><p class="hero-copy">Actualiza nombre, edad, zona y experiencia sin alterar el flujo actual.</p></section>
+    <ion-card class="form-card"><ion-card-content>
+      <div class="section-heading"><div class="section-icon" aria-hidden="true"><ion-icon name="people-outline"></ion-icon></div><div class="section-copy"><p class="section-label">FORMULARIO</p><h2 class="form-title">Informacion del agricultor</h2><p>Revisa y ajusta los datos del agricultor antes de guardar los cambios.</p></div></div>
+      <div class="fields-grid">
+        <div class="field-shell"><div class="field-icon" aria-hidden="true"><ion-icon name="person-outline"></ion-icon></div><ion-item class="form-item" lines="none"><ion-input placeholder="Nombre del agricultor" [(ngModel)]="agricultor.nombre"></ion-input></ion-item></div>
+        <div class="field-shell"><div class="field-icon" aria-hidden="true"><ion-icon name="calendar-outline"></ion-icon></div><ion-item class="form-item" lines="none"><ion-input type="number" placeholder="Edad" [(ngModel)]="agricultor.edad"></ion-input></ion-item></div>
+        <div class="field-shell"><div class="field-icon" aria-hidden="true"><ion-icon name="location-outline"></ion-icon></div><ion-item class="form-item" lines="none"><ion-input placeholder="Zona" [(ngModel)]="agricultor.zona"></ion-input></ion-item></div>
+        <div class="field-shell"><div class="field-icon" aria-hidden="true"><ion-icon name="briefcase-outline"></ion-icon></div><ion-item class="form-item" lines="none"><ion-input placeholder="Experiencia" [(ngModel)]="agricultor.experiencia"></ion-input></ion-item></div>
+      </div>
+    </ion-card-content></ion-card>
+    <ion-button expand="block" class="btn-guardar" [disabled]="guardando || cargando || !formularioValido()" (click)="guardar()"><ion-icon name="checkmark-outline" slot="start"></ion-icon>Actualizar agricultor</ion-button>
+  </div>
 </ion-content>

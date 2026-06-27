@@ -15,7 +15,7 @@ import {
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { addOutline, createOutline, basketOutline, trashOutline } from 'ionicons/icons';
+import { addOutline, arrowBackOutline, createOutline, basketOutline, trashOutline } from 'ionicons/icons';
 import { finalize, forkJoin } from 'rxjs';
 
 import { Cultivo } from '../../../../core/models/cultivo.model';
@@ -54,7 +54,7 @@ export class GestionProductosComponent {
     private readonly cultivosService: CultivosService,
     private readonly router: Router,
   ) {
-    addIcons({ addOutline, createOutline, basketOutline, trashOutline });
+    addIcons({ addOutline, arrowBackOutline, createOutline, basketOutline, trashOutline });
   }
 
   ionViewWillEnter(): void {
@@ -82,6 +82,10 @@ export class GestionProductosComponent {
 
   abrirFormulario(): void {
     this.router.navigate(['/productos/crear']);
+  }
+
+  volverAlDashboard(): void {
+    this.router.navigate(['/dashboard']);
   }
 
   editarProducto(producto: Producto): void {

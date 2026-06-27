@@ -15,7 +15,7 @@ import {
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { archiveOutline, addOutline, createOutline, trashOutline } from 'ionicons/icons';
+import { archiveOutline, addOutline, arrowBackOutline, createOutline, trashOutline } from 'ionicons/icons';
 import { finalize, forkJoin } from 'rxjs';
 
 import { CatalogoReferencia } from '../../../../core/models/cultivo.model';
@@ -54,7 +54,7 @@ export class GestionInsumosComponent {
     private readonly catalogosService: CatalogosService,
     private readonly router: Router,
   ) {
-    addIcons({ archiveOutline, addOutline, createOutline, trashOutline });
+    addIcons({ archiveOutline, addOutline, arrowBackOutline, createOutline, trashOutline });
   }
 
   ionViewWillEnter(): void {
@@ -82,6 +82,10 @@ export class GestionInsumosComponent {
 
   abrirFormulario(): void {
     this.router.navigate(['/insumos/crear']);
+  }
+
+  volverAlDashboard(): void {
+    this.router.navigate(['/dashboard']);
   }
 
   editarInsumo(insumo: Insumo): void {
