@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   IonButton,
   IonCard,
@@ -22,10 +22,11 @@ import { AuthService } from '../../../../core/service/auth.service';
   selector: 'app-login',
   standalone: true,
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  styleUrls: ['../auth-page.shared.scss', './login.component.scss'],
   imports: [
     CommonModule,
     FormsModule,
+    RouterLink,
     IonButton,
     IonCard,
     IonCardContent,
@@ -43,20 +44,27 @@ export class LoginComponent implements OnInit {
   contrasena = '';
   loading = false;
   errorMessage = '';
+  successMessage = '';
 
   constructor(
     private readonly authService: AuthService,
+    private readonly activatedRoute: ActivatedRoute,
     private readonly router: Router,
   ) {}
 
   ngOnInit(): void {
     if (this.authService.isAuthenticated()) {
       void this.router.navigate(['/dashboard']);
+      return;
     }
+
+    const message = this.activatedRoute.snapshot.queryParamMap.get('message');
+    this.successMessage = this.getSuccessMessage(message);
   }
 
   iniciarSesion(): void {
     this.errorMessage = '';
+    this.successMessage = '';
 
     const correo = this.correo.trim();
     const contrasena = this.contrasena;
@@ -80,5 +88,18 @@ export class LoginComponent implements OnInit {
           this.errorMessage = 'No se pudo iniciar sesion. Verifica tus credenciales.';
         },
       });
+  }
+
+  private getSuccessMessage(message: string | null): string {
+    switch (message) {
+      case 'registered':
+        return 'Tu cuenta fue creada. Inicia sesion para continuar.';
+      case 'reset-sent':
+        return 'Revisa tu correo si la cuenta existe. Enviamos un enlace de recuperacion.';
+      case 'password-reset':
+        return 'Tu contrasena fue actualizada. Ya puedes iniciar sesion.';
+      default:
+        return '';
+    }
   }
 }

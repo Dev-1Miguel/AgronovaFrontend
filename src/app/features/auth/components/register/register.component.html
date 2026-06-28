@@ -2,12 +2,23 @@
   <div class="login-shell">
     <section class="login-hero">
       <p class="login-eyebrow">AGRONOVA</p>
-      <ion-title>Iniciar sesion</ion-title>
-      <p class="login-copy">Ingresa tu correo y contrasena para acceder a los modulos operativos.</p>
+      <ion-title>Crear cuenta</ion-title>
+      <p class="login-copy">Registra tus datos para acceder a los modulos operativos.</p>
     </section>
 
     <ion-card class="login-card">
       <ion-card-content>
+        <div class="field-group">
+          <ion-label class="field-label">Nombre</ion-label>
+          <ion-item class="field-item" lines="none">
+            <ion-input
+              placeholder="Tu nombre"
+              [(ngModel)]="nombre"
+              [disabled]="loading">
+            </ion-input>
+          </ion-item>
+        </div>
+
         <div class="field-group">
           <ion-label class="field-label">Correo</ion-label>
           <ion-item class="field-item" lines="none">
@@ -25,8 +36,20 @@
           <ion-item class="field-item" lines="none">
             <ion-input
               type="password"
-              placeholder="Tu contrasena"
+              placeholder="Minimo 8 caracteres"
               [(ngModel)]="contrasena"
+              [disabled]="loading">
+            </ion-input>
+          </ion-item>
+        </div>
+
+        <div class="field-group">
+          <ion-label class="field-label">Confirmar contrasena</ion-label>
+          <ion-item class="field-item" lines="none">
+            <ion-input
+              type="password"
+              placeholder="Repite tu contrasena"
+              [(ngModel)]="confirmarContrasena"
               [disabled]="loading">
             </ion-input>
           </ion-item>
@@ -36,24 +59,20 @@
           <ion-text color="danger" class="error-text">{{ errorMessage }}</ion-text>
         }
 
-        @if (successMessage) {
-          <ion-text color="success" class="success-text">{{ successMessage }}</ion-text>
-        }
-
         <ion-button
           expand="block"
           class="login-button"
           [disabled]="loading"
-          (click)="iniciarSesion()">
+          (click)="registrar()">
           @if (loading) {
             <ion-spinner name="crescent" slot="start"></ion-spinner>
           }
-          Iniciar sesion
+          Crear cuenta
         </ion-button>
 
         <div class="secondary-actions">
+          <a class="auth-link" routerLink="/login">Volver a iniciar sesion</a>
           <a class="auth-link" routerLink="/auth/forgot-password">Olvide mi contrasena</a>
-          <a class="auth-link" routerLink="/auth/register">Crear cuenta</a>
         </div>
       </ion-card-content>
     </ion-card>

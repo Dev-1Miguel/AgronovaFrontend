@@ -3,6 +3,21 @@ export interface LoginRequest {
   contrasena: string;
 }
 
+export interface RegisterRequest {
+  nombre: string;
+  correo: string;
+  contrasena: string;
+}
+
+export interface ForgotPasswordRequest {
+  correo: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  contrasena: string;
+}
+
 export interface AuthenticatedUser {
   id: string;
   nombre: string;
@@ -14,4 +29,8 @@ export interface AuthenticatedUser {
 export interface LoginResponse {
   accessToken: string;
   user: AuthenticatedUser;
+}
+
+export interface AuthMessageResponse {
+  message: string;
 }
