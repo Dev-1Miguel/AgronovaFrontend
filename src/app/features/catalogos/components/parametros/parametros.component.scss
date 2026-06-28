@@ -5,7 +5,7 @@ ion-content.parametros-content{--background:linear-gradient(180deg,#eef4e8 0%,#f
 .section-heading,.card-top-row,.loading-card-row{display:flex;align-items:center}.section-heading{gap:12px}.card-top-row{justify-content:space-between;gap:12px}
 .section-label{color:#5c745f;font-size:12px;font-weight:700;letter-spacing:.12em;margin:0}.section-copy h2,.empty-state h3,.card-main h3{color:#18241b;margin:0}.section-copy h2{font-size:22px;font-weight:700}.section-copy p,.empty-state p{color:#637364;font-size:14px;margin:0}
 .section-icon,.card-icon,.empty-icon,.loading-icon{display:inline-flex;align-items:center;justify-content:center}.section-icon{width:48px;height:48px;border-radius:999px;background:#dcfce7;color:#166534;flex:0 0 auto}.section-icon ion-icon{font-size:22px}
-.parametros-segment{--background:#e7efe3;padding:4px;border-radius:18px}.parametros-segment ion-segment-button{min-height:42px;--border-radius:14px;--color:#48614d;--color-checked:#fff;--indicator-color:#234f31;font-size:12px}
+.parametros-segment{--background:#e7efe3;padding:4px;border-radius:18px}.parametros-segment ion-segment-button{min-height:42px;--border-radius:14px;--color:#48614d;--color-checked:#234f31;--indicator-color:#234f31;font-size:12px}
 .parametros-searchbar{--background:#fff;--border-radius:18px;--box-shadow:none}
 .parametro-card,.empty-state,.loading-card{border:1px solid rgba(40,95,58,.09);border-radius:24px}.parametro-card{--background:#fff;margin:0}
 .parametro-card ion-card-content,.loading-card{padding:22px 20px 18px}.parametro-card ion-card-content{display:grid;gap:16px;grid-template-columns:56px minmax(0,1fr)}
@@ -19,3 +19,6 @@ ion-content.parametros-content{--background:linear-gradient(180deg,#eef4e8 0%,#f
 .loading-line{border-radius:999px;background:linear-gradient(90deg,#eef2ee 25%,#f7faf7 50%,#eef2ee 75%);background-size:200% 100%;animation:pulse 1.4s ease-in-out infinite}.loading-line-chip{width:34%;height:28px}.loading-line-title{width:54%;height:18px}
 @keyframes pulse{0%{background-position:200% 0}100%{background-position:-200% 0}}
 @media (max-width:576px){.parametro-card ion-card-content,.loading-card-row{display:grid;gap:14px;grid-template-columns:48px minmax(0,1fr)}.card-icon,.loading-icon{width:48px;height:48px}.card-main h3,.section-copy h2{font-size:18px}}
+
+
+
