@@ -7,6 +7,7 @@ import {
   IonCard,
   IonCardContent,
   IonContent,
+  IonIcon,
   IonInput,
   IonItem,
   IonLabel,
@@ -14,6 +15,8 @@ import {
   IonText,
   IonTitle,
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { arrowBackOutline, leafOutline, mailOutline } from 'ionicons/icons';
 import { finalize } from 'rxjs';
 
 import { AuthService } from '../../../../core/service/auth.service';
@@ -31,6 +34,7 @@ import { AuthService } from '../../../../core/service/auth.service';
     IonCard,
     IonCardContent,
     IonContent,
+    IonIcon,
     IonInput,
     IonItem,
     IonLabel,
@@ -48,7 +52,9 @@ export class ForgotPasswordComponent {
   constructor(
     private readonly authService: AuthService,
     private readonly router: Router,
-  ) {}
+  ) {
+    addIcons({ leafOutline, mailOutline, arrowBackOutline });
+  }
 
   enviarEnlace(): void {
     this.errorMessage = '';

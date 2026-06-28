@@ -7,6 +7,7 @@ import {
   IonCard,
   IonCardContent,
   IonContent,
+  IonIcon,
   IonInput,
   IonItem,
   IonLabel,
@@ -14,6 +15,8 @@ import {
   IonText,
   IonTitle,
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { eyeOffOutline, eyeOutline, leafOutline, lockClosedOutline, mailOutline } from 'ionicons/icons';
 import { finalize } from 'rxjs';
 
 import { AuthService } from '../../../../core/service/auth.service';
@@ -31,6 +34,7 @@ import { AuthService } from '../../../../core/service/auth.service';
     IonCard,
     IonCardContent,
     IonContent,
+    IonIcon,
     IonInput,
     IonItem,
     IonLabel,
@@ -45,6 +49,7 @@ export class LoginComponent implements OnInit {
   loading = false;
   errorMessage = '';
   successMessage = '';
+  mostrarContrasena = false;
 
   constructor(
     private readonly authService: AuthService,
@@ -53,6 +58,8 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    addIcons({ leafOutline, mailOutline, lockClosedOutline, eyeOutline, eyeOffOutline });
+
     if (this.authService.isAuthenticated()) {
       void this.router.navigate(['/dashboard']);
       return;
@@ -60,6 +67,10 @@ export class LoginComponent implements OnInit {
 
     const message = this.activatedRoute.snapshot.queryParamMap.get('message');
     this.successMessage = this.getSuccessMessage(message);
+  }
+
+  toggleMostrarContrasena(): void {
+    this.mostrarContrasena = !this.mostrarContrasena;
   }
 
   iniciarSesion(): void {

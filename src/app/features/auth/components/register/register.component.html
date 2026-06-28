@@ -1,80 +1,128 @@
 <ion-content class="login-content">
   <div class="login-shell">
-    <section class="login-hero">
-      <p class="login-eyebrow">AGRONOVA</p>
-      <ion-title>Crear cuenta</ion-title>
-      <p class="login-copy">Registra tus datos para acceder a los modulos operativos.</p>
-    </section>
-
-    <ion-card class="login-card">
-      <ion-card-content>
-        <div class="field-group">
-          <ion-label class="field-label">Nombre</ion-label>
-          <ion-item class="field-item" lines="none">
-            <ion-input
-              placeholder="Tu nombre"
-              [(ngModel)]="nombre"
-              [disabled]="loading">
-            </ion-input>
-          </ion-item>
+    <div class="auth-layout">
+      <section class="login-hero">
+        <div class="brand-lockup">
+          <div class="brand-mark" aria-hidden="true">
+            <ion-icon name="leaf-outline"></ion-icon>
+          </div>
+          <div class="brand-copy">
+            <p class="brand-name">Agronova</p>
+          </div>
         </div>
 
-        <div class="field-group">
-          <ion-label class="field-label">Correo</ion-label>
-          <ion-item class="field-item" lines="none">
-            <ion-input
-              type="email"
-              placeholder="correo@agronova.com"
-              [(ngModel)]="correo"
-              [disabled]="loading">
-            </ion-input>
-          </ion-item>
-        </div>
+        <ion-title>Crea tu acceso</ion-title>
+        <p class="login-copy">Registra tus datos para ingresar al entorno de trabajo de Agronova con la misma experiencia visual del mockup aprobado.</p>
+      </section>
 
-        <div class="field-group">
-          <ion-label class="field-label">Contrasena</ion-label>
-          <ion-item class="field-item" lines="none">
-            <ion-input
-              type="password"
-              placeholder="Minimo 8 caracteres"
-              [(ngModel)]="contrasena"
-              [disabled]="loading">
-            </ion-input>
-          </ion-item>
-        </div>
+      <ion-card class="login-card">
+        <ion-card-content>
+          <div class="card-header">
+            <h2 class="card-title">Registro</h2>
+            <p class="card-copy">Completa la informacion solicitada para crear tu cuenta sin alterar el flujo actual.</p>
+          </div>
 
-        <div class="field-group">
-          <ion-label class="field-label">Confirmar contrasena</ion-label>
-          <ion-item class="field-item" lines="none">
-            <ion-input
-              type="password"
-              placeholder="Repite tu contrasena"
-              [(ngModel)]="confirmarContrasena"
-              [disabled]="loading">
-            </ion-input>
-          </ion-item>
-        </div>
+          <div class="form-stack">
+            <div class="field-group">
+              <ion-label class="field-label">Nombre</ion-label>
+              <ion-item class="field-item" lines="none">
+                <ion-icon name="person-outline" slot="start"></ion-icon>
+                <ion-input
+                  class="field-input"
+                  placeholder="Tu nombre"
+                  [(ngModel)]="nombre"
+                  [disabled]="loading">
+                </ion-input>
+              </ion-item>
+            </div>
 
-        @if (errorMessage) {
-          <ion-text color="danger" class="error-text">{{ errorMessage }}</ion-text>
-        }
+            <div class="field-group">
+              <ion-label class="field-label">Correo</ion-label>
+              <ion-item class="field-item" lines="none">
+                <ion-icon name="mail-outline" slot="start"></ion-icon>
+                <ion-input
+                  class="field-input"
+                  type="email"
+                  placeholder="correo@agronova.com"
+                  [(ngModel)]="correo"
+                  [disabled]="loading">
+                </ion-input>
+              </ion-item>
+            </div>
 
-        <ion-button
-          expand="block"
-          class="login-button"
-          [disabled]="loading"
-          (click)="registrar()">
-          @if (loading) {
-            <ion-spinner name="crescent" slot="start"></ion-spinner>
+            <div class="field-group">
+              <ion-label class="field-label">Contrasena</ion-label>
+              <ion-item class="field-item" lines="none">
+                <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+                <ion-input
+                  class="field-input"
+                  [type]="mostrarContrasena ? 'text' : 'password'"
+                  placeholder="Minimo 8 caracteres"
+                  [(ngModel)]="contrasena"
+                  [disabled]="loading">
+                </ion-input>
+                <ion-button
+                  fill="clear"
+                  slot="end"
+                  type="button"
+                  class="password-toggle"
+                  [disabled]="loading"
+                  (click)="toggleMostrarContrasena()">
+                  <ion-icon [name]="mostrarContrasena ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+                </ion-button>
+              </ion-item>
+            </div>
+
+            <div class="field-group">
+              <ion-label class="field-label">Confirmar contrasena</ion-label>
+              <ion-item class="field-item" lines="none">
+                <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+                <ion-input
+                  class="field-input"
+                  [type]="mostrarConfirmarContrasena ? 'text' : 'password'"
+                  placeholder="Repite tu contrasena"
+                  [(ngModel)]="confirmarContrasena"
+                  [disabled]="loading">
+                </ion-input>
+                <ion-button
+                  fill="clear"
+                  slot="end"
+                  type="button"
+                  class="password-toggle"
+                  [disabled]="loading"
+                  (click)="toggleMostrarConfirmarContrasena()">
+                  <ion-icon [name]="mostrarConfirmarContrasena ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+                </ion-button>
+              </ion-item>
+            </div>
+          </div>
+
+          @if (errorMessage) {
+            <ion-text class="error-text message-box error">{{ errorMessage }}</ion-text>
           }
-          Crear cuenta
-        </ion-button>
 
-        <div class="secondary-actions">
-          <a class="auth-link" routerLink="/login">Volver a iniciar sesion</a>
-          <a class="auth-link" routerLink="/auth/forgot-password">Olvide mi contrasena</a>
-        </div>
-      </ion-card-content>
-    </ion-card>
+          <ion-button
+            expand="block"
+            class="login-button"
+            [disabled]="loading"
+            (click)="registrar()">
+            @if (loading) {
+              <ion-spinner name="crescent" slot="start"></ion-spinner>
+            }
+            Crear cuenta
+          </ion-button>
+
+          <div class="secondary-actions">
+            <a class="back-link" routerLink="/login">
+              <ion-icon name="arrow-back-outline"></ion-icon>
+              Volver a iniciar sesion
+            </a>
+            <p class="hint-text">Al crear tu cuenta mantienes exactamente las mismas validaciones y comportamiento del flujo actual.</p>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
   </div>
 </ion-content>
+
+
