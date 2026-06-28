@@ -1,14 +1,38 @@
 <ion-header class="dashboard-header">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button fill="clear" aria-label="Abrir menu">
-        <ion-icon slot="icon-only" name="menu" aria-hidden="true"></ion-icon>
+    <ion-title>Dashboard - AgriGestor</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button fill="clear" aria-label="Abrir menu de usuario" (click)="abrirMenuUsuario()">
+        <ion-icon slot="icon-only" name="person-circle-outline" aria-hidden="true"></ion-icon>
       </ion-button>
     </ion-buttons>
-
-    <ion-title>Dashboard - AgriGestor</ion-title>
   </ion-toolbar>
 </ion-header>
+
+<ion-popover [isOpen]="menuUsuarioAbierto" (didDismiss)="cerrarMenuUsuario()" alignment="end" side="bottom">
+  <ng-template>
+    <div class="user-menu">
+      <div class="user-menu__header">
+        <p class="user-menu__eyebrow">SESION ACTIVA</p>
+        <h3>{{ nombreUsuario }}</h3>
+      </div>
+
+      <ion-list lines="none" class="user-menu__list">
+        <ion-item button="false" disabled="true" class="user-menu__item">
+          <ion-icon slot="start" name="person-outline"></ion-icon>
+          <ion-label>Mi perfil</ion-label>
+          <ion-text color="medium">Proximamente</ion-text>
+        </ion-item>
+
+        <ion-item button="true" detail="false" class="user-menu__item" (click)="cerrarSesion()">
+          <ion-icon slot="start" name="log-out-outline"></ion-icon>
+          <ion-label>Cerrar sesion</ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </ng-template>
+</ion-popover>
 
 <ion-content class="dashboard-content">
   <main class="dashboard-shell">

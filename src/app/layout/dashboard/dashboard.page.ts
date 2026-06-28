@@ -1,10 +1,16 @@
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   IonButton,
   IonButtons,
   IonContent,
   IonHeader,
   IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonPopover,
+  IonText,
   IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
@@ -14,12 +20,16 @@ import {
   cashOutline,
   fileTrayFull,
   leaf,
-  menu,
+  logOutOutline,
   people,
+  personCircleOutline,
+  personOutline,
   readerOutline,
 } from 'ionicons/icons';
 import { finalize, forkJoin } from 'rxjs';
 import { DASHBOARD_MODULES } from '../../core/models/dashboard-module.model';
+import { AuthenticatedUser } from '../../core/models/auth.model';
+import { AuthService } from '../../core/service/auth.service';
 import { CultivosService } from '../../core/service/cultivos.service';
 import { InsumosService } from '../../core/service/insumos.service';
 import { ProductosService } from '../../core/service/productos.service';
@@ -36,6 +46,11 @@ import { ModuleCardComponent } from '../../shared/components/module-card/module-
     IonContent,
     IonHeader,
     IonIcon,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonPopover,
+    IonText,
     IonTitle,
     IonToolbar,
     ModuleCardComponent,
@@ -71,18 +86,51 @@ export class DashboardPage {
   ];
   protected cargandoResumen = false;
   protected errorResumen = false;
+  protected menuUsuarioAbierto = false;
+  protected currentUser: AuthenticatedUser | null = null;
 
+  private readonly authService = inject(AuthService);
   private readonly cultivosService = inject(CultivosService);
   private readonly tareasService = inject(TareasService);
   private readonly insumosService = inject(InsumosService);
   private readonly productosService = inject(ProductosService);
+  private readonly router = inject(Router);
 
   constructor() {
-    addIcons({ basket, cashOutline, fileTrayFull, leaf, menu, people, readerOutline });
+    addIcons({
+      basket,
+      cashOutline,
+      fileTrayFull,
+      leaf,
+      logOutOutline,
+      people,
+      personCircleOutline,
+      personOutline,
+      readerOutline,
+    });
+  }
+
+  get nombreUsuario(): string {
+    return this.currentUser?.nombre?.trim() || 'Usuario';
   }
 
   ionViewWillEnter(): void {
+    this.currentUser = this.authService.getCurrentUser();
     this.cargarResumen();
+  }
+
+  abrirMenuUsuario(): void {
+    this.menuUsuarioAbierto = true;
+  }
+
+  cerrarMenuUsuario(): void {
+    this.menuUsuarioAbierto = false;
+  }
+
+  cerrarSesion(): void {
+    this.cerrarMenuUsuario();
+    this.authService.logout();
+    void this.router.navigate(['/login']);
   }
 
   private cargarResumen(): void {

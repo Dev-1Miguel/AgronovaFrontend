@@ -1,0 +1,52 @@
+<ion-content class="login-content">
+  <div class="login-shell">
+    <section class="login-hero">
+      <p class="login-eyebrow">AGRONOVA</p>
+      <ion-title>Iniciar sesion</ion-title>
+      <p class="login-copy">Ingresa tu correo y contrasena para acceder a los modulos operativos.</p>
+    </section>
+
+    <ion-card class="login-card">
+      <ion-card-content>
+        <div class="field-group">
+          <ion-label class="field-label">Correo</ion-label>
+          <ion-item class="field-item" lines="none">
+            <ion-input
+              type="email"
+              placeholder="correo@agronova.com"
+              [(ngModel)]="correo"
+              [disabled]="loading">
+            </ion-input>
+          </ion-item>
+        </div>
+
+        <div class="field-group">
+          <ion-label class="field-label">Contrasena</ion-label>
+          <ion-item class="field-item" lines="none">
+            <ion-input
+              type="password"
+              placeholder="Tu contrasena"
+              [(ngModel)]="contrasena"
+              [disabled]="loading">
+            </ion-input>
+          </ion-item>
+        </div>
+
+        @if (errorMessage) {
+          <ion-text color="danger" class="error-text">{{ errorMessage }}</ion-text>
+        }
+
+        <ion-button
+          expand="block"
+          class="login-button"
+          [disabled]="loading"
+          (click)="iniciarSesion()">
+          @if (loading) {
+            <ion-spinner name="crescent" slot="start"></ion-spinner>
+          }
+          Iniciar sesion
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
