@@ -25,23 +25,25 @@
       </div>
     </div>
 
-    <ion-card class="producto-card" *ngFor="let producto of productosFiltrados(); else emptyStateBlock">
-      <ion-card-content>
-        <div class="card-icon" aria-hidden="true"><ion-icon name="basket-outline"></ion-icon></div>
-        <div class="card-body">
-          <div class="card-main">
-            <h3>{{ producto.nombre }}</h3>
-            <div class="card-middle-row"><span class="cultivo-chip">{{ obtenerCultivo(producto) || 'Cultivo no asignado' }}</span></div>
-            <p class="card-description">{{ producto.descripcion || 'Sin descripcion' }}</p>
-            <div class="card-bottom-row"><span>Stock: {{ producto.cantidadStock }}</span><span>${{ producto.precioCaja.toFixed(2) }} / caja</span></div>
+    <ng-container *ngIf="productosFiltrados().length > 0; else emptyStateBlock">
+      <ion-card class="producto-card" *ngFor="let producto of productosFiltrados()">
+        <ion-card-content>
+          <div class="card-icon" aria-hidden="true"><ion-icon name="basket-outline"></ion-icon></div>
+          <div class="card-body">
+            <div class="card-main">
+              <h3>{{ producto.nombre }}</h3>
+              <div class="card-middle-row"><span class="cultivo-chip">{{ obtenerCultivo(producto) || 'Cultivo no asignado' }}</span></div>
+              <p class="card-description">{{ producto.descripcion || 'Sin descripcion' }}</p>
+              <div class="card-bottom-row"><span>Stock: {{ producto.cantidadStock }}</span><span>${{ producto.precioCaja.toFixed(2) }} / caja</span></div>
+            </div>
+            <ion-buttons class="acciones-grupo">
+              <ion-button class="accion-button editar-button" (click)="editarProducto(producto)"><ion-icon name="create-outline"></ion-icon></ion-button>
+              <ion-button class="accion-button eliminar-button" (click)="eliminarProducto(producto)"><ion-icon name="trash-outline"></ion-icon></ion-button>
+            </ion-buttons>
           </div>
-          <ion-buttons class="acciones-grupo">
-            <ion-button class="accion-button editar-button" (click)="editarProducto(producto)"><ion-icon name="create-outline"></ion-icon></ion-button>
-            <ion-button class="accion-button eliminar-button" (click)="eliminarProducto(producto)"><ion-icon name="trash-outline"></ion-icon></ion-button>
-          </ion-buttons>
-        </div>
-      </ion-card-content>
-    </ion-card>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
 
     <ng-template #emptyStateBlock>
       <div class="empty-state">

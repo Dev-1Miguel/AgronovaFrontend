@@ -31,22 +31,24 @@
       </div>
     </div>
 
-    <ion-card class="insumo-card" *ngFor="let insumo of insumosFiltrados(); else emptyStateBlock">
-      <ion-card-content>
-        <div class="card-icon" aria-hidden="true"><ion-icon name="archive-outline"></ion-icon></div>
-        <div class="card-body">
-          <div class="card-main">
-            <h3>{{ insumo.descripcion }}</h3>
-            <div class="card-middle-row"><span class="tipo-chip">{{ obtenerTipoInsumo(insumo) || 'Tipo no asignado' }}</span></div>
-            <div class="card-bottom-row"><ion-icon name="cube-outline"></ion-icon><span>{{ insumo.cantidad }} {{ insumo.unidadMedida }}</span></div>
+    <ng-container *ngIf="insumosFiltrados().length > 0; else emptyStateBlock">
+      <ion-card class="insumo-card" *ngFor="let insumo of insumosFiltrados()">
+        <ion-card-content>
+          <div class="card-icon" aria-hidden="true"><ion-icon name="archive-outline"></ion-icon></div>
+          <div class="card-body">
+            <div class="card-main">
+              <h3>{{ insumo.descripcion }}</h3>
+              <div class="card-middle-row"><span class="tipo-chip">{{ obtenerTipoInsumo(insumo) || 'Tipo no asignado' }}</span></div>
+              <div class="card-bottom-row"><ion-icon name="cube-outline"></ion-icon><span>{{ insumo.cantidad }} {{ insumo.unidadMedida }}</span></div>
+            </div>
+            <ion-buttons class="acciones-grupo">
+              <ion-button class="accion-button editar-button" (click)="editarInsumo(insumo)"><ion-icon name="create-outline"></ion-icon></ion-button>
+              <ion-button class="accion-button eliminar-button" (click)="eliminarInsumo(insumo)"><ion-icon name="trash-outline"></ion-icon></ion-button>
+            </ion-buttons>
           </div>
-          <ion-buttons class="acciones-grupo">
-            <ion-button class="accion-button editar-button" (click)="editarInsumo(insumo)"><ion-icon name="create-outline"></ion-icon></ion-button>
-            <ion-button class="accion-button eliminar-button" (click)="eliminarInsumo(insumo)"><ion-icon name="trash-outline"></ion-icon></ion-button>
-          </ion-buttons>
-        </div>
-      </ion-card-content>
-    </ion-card>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
 
     <ng-template #emptyStateBlock>
       <div class="empty-state">
