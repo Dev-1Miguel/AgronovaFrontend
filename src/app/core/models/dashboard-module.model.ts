@@ -4,7 +4,6 @@ export interface DashboardModule {
   icon: string;
   route?: string;
 }
-
 export const DASHBOARD_MODULES: DashboardModule[] = [
   {
     title: 'Cultivos',
@@ -35,17 +34,5 @@ export const DASHBOARD_MODULES: DashboardModule[] = [
     description: 'Administra tu personal.',
     icon: 'people',
     route: '/agricultores',
-  },
-  {
-    title: 'Productos',
-    description: 'Gestiona la cosecha lista.',
-    icon: 'basket',
-    route: '/productos',
-  },
-  {
-    title: 'Ventas',
-    description: 'Registra y consulta ventas activas.',
-    icon: 'cash-outline',
-    route: '/ventas',
   },
 ];
