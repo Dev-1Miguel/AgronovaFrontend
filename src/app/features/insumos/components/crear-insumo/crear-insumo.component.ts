@@ -84,7 +84,7 @@ export class CrearInsumoComponent implements OnInit {
     this.cargandoDatos = true;
 
     forkJoin({
-      tiposInsumo: this.catalogosService.getTiposInsumo(),
+      tiposInsumo: this.catalogosService.obtenerPorTipo('tipos-insumo'),
     })
       .pipe(finalize(() => this.cargandoDatos = false))
       .subscribe({
@@ -135,3 +135,4 @@ export class CrearInsumoComponent implements OnInit {
     this.location.back();
   }
 }
+

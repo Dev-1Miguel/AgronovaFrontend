@@ -99,8 +99,8 @@ export class EditarCultivoComponent implements OnInit {
 
     forkJoin({
       cultivo: this.cultivosService.getCultivoById(this.cultivoId),
-      categorias: this.catalogosService.getCategoriasCultivo(),
-      ubicaciones: this.catalogosService.getUbicaciones(),
+      categorias: this.catalogosService.obtenerPorTipo('categorias-cultivo'),
+      ubicaciones: this.catalogosService.obtenerPorTipo('ubicaciones'),
     })
       .pipe(finalize(() => this.cargando = false))
       .subscribe({
@@ -154,3 +154,4 @@ export class EditarCultivoComponent implements OnInit {
     this.location.back();
   }
 }
+

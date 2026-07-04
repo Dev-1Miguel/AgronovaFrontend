@@ -11,7 +11,8 @@ export interface Cultivo {
 export interface CatalogoReferencia {
   id?: string;
   nombre?: string;
-  estado?: string;
+  estado?: boolean;
+  tipo?: 'categoria-cultivo' | 'tipo-insumo' | 'tipo-tarea' | 'ubicacion';
 }
 
 export interface CreateCultivoDto {

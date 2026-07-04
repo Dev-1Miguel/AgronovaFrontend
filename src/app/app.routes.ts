@@ -1,7 +1,5 @@
 import { Routes } from '@angular/router';
-
 import { authGuard } from './core/guards/auth.guard';
-
 export const routes: Routes = [
   {
     path: 'login',
@@ -76,36 +74,6 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () =>
       import('./features/insumos/components/editar-insumo/editar-insumo.component').then((m) => m.EditarInsumoComponent),
-  },
-  {
-    path: 'productos',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/productos/components/gestion-productos/gestion-productos.component').then((m) => m.GestionProductosComponent),
-  },
-  {
-    path: 'productos/crear',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/productos/components/crear-producto/crear-producto.component').then((m) => m.CrearProductoComponent),
-  },
-  {
-    path: 'productos/editar/:id',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/productos/components/editar-producto/editar-producto.component').then((m) => m.EditarProductoComponent),
-  },
-  {
-    path: 'ventas',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/ventas/components/gestion-ventas/gestion-ventas.component').then((m) => m.GestionVentasComponent),
-  },
-  {
-    path: 'ventas/crear',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/ventas/components/crear-venta/crear-venta.component').then((m) => m.CrearVentaComponent),
   },
   {
     path: 'tareas',

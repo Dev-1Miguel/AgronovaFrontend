@@ -61,7 +61,7 @@
               <div class="card-main">
                 <div class="card-top-row">
                   <span class="catalogo-chip">{{ configActiva.title }}</span>
-                  <span class="estado-chip" *ngIf="registro.estado">{{ registro.estado }}</span>
+                  <span class="estado-chip" *ngIf="estadoLabel(registro.estado) as estadoLabelTexto">{{ estadoLabelTexto }}</span>
                 </div>
 
                 <h3>{{ registro.nombre || 'Sin nombre' }}</h3>
@@ -112,9 +112,9 @@
             </ion-input>
           </ion-item>
 
-          <div class="estado-panel" *ngIf="registroEnEdicion?.estado">
+          <div class="estado-panel" *ngIf="estadoLabel(registroEnEdicion?.estado) as estadoLabelTexto">
             <p class="section-label">ESTADO</p>
-            <span class="estado-chip">{{ registroEnEdicion?.estado }}</span>
+            <span class="estado-chip">{{ estadoLabelTexto }}</span>
           </div>
 
           <ion-button class="guardar-button" expand="block" type="submit" [disabled]="guardando || !nombreFormulario.trim()">

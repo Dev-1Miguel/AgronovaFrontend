@@ -85,8 +85,8 @@ export class CultivosPage {
 
     forkJoin({
       cultivos: this.cultivosService.getCultivos(),
-      categorias: this.catalogosService.getCategoriasCultivo(),
-      ubicaciones: this.catalogosService.getUbicaciones(),
+      categorias: this.catalogosService.obtenerPorTipo('categorias-cultivo'),
+      ubicaciones: this.catalogosService.obtenerPorTipo('ubicaciones'),
     })
       .pipe(finalize(() => this.cargandoCultivos = false))
       .subscribe({
@@ -170,3 +170,4 @@ export class CultivosPage {
     return catalogos.get(id) ?? null;
   }
 }
+
