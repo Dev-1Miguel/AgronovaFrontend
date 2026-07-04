@@ -31,6 +31,9 @@
       </div>
     </div>
 
+    <div class="feedback-message error" *ngIf="errorCarga">{{ errorCarga }}</div>
+    <div class="feedback-message error" *ngIf="errorAccion">{{ errorAccion }}</div>
+
     <ng-container *ngIf="insumosFiltrados().length > 0; else emptyStateBlock">
       <ion-card class="insumo-card" *ngFor="let insumo of insumosFiltrados()">
         <ion-card-content>

@@ -49,3 +49,6 @@
   transition: background-color 9999s ease-in-out 0s;
 }
 
+
+.feedback-message{padding:14px 15px;border-radius:16px;font-size:14px;line-height:1.5}
+.feedback-message.error{color:#8e2f2f;background:rgba(193,63,63,.08);border:1px solid rgba(193,63,63,.12)}

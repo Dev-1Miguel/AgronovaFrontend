@@ -22,6 +22,7 @@ import { CatalogoReferencia } from '../../../../core/models/cultivo.model';
 import { Insumo } from '../../../../core/models/insumo.model';
 import { CatalogosService } from '../../../../core/service/catalogos.service';
 import { InsumosService } from '../../../../core/service/insumos.service';
+import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.util';
 
 @Component({
   selector: 'app-gestion-insumos',
@@ -47,6 +48,8 @@ export class GestionInsumosComponent {
   busqueda = '';
   insumos: Insumo[] = [];
   cargandoInsumos = false;
+  errorCarga = '';
+  errorAccion = '';
   private tiposInsumoPorId = new Map<string, string>();
 
   constructor(
@@ -63,6 +66,7 @@ export class GestionInsumosComponent {
 
   cargarInsumos(): void {
     this.cargandoInsumos = true;
+    this.errorCarga = '';
 
     forkJoin({
       insumos: this.insumosService.getInsumos(),
@@ -75,6 +79,7 @@ export class GestionInsumosComponent {
           this.insumos = insumos;
         },
         error: (error) => {
+          this.errorCarga = getHttpErrorMessage(error, 'No se pudieron cargar los insumos en este momento.');
           console.error('Error al cargar insumos', error);
         },
       });
@@ -93,11 +98,15 @@ export class GestionInsumosComponent {
   }
 
   eliminarInsumo(insumo: Insumo): void {
+    this.errorAccion = '';
+
     this.insumosService.deleteInsumo(insumo.id).subscribe({
       next: () => {
+        this.errorAccion = '';
         this.insumos = this.insumos.filter((item) => item.id !== insumo.id);
       },
       error: (error) => {
+        this.errorAccion = getHttpErrorMessage(error, 'No se pudo eliminar el insumo en este momento.');
         console.error('Error al eliminar insumo', error);
       },
     });
@@ -130,4 +139,3 @@ export class GestionInsumosComponent {
     );
   }
 }
-

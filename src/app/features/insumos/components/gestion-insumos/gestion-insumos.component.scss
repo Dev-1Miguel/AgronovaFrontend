@@ -5,6 +5,7 @@ ion-content.insumos-content{--background:linear-gradient(180deg,#eef4e8 0%,#f3f6
 .insumos-section,.card-body{display:grid;gap:16px}.section-heading{align-items:center;display:flex;gap:12px}.section-label{color:#5c745f;font-size:12px;font-weight:700;letter-spacing:.12em;margin:0 0 6px}
 .section-icon,.card-icon,.empty-icon{align-items:center;display:inline-flex;justify-content:center}.section-icon{width:48px;height:48px;border-radius:999px;background:#dcfce7;color:#166534;flex:0 0 auto;box-shadow:inset 0 0 0 1px rgba(40,95,58,.06)}.section-icon ion-icon{font-size:22px}
 .section-copy h2,.card-main h3,.empty-state h3{color:#18241b;margin:0}.section-copy h2{font-size:22px;font-weight:700;letter-spacing:-.03em}.section-copy p,.card-bottom-row,.empty-state p{color:#637364;font-size:14px}
+
 .insumo-card,.empty-state{border:1px solid rgba(40,95,58,.09);border-radius:24px}.insumo-card{--background:linear-gradient(180deg,rgba(255,255,255,.98),#fbfcf8);margin:0}
 .insumo-card ion-card-content{display:grid;gap:16px;grid-template-columns:56px minmax(0,1fr);padding:22px 20px 18px}.card-icon{width:56px;height:56px;border-radius:999px;background:rgba(118,185,92,.18);color:#285f3a;box-shadow:inset 0 0 0 1px rgba(40,95,58,.06)}.card-icon ion-icon{font-size:24px}
 .card-main{display:grid;gap:12px}.card-main h3{font-size:20px;font-weight:700;letter-spacing:-.03em;line-height:1.2;word-break:break-word}.tipo-chip{display:inline-flex;align-items:center;min-height:28px;padding:0 12px;border-radius:999px;background:#dcfce7;color:#166534;font-size:12px;font-weight:700}

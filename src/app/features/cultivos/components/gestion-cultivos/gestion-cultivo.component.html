@@ -38,6 +38,9 @@
       </div>
     </div>
 
+    <div class="feedback-message error" *ngIf="errorCarga">{{ errorCarga }}</div>
+    <div class="feedback-message error" *ngIf="errorAccion">{{ errorAccion }}</div>
+
     <div class="list-state" *ngIf="!cargandoCultivos; else loadingState">
       <div class="empty-state" *ngIf="!cultivos.length">
         <div class="empty-icon">

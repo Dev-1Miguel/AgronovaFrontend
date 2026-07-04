@@ -25,6 +25,9 @@
       </div>
     </div>
 
+    <div class="feedback-message error" *ngIf="errorCarga">{{ errorCarga }}</div>
+    <div class="feedback-message error" *ngIf="errorAccion">{{ errorAccion }}</div>
+
     <ng-container *ngIf="agricultoresFiltrados().length > 0; else emptyStateBlock">
       <ion-card class="agricultor-card" *ngFor="let agricultor of agricultoresFiltrados()">
         <ion-card-content>

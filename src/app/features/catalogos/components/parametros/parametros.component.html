@@ -41,6 +41,9 @@
       [(ngModel)]="busqueda">
     </ion-searchbar>
 
+    <div class="feedback-message error" *ngIf="errorCarga">{{ errorCarga }}</div>
+    <div class="feedback-message error" *ngIf="errorAccion && !modalAbierto">{{ errorAccion }}</div>
+
     <div class="list-state" *ngIf="!cargando; else loadingState">
       <div class="empty-state" *ngIf="!registrosFiltrados().length; else resultsState">
         <div class="empty-icon"><ion-icon [name]="configActiva.icon"></ion-icon></div>
@@ -111,6 +114,8 @@
               [disabled]="guardando">
             </ion-input>
           </ion-item>
+
+          <div class="feedback-message error" *ngIf="errorAccion">{{ errorAccion }}</div>
 
           <div class="estado-panel" *ngIf="estadoLabel(registroEnEdicion?.estado) as estadoLabelTexto">
             <p class="section-label">ESTADO</p>

@@ -31,6 +31,7 @@ import { AuthService } from '../../core/service/auth.service';
 import { CultivosService } from '../../core/service/cultivos.service';
 import { InsumosService } from '../../core/service/insumos.service';
 import { TareasService } from '../../core/service/tareas.service';
+import { getHttpErrorMessage } from '../../core/utils/http-error-message.util';
 import { ModuleCardComponent } from '../../shared/components/module-card/module-card.component';
 @Component({
   selector: 'app-dashboard',
@@ -75,7 +76,7 @@ export class DashboardPage {
     },
   ];
   protected cargandoResumen = false;
-  protected errorResumen = false;
+  protected errorResumen = '';
   protected menuUsuarioAbierto = false;
   protected currentUser: AuthenticatedUser | null = null;
   private readonly authService = inject(AuthService);
@@ -114,7 +115,7 @@ export class DashboardPage {
   }
   private cargarResumen(): void {
     this.cargandoResumen = true;
-    this.errorResumen = false;
+    this.errorResumen = '';
     forkJoin({
       cultivos: this.cultivosService.getCultivos(),
       tareas: this.tareasService.getTareas(),
@@ -128,7 +129,10 @@ export class DashboardPage {
           this.kpis[2].value = insumos.length;
         },
         error: (error) => {
-          this.errorResumen = true;
+          this.errorResumen = getHttpErrorMessage(
+            error,
+            'No se pudo cargar el resumen operativo. La navegacion del Dashboard sigue disponible.',
+          );
           console.error('Error al cargar resumen del dashboard', error);
         },
       });
