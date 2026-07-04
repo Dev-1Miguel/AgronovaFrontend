@@ -66,7 +66,7 @@ export class GestionInsumosComponent {
 
     forkJoin({
       insumos: this.insumosService.getInsumos(),
-      tiposInsumo: this.catalogosService.getTiposInsumo(),
+      tiposInsumo: this.catalogosService.obtenerPorTipo('tipos-insumo'),
     })
       .pipe(finalize(() => this.cargandoInsumos = false))
       .subscribe({
@@ -130,3 +130,4 @@ export class GestionInsumosComponent {
     );
   }
 }
+

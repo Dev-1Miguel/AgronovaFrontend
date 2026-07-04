@@ -96,7 +96,7 @@ export class EditarInsumoComponent implements OnInit {
 
     forkJoin({
       insumo: this.insumosService.getInsumoById(this.insumoId),
-      tiposInsumo: this.catalogosService.getTiposInsumo(),
+      tiposInsumo: this.catalogosService.obtenerPorTipo('tipos-insumo'),
     })
       .pipe(finalize(() => this.cargando = false))
       .subscribe({
@@ -157,3 +157,4 @@ export class EditarInsumoComponent implements OnInit {
     };
   }
 }
+

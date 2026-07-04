@@ -119,7 +119,7 @@ export class CrearTareaComponent implements OnInit {
     this.cargandoDatos = true;
 
     forkJoin({
-      tiposTarea: this.catalogosService.getTiposTarea(),
+      tiposTarea: this.catalogosService.obtenerPorTipo('tipos-tarea'),
       cultivos: this.cultivosService.getCultivos(),
       agricultores: this.agricultoresService.getAgricultores(),
     })
@@ -181,3 +181,4 @@ export class CrearTareaComponent implements OnInit {
     this.location.back();
   }
 }
+

@@ -53,8 +53,8 @@ interface CatalogoConfig {
   searchPlaceholder: string;
   icon: string;
   list: () => Observable<CatalogoReferencia[]>;
-  create: (payload: { nombre: string }) => Observable<CatalogoReferencia>;
-  update: (id: string, payload: { nombre?: string }) => Observable<CatalogoReferencia>;
+  create: (payload: { nombre: string; estado?: boolean }) => Observable<CatalogoReferencia>;
+  update: (id: string, payload: { nombre?: string; estado?: boolean }) => Observable<CatalogoReferencia>;
   remove: (id: string) => Observable<void>;
 }
 
@@ -145,10 +145,10 @@ export class ParametrosComponent {
         inputPlaceholder: 'Nombre de la categoria',
         searchPlaceholder: 'Buscar categoria',
         icon: 'leaf-outline',
-        list: () => this.catalogosService.getCategoriasCultivo(),
-        create: (payload) => this.catalogosService.createCategoriaCultivo(payload),
-        update: (id, payload) => this.catalogosService.updateCategoriaCultivo(id, payload),
-        remove: (id) => this.catalogosService.deleteCategoriaCultivo(id),
+        list: () => this.catalogosService.obtenerPorTipo('categorias-cultivo'),
+        create: (payload) => this.catalogosService.crearCatalogo('categorias-cultivo', payload),
+        update: (id, payload) => this.catalogosService.actualizarCatalogo('categorias-cultivo', id, payload),
+        remove: (id) => this.catalogosService.eliminarCatalogo('categorias-cultivo', id),
       },
       {
         key: 'tipos-insumo',
@@ -161,10 +161,10 @@ export class ParametrosComponent {
         inputPlaceholder: 'Nombre del tipo de insumo',
         searchPlaceholder: 'Buscar tipo de insumo',
         icon: 'cube-outline',
-        list: () => this.catalogosService.getTiposInsumo(),
-        create: (payload) => this.catalogosService.createTipoInsumo(payload),
-        update: (id, payload) => this.catalogosService.updateTipoInsumo(id, payload),
-        remove: (id) => this.catalogosService.deleteTipoInsumo(id),
+        list: () => this.catalogosService.obtenerPorTipo('tipos-insumo'),
+        create: (payload) => this.catalogosService.crearCatalogo('tipos-insumo', payload),
+        update: (id, payload) => this.catalogosService.actualizarCatalogo('tipos-insumo', id, payload),
+        remove: (id) => this.catalogosService.eliminarCatalogo('tipos-insumo', id),
       },
       {
         key: 'tipos-tarea',
@@ -177,10 +177,10 @@ export class ParametrosComponent {
         inputPlaceholder: 'Nombre del tipo de tarea',
         searchPlaceholder: 'Buscar tipo de tarea',
         icon: 'reader-outline',
-        list: () => this.catalogosService.getTiposTarea(),
-        create: (payload) => this.catalogosService.createTipoTarea(payload),
-        update: (id, payload) => this.catalogosService.updateTipoTarea(id, payload),
-        remove: (id) => this.catalogosService.deleteTipoTarea(id),
+        list: () => this.catalogosService.obtenerPorTipo('tipos-tarea'),
+        create: (payload) => this.catalogosService.crearCatalogo('tipos-tarea', payload),
+        update: (id, payload) => this.catalogosService.actualizarCatalogo('tipos-tarea', id, payload),
+        remove: (id) => this.catalogosService.eliminarCatalogo('tipos-tarea', id),
       },
       {
         key: 'ubicaciones',
@@ -193,10 +193,10 @@ export class ParametrosComponent {
         inputPlaceholder: 'Nombre de la ubicacion',
         searchPlaceholder: 'Buscar ubicacion',
         icon: 'location-outline',
-        list: () => this.catalogosService.getUbicaciones(),
-        create: (payload) => this.catalogosService.createUbicacion(payload),
-        update: (id, payload) => this.catalogosService.updateUbicacion(id, payload),
-        remove: (id) => this.catalogosService.deleteUbicacion(id),
+        list: () => this.catalogosService.obtenerPorTipo('ubicaciones'),
+        create: (payload) => this.catalogosService.crearCatalogo('ubicaciones', payload),
+        update: (id, payload) => this.catalogosService.actualizarCatalogo('ubicaciones', id, payload),
+        remove: (id) => this.catalogosService.eliminarCatalogo('ubicaciones', id),
       },
     ];
   }
@@ -260,6 +260,14 @@ export class ParametrosComponent {
     return this.registros.filter((registro) => (registro.nombre || '').toLowerCase().includes(termino));
   }
 
+  estadoLabel(estado?: boolean): string | null {
+    if (estado === undefined) {
+      return null;
+    }
+
+    return estado ? 'Activo' : 'Inactivo';
+  }
+
   abrirNuevo(): void {
     this.registroEnEdicion = null;
     this.nombreFormulario = '';
@@ -290,7 +298,7 @@ export class ParametrosComponent {
 
     const request$ = id
       ? this.configActiva.update(id, { nombre })
-      : this.configActiva.create({ nombre });
+      : this.configActiva.create({ nombre, estado: true });
 
     request$
       .pipe(finalize(() => this.guardando = false))

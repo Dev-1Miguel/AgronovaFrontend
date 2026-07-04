@@ -1,4 +1,4 @@
-﻿import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -96,7 +96,7 @@ export class GestionTareasComponent {
 
     forkJoin({
       tareas: this.tareasService.getTareas(),
-      tiposTarea: this.catalogosService.getTiposTarea(),
+      tiposTarea: this.catalogosService.obtenerPorTipo('tipos-tarea'),
       cultivos: this.cultivosService.getCultivos(),
       insumos: this.insumosService.getInsumos(),
       agricultores: this.agricultoresService.getAgricultores(),
@@ -233,3 +233,4 @@ export class GestionTareasComponent {
     return new Map(items.map((item) => [item.id, item.descripcion]));
   }
 }
+
