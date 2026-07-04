@@ -1,7 +1,5 @@
 :host {
   --auth-green-dark: #234f31;
-  --auth-green: #2f7a42;
-  --auth-background: #eef4e8;
   --auth-surface: #ffffff;
   --auth-text: #1f2d1f;
   --auth-muted: #647067;
@@ -131,7 +129,6 @@
 
 .login-copy {
   max-width: 30ch;
-  font-size: 0.97rem;
 }
 
 .login-card {
@@ -178,39 +175,7 @@
   --background: #fff;
   --border-radius: 16px;
   --min-height: 58px;
-  --inner-padding-start: 14px;
-  --inner-padding-end: 14px;
-  --highlight-height: 0;
-  --color: var(--auth-text);
-  --placeholder-color: #93a093;
-  border: 1px solid var(--auth-border);
-  border-radius: 16px;
-}
-
-.field-item:focus-within {
-  border-color: rgba(47, 122, 66, 0.48);
-  box-shadow: 0 0 0 4px rgba(47, 122, 66, 0.12);
-}
-
-.field-item ion-icon,
-.password-toggle {
-  color: #6d7f70;
-}
-
-.field-input {
-  --padding-top: 17px;
-  --padding-bottom: 17px;
-  --padding-start: 10px;
-  --padding-end: 10px;
-  font-size: 0.97rem;
-}
-
-.password-toggle {
-  --padding-start: 8px;
-  --padding-end: 8px;
-  margin: 0;
-  height: 40px;
-}
+.field-item{--background:#fff;--border-radius:16px;--min-height:54px;--inner-padding-start:14px;--inner-padding-end:14px;--highlight-height:0;--color:var(--auth-text);--placeholder-color:#93a093;border:1px solid var(--auth-border);border-radius:16px;overflow:hidden}.field-item:focus-within{border-color:rgba(47,122,66,.48);box-shadow:0 0 0 4px rgba(47,122,66,.12)}.field-item ion-icon[slot='start']{width:20px;color:#6d7f70;font-size:20px}.field-input{--padding-top:0;--padding-bottom:0;--padding-start:12px;--padding-end:12px;--placeholder-opacity:1;min-height:54px}.field-input::part(native){padding:0;color:var(--auth-text);line-height:1.4;background:transparent;-webkit-text-fill-color:var(--auth-text)}.password-toggle{--padding-start:10px;--padding-end:10px;margin:0 2px 0 4px;color:#6d7f70}
 
 .message-box {
   padding: 14px 15px;
@@ -292,3 +257,9 @@
     padding: 26px 24px;
   }
 }
+
+
+
+
+
+
