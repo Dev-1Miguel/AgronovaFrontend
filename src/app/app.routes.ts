@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { adminRoleGuard } from './core/guards/admin-role.guard';
 import { authGuard } from './core/guards/auth.guard';
 export const routes: Routes = [
   {
@@ -47,13 +48,13 @@ export const routes: Routes = [
   },
   {
     path: 'parametros',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminRoleGuard],
     loadComponent: () =>
       import('./features/catalogos/components/parametros/parametros.component').then((m) => m.ParametrosComponent),
   },
   {
     path: 'categorias-cultivo',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminRoleGuard],
     loadComponent: () =>
       import('./features/catalogos/components/parametros/parametros.component').then((m) => m.ParametrosComponent),
   },

@@ -54,7 +54,6 @@ import { ModuleCardComponent } from '../../shared/components/module-card/module-
   ],
 })
 export class DashboardPage {
-  protected readonly modules = DASHBOARD_MODULES;
   protected readonly kpis = [
     {
       value: 0,
@@ -84,6 +83,7 @@ export class DashboardPage {
   private readonly tareasService = inject(TareasService);
   private readonly insumosService = inject(InsumosService);
   private readonly router = inject(Router);
+
   constructor() {
     addIcons({
       fileTrayFull,
@@ -95,24 +95,36 @@ export class DashboardPage {
       readerOutline,
     });
   }
+
   get nombreUsuario(): string {
     return this.currentUser?.nombre?.trim() || 'Usuario';
   }
+
+  get modules() {
+    return this.currentUser?.rol === 'Administrador'
+      ? DASHBOARD_MODULES
+      : DASHBOARD_MODULES.filter((module) => module.route !== '/parametros');
+  }
+
   ionViewWillEnter(): void {
     this.currentUser = this.authService.getCurrentUser();
     this.cargarResumen();
   }
+
   abrirMenuUsuario(): void {
     this.menuUsuarioAbierto = true;
   }
+
   cerrarMenuUsuario(): void {
     this.menuUsuarioAbierto = false;
   }
+
   cerrarSesion(): void {
     this.cerrarMenuUsuario();
     this.authService.logout();
     void this.router.navigate(['/login']);
   }
+
   private cargarResumen(): void {
     this.cargandoResumen = true;
     this.errorResumen = '';

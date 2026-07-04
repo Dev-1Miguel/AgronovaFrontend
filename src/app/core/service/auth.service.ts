@@ -74,4 +74,8 @@ export class AuthService {
   isAuthenticated(): boolean {
     return Boolean(this.getAccessToken() && this.getCurrentUser());
   }
+
+  hasRole(rol: string): boolean {
+    return this.getCurrentUser()?.rol === rol;
+  }
 }
