@@ -7,6 +7,7 @@ import {
   IonCard,
   IonCardContent,
   IonContent,
+  IonIcon,
   IonInput,
   IonItem,
   IonLabel,
@@ -14,6 +15,14 @@ import {
   IonText,
   IonTitle,
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import {
+  arrowBackOutline,
+  eyeOffOutline,
+  eyeOutline,
+  leafOutline,
+  lockClosedOutline,
+} from 'ionicons/icons';
 import { finalize } from 'rxjs';
 
 import { AuthService } from '../../../../core/service/auth.service';
@@ -31,6 +40,7 @@ import { AuthService } from '../../../../core/service/auth.service';
     IonCard,
     IonCardContent,
     IonContent,
+    IonIcon,
     IonInput,
     IonItem,
     IonLabel,
@@ -45,12 +55,22 @@ export class ResetPasswordComponent implements OnInit {
   confirmarContrasena = '';
   loading = false;
   errorMessage = '';
+  mostrarContrasena = false;
+  mostrarConfirmarContrasena = false;
 
   constructor(
     private readonly activatedRoute: ActivatedRoute,
     private readonly authService: AuthService,
     private readonly router: Router,
-  ) {}
+  ) {
+    addIcons({
+      leafOutline,
+      lockClosedOutline,
+      eyeOutline,
+      eyeOffOutline,
+      arrowBackOutline,
+    });
+  }
 
   ngOnInit(): void {
     this.token = this.activatedRoute.snapshot.queryParamMap.get('token')?.trim() ?? '';
@@ -58,6 +78,14 @@ export class ResetPasswordComponent implements OnInit {
     if (!this.token) {
       this.errorMessage = 'El enlace de recuperacion no es valido o esta incompleto.';
     }
+  }
+
+  toggleMostrarContrasena(): void {
+    this.mostrarContrasena = !this.mostrarContrasena;
+  }
+
+  toggleMostrarConfirmarContrasena(): void {
+    this.mostrarConfirmarContrasena = !this.mostrarConfirmarContrasena;
   }
 
   restablecerContrasena(): void {

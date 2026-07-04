@@ -1,61 +1,95 @@
 <ion-content class="login-content">
   <div class="login-shell">
-    <section class="login-hero">
-      <p class="login-eyebrow">AGRONOVA</p>
-      <ion-title>Iniciar sesion</ion-title>
-      <p class="login-copy">Ingresa tu correo y contrasena para acceder a los modulos operativos.</p>
-    </section>
-
-    <ion-card class="login-card">
-      <ion-card-content>
-        <div class="field-group">
-          <ion-label class="field-label">Correo</ion-label>
-          <ion-item class="field-item" lines="none">
-            <ion-input
-              type="email"
-              placeholder="correo@agronova.com"
-              [(ngModel)]="correo"
-              [disabled]="loading">
-            </ion-input>
-          </ion-item>
+    <div class="auth-layout">
+      <section class="login-hero">
+        <div class="brand-lockup">
+          <div class="brand-mark" aria-hidden="true">
+            <ion-icon name="leaf-outline"></ion-icon>
+          </div>
+          <div class="brand-copy">
+            <p class="brand-name">Agronova</p>
+          </div>
         </div>
 
-        <div class="field-group">
-          <ion-label class="field-label">Contrasena</ion-label>
-          <ion-item class="field-item" lines="none">
-            <ion-input
-              type="password"
-              placeholder="Tu contrasena"
-              [(ngModel)]="contrasena"
-              [disabled]="loading">
-            </ion-input>
-          </ion-item>
-        </div>
+        <ion-title>Bienvenido de nuevo</ion-title>
+        <p class="login-copy">Ingresa con tu cuenta para continuar con la gestion operativa de Agronova en un entorno claro, seguro y enfocado.</p>
+      </section>
 
-        @if (errorMessage) {
-          <ion-text color="danger" class="error-text">{{ errorMessage }}</ion-text>
-        }
+      <ion-card class="login-card">
+        <ion-card-content>
+          <div class="card-header">
+            <h2 class="card-title">Iniciar sesion</h2>
+            <p class="card-copy">Accede con tu correo institucional y tu contrasena actual.</p>
+          </div>
 
-        @if (successMessage) {
-          <ion-text color="success" class="success-text">{{ successMessage }}</ion-text>
-        }
+          <div class="form-stack">
+            <div class="field-group">
+              <ion-label class="field-label">Correo</ion-label>
+              <ion-item class="field-item" lines="none">
+                <ion-icon name="mail-outline" slot="start"></ion-icon>
+                <ion-input
+                  class="field-input"
+                  type="email"
+                  placeholder="correo@agronova.com"
+                  [(ngModel)]="correo"
+                  [disabled]="loading">
+                </ion-input>
+              </ion-item>
+            </div>
 
-        <ion-button
-          expand="block"
-          class="login-button"
-          [disabled]="loading"
-          (click)="iniciarSesion()">
-          @if (loading) {
-            <ion-spinner name="crescent" slot="start"></ion-spinner>
+            <div class="field-group">
+              <ion-label class="field-label">Contrasena</ion-label>
+              <ion-item class="field-item" lines="none">
+                <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+                <ion-input
+                  class="field-input"
+                  [type]="mostrarContrasena ? 'text' : 'password'"
+                  placeholder="Tu contrasena"
+                  [(ngModel)]="contrasena"
+                  [disabled]="loading">
+                </ion-input>
+                <ion-button
+                  fill="clear"
+                  slot="end"
+                  type="button"
+                  class="password-toggle"
+                  [disabled]="loading"
+                  (click)="toggleMostrarContrasena()">
+                  <ion-icon [name]="mostrarContrasena ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+                </ion-button>
+              </ion-item>
+            </div>
+          </div>
+
+          @if (errorMessage) {
+            <ion-text class="error-text message-box error">{{ errorMessage }}</ion-text>
           }
-          Iniciar sesion
-        </ion-button>
 
-        <div class="secondary-actions">
-          <a class="auth-link" routerLink="/auth/forgot-password">Olvide mi contrasena</a>
-          <a class="auth-link" routerLink="/auth/register">Crear cuenta</a>
-        </div>
-      </ion-card-content>
-    </ion-card>
+          @if (successMessage) {
+            <ion-text class="success-text message-box success">{{ successMessage }}</ion-text>
+          }
+
+          <ion-button
+            expand="block"
+            class="login-button"
+            [disabled]="loading"
+            (click)="iniciarSesion()">
+            @if (loading) {
+              <ion-spinner name="crescent" slot="start"></ion-spinner>
+            }
+            Iniciar sesion
+          </ion-button>
+
+          <div class="secondary-actions">
+            <div class="link-row">
+              <a class="auth-link" routerLink="/auth/forgot-password">Recuperar contrasena</a>
+              <a class="auth-link" routerLink="/auth/register">Crear cuenta</a>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
   </div>
 </ion-content>
+
+

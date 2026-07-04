@@ -7,6 +7,7 @@ import {
   IonCard,
   IonCardContent,
   IonContent,
+  IonIcon,
   IonInput,
   IonItem,
   IonLabel,
@@ -14,6 +15,16 @@ import {
   IonText,
   IonTitle,
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import {
+  arrowBackOutline,
+  eyeOffOutline,
+  eyeOutline,
+  leafOutline,
+  lockClosedOutline,
+  mailOutline,
+  personOutline,
+} from 'ionicons/icons';
 import { finalize } from 'rxjs';
 
 import { AuthService } from '../../../../core/service/auth.service';
@@ -31,6 +42,7 @@ import { AuthService } from '../../../../core/service/auth.service';
     IonCard,
     IonCardContent,
     IonContent,
+    IonIcon,
     IonInput,
     IonItem,
     IonLabel,
@@ -46,11 +58,31 @@ export class RegisterComponent {
   confirmarContrasena = '';
   loading = false;
   errorMessage = '';
+  mostrarContrasena = false;
+  mostrarConfirmarContrasena = false;
 
   constructor(
     private readonly authService: AuthService,
     private readonly router: Router,
-  ) {}
+  ) {
+    addIcons({
+      leafOutline,
+      personOutline,
+      mailOutline,
+      lockClosedOutline,
+      eyeOutline,
+      eyeOffOutline,
+      arrowBackOutline,
+    });
+  }
+
+  toggleMostrarContrasena(): void {
+    this.mostrarContrasena = !this.mostrarContrasena;
+  }
+
+  toggleMostrarConfirmarContrasena(): void {
+    this.mostrarConfirmarContrasena = !this.mostrarConfirmarContrasena;
+  }
 
   registrar(): void {
     this.errorMessage = '';
