@@ -17,7 +17,7 @@ import {
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { archiveOutline, arrowBackOutline, checkmarkOutline, pricetagOutline } from 'ionicons/icons';
+import { albumsOutline, archiveOutline, arrowBackOutline, checkmarkOutline, cubeOutline, pricetagOutline } from 'ionicons/icons';
 import { finalize, forkJoin } from 'rxjs';
 
 import { CatalogoReferencia } from '../../../../core/models/cultivo.model';
@@ -73,7 +73,7 @@ export class CrearInsumoComponent implements OnInit {
     private readonly insumosService: InsumosService,
     private readonly location: Location,
   ) {
-    addIcons({ archiveOutline, arrowBackOutline, checkmarkOutline, pricetagOutline });
+    addIcons({ albumsOutline, archiveOutline, arrowBackOutline, checkmarkOutline, cubeOutline, pricetagOutline });
   }
 
   ngOnInit(): void {

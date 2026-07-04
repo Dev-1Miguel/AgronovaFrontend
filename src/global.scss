@@ -36,4 +36,17 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+/* @import '@ionic/angular/css/palettes/dark.system.css'; */
+
+
+.login-content .field-item input:-webkit-autofill,
+.login-content .field-item input:-webkit-autofill:hover,
+.login-content .field-item input:-webkit-autofill:focus,
+.login-content .field-item input:-webkit-autofill:active {
+  background: transparent;
+  -webkit-text-fill-color: #203025;
+  caret-color: #203025;
+  box-shadow: 0 0 0 1000px #ffffff inset;
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+  transition: background-color 9999s ease-in-out 0s;
+}

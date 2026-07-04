@@ -13,10 +13,10 @@ export const DASHBOARD_MODULES: DashboardModule[] = [
     route: '/cultivos',
   },
   {
-    title: 'Categorias',
-    description: 'Administra categorias de cultivo.',
+    title: 'Parametros',
+    description: 'Administra categorias, tipos y ubicaciones.',
     icon: 'leaf',
-    route: '/categorias-cultivo',
+    route: '/parametros',
   },
   {
     title: 'Tareas',

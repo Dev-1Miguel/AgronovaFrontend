@@ -1,0 +1,151 @@
+<ion-header>
+  <ion-toolbar class="parametros-toolbar">
+    <ion-title>
+      <span style="display:inline-flex;align-items:center;gap:8px;">
+        <ion-button fill="clear" (click)="volverAlDashboard()" aria-label="Volver al Dashboard" style="--color:#fff;--padding-start:0;--padding-end:0;--background-hover:rgba(255,255,255,.12);min-width:40px;min-height:40px;width:40px;height:40px;margin:0;cursor:pointer;">
+          <ion-icon name="arrow-back-outline" style="font-size:16px;"></ion-icon>
+        </ion-button>
+        <span>Parametros</span>
+      </span>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button class="nuevo-button" (click)="abrirNuevo()">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Nuevo
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="parametros-content ion-padding">
+  <section class="parametros-section">
+    <div class="section-heading">
+      <div class="section-icon"><ion-icon name="business-outline"></ion-icon></div>
+      <div class="section-copy">
+        <p class="section-label">PARAMETROS</p>
+        <h2>{{ configActiva.heading }}</h2>
+        <p>{{ configActiva.description }}</p>
+      </div>
+    </div>
+
+    <ion-segment class="parametros-segment" [value]="catalogoActivo" (ionChange)="cambiarCatalogo($event)">
+      <ion-segment-button *ngFor="let catalogo of catalogos" [value]="catalogo.key">
+        {{ catalogo.tabLabel }}
+      </ion-segment-button>
+    </ion-segment>
+
+    <ion-searchbar
+      class="parametros-searchbar"
+      [placeholder]="configActiva.searchPlaceholder"
+      [(ngModel)]="busqueda">
+    </ion-searchbar>
+
+    <div class="list-state" *ngIf="!cargando; else loadingState">
+      <div class="empty-state" *ngIf="!registrosFiltrados().length; else resultsState">
+        <div class="empty-icon"><ion-icon [name]="configActiva.icon"></ion-icon></div>
+        <h3>{{ configActiva.emptyTitle }}</h3>
+        <p>{{ configActiva.emptyDescription }}</p>
+        <ion-button class="empty-cta" (click)="abrirNuevo()">
+          <ion-icon name="add-outline" slot="start"></ion-icon>
+          Nuevo registro
+        </ion-button>
+      </div>
+
+      <ng-template #resultsState>
+        <ion-card class="parametro-card" *ngFor="let registro of registrosFiltrados()">
+          <ion-card-content>
+            <div class="card-icon" aria-hidden="true"><ion-icon [name]="configActiva.icon"></ion-icon></div>
+
+            <div class="card-body">
+              <div class="card-main">
+                <div class="card-top-row">
+                  <span class="catalogo-chip">{{ configActiva.title }}</span>
+                  <span class="estado-chip" *ngIf="registro.estado">{{ registro.estado }}</span>
+                </div>
+
+                <h3>{{ registro.nombre || 'Sin nombre' }}</h3>
+              </div>
+
+              <ion-buttons class="acciones-grupo">
+                <ion-button class="accion-button editar-button" (click)="abrirEdicion(registro)">
+                  <ion-icon name="create-outline"></ion-icon>
+                </ion-button>
+
+                <ion-button
+                  class="accion-button eliminar-button"
+                  [disabled]="eliminandoId === registro.id"
+                  (click)="solicitarDesactivacion(registro)">
+                  <ion-icon name="trash-outline"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ng-template>
+    </div>
+  </section>
+
+  <ion-modal [isOpen]="modalAbierto" (didDismiss)="cerrarModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar class="modal-toolbar">
+          <ion-title>{{ tituloModal }}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" [disabled]="guardando" (click)="cerrarModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="modal-content ion-padding">
+        <form class="modal-form" (ngSubmit)="guardar()">
+          <ion-item class="form-item" lines="none">
+            <ion-input
+              label="Nombre"
+              labelPlacement="stacked"
+              [placeholder]="configActiva.inputPlaceholder"
+              [(ngModel)]="nombreFormulario"
+              name="nombreFormulario"
+              [disabled]="guardando">
+            </ion-input>
+          </ion-item>
+
+          <div class="estado-panel" *ngIf="registroEnEdicion?.estado">
+            <p class="section-label">ESTADO</p>
+            <span class="estado-chip">{{ registroEnEdicion?.estado }}</span>
+          </div>
+
+          <ion-button class="guardar-button" expand="block" type="submit" [disabled]="guardando || !nombreFormulario.trim()">
+            <ion-icon [name]="registroEnEdicion ? 'save-outline' : 'add-outline'" slot="start"></ion-icon>
+            {{ registroEnEdicion ? 'Guardar cambios' : 'Crear registro' }}
+          </ion-button>
+        </form>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-alert
+    [isOpen]="alertaAbierta"
+    header="Desactivar registro"
+    [message]="mensajeConfirmacion"
+    [buttons]="alertaButtons"
+    (didDismiss)="cerrarAlerta()">
+  </ion-alert>
+
+  <ng-template #loadingState>
+    <div class="loading-state">
+      <div class="loading-card" *ngFor="let item of [1, 2, 3]">
+        <div class="loading-card-row">
+          <div class="loading-icon"></div>
+          <div class="loading-copy">
+            <div class="loading-line loading-line-chip"></div>
+            <div class="loading-line loading-line-title"></div>
+          </div>
+          <div class="loading-actions"></div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</ion-content>

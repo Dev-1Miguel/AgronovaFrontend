@@ -38,6 +38,44 @@
   }
 }
 
+.user-menu {
+  min-width: 240px;
+  padding: 10px;
+}
+
+.user-menu__header {
+  padding: 6px 8px 10px;
+}
+
+.user-menu__eyebrow {
+  margin: 0 0 4px;
+  color: #5c745f;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.user-menu__header h3 {
+  margin: 0;
+  color: var(--agronova-ink);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.user-menu__list {
+  background: transparent;
+  padding: 0;
+}
+
+.user-menu__item {
+  --background: #fff;
+  --border-radius: 14px;
+  --color: var(--agronova-ink);
+  --inner-padding-end: 12px;
+  --inner-padding-start: 12px;
+  margin-top: 6px;
+}
+
 .dashboard-content {
   --background: linear-gradient(180deg, #eef4e8 0%, var(--agronova-page-bg) 40%, #f8faf6 100%);
 }
