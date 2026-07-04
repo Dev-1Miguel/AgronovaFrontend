@@ -130,7 +130,7 @@ export class EditarTareaComponent implements OnInit {
 
     forkJoin({
       tarea: this.tareasService.getTareaById(this.tareaId),
-      tiposTarea: this.catalogosService.getTiposTarea(),
+      tiposTarea: this.catalogosService.obtenerPorTipo('tipos-tarea'),
       cultivos: this.cultivosService.getCultivos(),
       agricultores: this.agricultoresService.getAgricultores(),
     })
@@ -208,3 +208,4 @@ export class EditarTareaComponent implements OnInit {
     };
   }
 }
+

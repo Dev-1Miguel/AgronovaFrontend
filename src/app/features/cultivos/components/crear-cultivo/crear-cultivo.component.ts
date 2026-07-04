@@ -88,8 +88,8 @@ export class CrearCultivoComponent implements OnInit {
     this.cargandoCatalogos = true;
 
     forkJoin({
-      categorias: this.catalogosService.getCategoriasCultivo(),
-      ubicaciones: this.catalogosService.getUbicaciones(),
+      categorias: this.catalogosService.obtenerPorTipo('categorias-cultivo'),
+      ubicaciones: this.catalogosService.obtenerPorTipo('ubicaciones'),
     })
       .pipe(finalize(() => this.cargandoCatalogos = false))
       .subscribe({
@@ -137,3 +137,4 @@ export class CrearCultivoComponent implements OnInit {
     this.location.back();
   }
 }
+
