@@ -3,7 +3,9 @@ export interface DashboardModule {
   description: string;
   icon: string;
   route?: string;
+  adminOnly?: boolean;
 }
+
 export const DASHBOARD_MODULES: DashboardModule[] = [
   {
     title: 'Cultivos',
@@ -12,10 +14,11 @@ export const DASHBOARD_MODULES: DashboardModule[] = [
     route: '/cultivos',
   },
   {
-    title: 'Parametros',
-    description: 'Administra categorias, tipos y ubicaciones.',
-    icon: 'leaf',
-    route: '/parametros',
+    title: 'Administracion',
+    description: 'Centraliza usuarios y parametros del sistema.',
+    icon: 'settings-outline',
+    route: '/administracion',
+    adminOnly: true,
   },
   {
     title: 'Tareas',

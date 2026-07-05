@@ -1,0 +1,79 @@
+ion-content.administracion-content {
+  --background: linear-gradient(180deg, #eef4e8 0%, #f3f6ef 40%, #f8faf6 100%);
+}
+
+.administracion-toolbar {
+  --background: linear-gradient(135deg, #234f31 0%, #2f7a42 100%);
+  --color: #fff;
+  --border-width: 0;
+}
+
+.administracion-toolbar ion-title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.administracion-shell {
+  display: grid;
+  gap: 18px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-icon {
+  align-items: center;
+  background: #dcfce7;
+  border-radius: 999px;
+  color: #166534;
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 48px;
+  justify-content: center;
+  width: 48px;
+}
+
+.section-icon ion-icon {
+  font-size: 22px;
+}
+
+.section-label {
+  color: #5c745f;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  margin: 0 0 6px;
+}
+
+.section-copy h2 {
+  color: #18241b;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.section-copy p {
+  color: #637364;
+  font-size: 14px;
+  margin: 0;
+}
+
+.module-list {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 640px) {
+  .module-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .section-copy h2 {
+    font-size: 20px;
+  }
+}

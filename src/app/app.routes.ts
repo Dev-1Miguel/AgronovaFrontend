@@ -29,6 +29,18 @@ export const routes: Routes = [
       import('./layout/dashboard/dashboard.page').then((m) => m.DashboardPage),
   },
   {
+    path: 'administracion',
+    canActivate: [authGuard, adminRoleGuard],
+    loadComponent: () =>
+      import('./features/administracion/components/administracion/administracion.component').then((m) => m.AdministracionComponent),
+  },
+  {
+    path: 'usuarios',
+    canActivate: [authGuard, adminRoleGuard],
+    loadComponent: () =>
+      import('./features/usuarios/components/gestion-usuarios/gestion-usuarios.component').then((m) => m.GestionUsuariosComponent),
+  },
+  {
     path: 'cultivos',
     canActivate: [authGuard],
     loadComponent: () =>

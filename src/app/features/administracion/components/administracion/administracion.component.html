@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar class="administracion-toolbar">
+    <ion-title>
+      <span style="display:inline-flex;align-items:center;gap:8px;">
+        <ion-button fill="clear" (click)="volverAlDashboard()" aria-label="Volver al Dashboard" style="--color:#fff;--padding-start:0;--padding-end:0;--background-hover:rgba(255,255,255,.12);min-width:40px;min-height:40px;width:40px;height:40px;margin:0;cursor:pointer;">
+          <ion-icon name="arrow-back-outline" style="font-size:16px;"></ion-icon>
+        </ion-button>
+        <span>Administracion</span>
+      </span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="administracion-content ion-padding">
+  <section class="administracion-shell">
+    <div class="section-heading">
+      <div class="section-icon"><ion-icon name="shield-checkmark-outline"></ion-icon></div>
+      <div class="section-copy">
+        <p class="section-label">ADMIN</p>
+        <h2>Centro de administracion</h2>
+        <p>Accede a las herramientas reservadas para administradores desde una vista simple y movil.</p>
+      </div>
+    </div>
+
+    <section class="module-list" aria-label="Herramientas de administracion">
+      @for (module of modules; track module.title) {
+        <app-module-card
+          [title]="module.title"
+          [description]="module.description"
+          [icon]="module.icon"
+          [route]="module.route"
+        />
+      }
+    </section>
+  </section>
+</ion-content>

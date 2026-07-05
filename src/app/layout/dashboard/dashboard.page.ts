@@ -23,6 +23,7 @@ import {
   personCircleOutline,
   personOutline,
   readerOutline,
+  settingsOutline,
 } from 'ionicons/icons';
 import { finalize, forkJoin } from 'rxjs';
 import { DASHBOARD_MODULES } from '../../core/models/dashboard-module.model';
@@ -93,6 +94,7 @@ export class DashboardPage {
       personCircleOutline,
       personOutline,
       readerOutline,
+      settingsOutline,
     });
   }
 
@@ -101,9 +103,7 @@ export class DashboardPage {
   }
 
   get modules() {
-    return this.currentUser?.rol === 'Administrador'
-      ? DASHBOARD_MODULES
-      : DASHBOARD_MODULES.filter((module) => module.route !== '/parametros');
+    return DASHBOARD_MODULES.filter((module) => !module.adminOnly || this.currentUser?.rol === 'Administrador');
   }
 
   ionViewWillEnter(): void {
