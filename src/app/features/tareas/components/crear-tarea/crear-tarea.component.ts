@@ -174,6 +174,15 @@ export class CrearTareaComponent implements OnInit {
         && this.tarea.idCultivo
         && this.tarea.idTipoTarea
         && this.tarea.descripcion.trim()
+        && !this.fechasInvalidas()
+    );
+  }
+
+  fechasInvalidas(): boolean {
+    return Boolean(
+      this.tarea.fechaInicio
+        && this.tarea.fechaFin
+        && this.tarea.fechaInicio > this.tarea.fechaFin
     );
   }
 

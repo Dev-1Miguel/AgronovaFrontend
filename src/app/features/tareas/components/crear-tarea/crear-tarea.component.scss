@@ -255,3 +255,9 @@ ion-select::part(text) {
     width: 40px;
   }
 }
+
+.inline-state--error {
+  color: #b42318;
+  font-weight: 700;
+  margin-top: 14px;
+}
