@@ -21,12 +21,14 @@ import {
   calendarOutline,
   checkmarkOutline,
   locationOutline,
+  peopleOutline,
   personOutline,
 } from 'ionicons/icons';
 import { finalize } from 'rxjs';
 
 import { CreateAgricultorDto } from '../../../../core/models/agricultor.model';
 import { AgricultoresService } from '../../../../core/service/agricultores.service';
+import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.util';
 
 interface AgricultorForm {
   nombre: string;
@@ -67,6 +69,7 @@ export class CrearAgricultorComponent {
   };
 
   guardando = false;
+  errorMessage = '';
 
   constructor(
     private readonly agricultoresService: AgricultoresService,
@@ -78,6 +81,7 @@ export class CrearAgricultorComponent {
       calendarOutline,
       checkmarkOutline,
       locationOutline,
+      peopleOutline,
       personOutline,
     });
   }
@@ -96,6 +100,7 @@ export class CrearAgricultorComponent {
     };
 
     this.guardando = true;
+    this.errorMessage = '';
 
     this.agricultoresService.createAgricultor(payload)
       .pipe(finalize(() => this.guardando = false))
@@ -104,6 +109,7 @@ export class CrearAgricultorComponent {
           this.volverAGestion();
         },
         error: (error) => {
+          this.errorMessage = getHttpErrorMessage(error, 'No se pudo registrar el agricultor en este momento.');
           console.error('Error al crear agricultor', error);
         },
       });
@@ -115,7 +121,7 @@ export class CrearAgricultorComponent {
         && this.agricultor.edad !== null
         && Number(this.agricultor.edad) > 0
         && this.agricultor.zona.trim()
-        && this.agricultor.experiencia.trim()
+        && this.agricultor.experiencia.trim(),
     );
   }
 

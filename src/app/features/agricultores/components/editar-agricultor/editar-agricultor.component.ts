@@ -22,12 +22,14 @@ import {
   calendarOutline,
   checkmarkOutline,
   locationOutline,
+  peopleOutline,
   personOutline,
 } from 'ionicons/icons';
 import { finalize } from 'rxjs';
 
 import { UpdateAgricultorDto } from '../../../../core/models/agricultor.model';
 import { AgricultoresService } from '../../../../core/service/agricultores.service';
+import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.util';
 
 interface AgricultorForm {
   nombre: string;
@@ -67,6 +69,7 @@ export class EditarAgricultorComponent implements OnInit {
 
   cargando = false;
   guardando = false;
+  errorMessage = '';
   private agricultorId = '';
 
   constructor(
@@ -81,6 +84,7 @@ export class EditarAgricultorComponent implements OnInit {
       calendarOutline,
       checkmarkOutline,
       locationOutline,
+      peopleOutline,
       personOutline,
     });
   }
@@ -89,7 +93,7 @@ export class EditarAgricultorComponent implements OnInit {
     this.agricultorId = this.route.snapshot.paramMap.get('id') ?? '';
 
     if (!this.agricultorId) {
-      this.router.navigate(['/agricultores']);
+      void this.router.navigate(['/agricultores']);
       return;
     }
 
@@ -98,6 +102,7 @@ export class EditarAgricultorComponent implements OnInit {
 
   cargarAgricultor(): void {
     this.cargando = true;
+    this.errorMessage = '';
 
     this.agricultoresService.getAgricultorById(this.agricultorId)
       .pipe(finalize(() => this.cargando = false))
@@ -111,6 +116,7 @@ export class EditarAgricultorComponent implements OnInit {
           };
         },
         error: (error) => {
+          this.errorMessage = getHttpErrorMessage(error, 'No se pudo cargar el agricultor en este momento.');
           console.error('Error al cargar agricultor', error);
         },
       });
@@ -129,6 +135,7 @@ export class EditarAgricultorComponent implements OnInit {
     };
 
     this.guardando = true;
+    this.errorMessage = '';
 
     this.agricultoresService.updateAgricultor(this.agricultorId, payload)
       .pipe(finalize(() => this.guardando = false))
@@ -137,6 +144,7 @@ export class EditarAgricultorComponent implements OnInit {
           this.volverAGestion();
         },
         error: (error) => {
+          this.errorMessage = getHttpErrorMessage(error, 'No se pudo actualizar el agricultor en este momento.');
           console.error('Error al actualizar agricultor', error);
         },
       });
@@ -148,7 +156,7 @@ export class EditarAgricultorComponent implements OnInit {
         && this.agricultor.edad !== null
         && Number(this.agricultor.edad) > 0
         && this.agricultor.zona.trim()
-        && this.agricultor.experiencia.trim()
+        && this.agricultor.experiencia.trim(),
     );
   }
 

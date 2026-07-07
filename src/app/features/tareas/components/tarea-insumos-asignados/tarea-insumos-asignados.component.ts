@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   IonButton,
@@ -18,6 +18,7 @@ import { finalize } from 'rxjs';
 import { Insumo } from '../../../../core/models/insumo.model';
 import { InsumoAsignado } from '../../../../core/models/tarea.model';
 import { InsumosService } from '../../../../core/service/insumos.service';
+import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.util';
 
 @Component({
   selector: 'app-tarea-insumos-asignados',
@@ -51,6 +52,7 @@ export class TareaInsumosAsignadosComponent implements OnInit {
 
   insumos: Insumo[] = [];
   cargando = false;
+  errorMessage = '';
   insumoSeleccionado = '';
   cantidad: number | null = null;
 
@@ -66,6 +68,7 @@ export class TareaInsumosAsignadosComponent implements OnInit {
 
   cargarInsumos(): void {
     this.cargando = true;
+    this.errorMessage = '';
 
     this.insumosService.getInsumos()
       .pipe(finalize(() => this.cargando = false))
@@ -74,6 +77,7 @@ export class TareaInsumosAsignadosComponent implements OnInit {
           this.insumos = insumos;
         },
         error: (error) => {
+          this.errorMessage = getHttpErrorMessage(error, 'No se pudieron cargar los insumos en este momento.');
           console.error('Error al cargar insumos', error);
         },
       });
@@ -123,4 +127,3 @@ export class TareaInsumosAsignadosComponent implements OnInit {
     this.asignacionesChange.emit(this.asignaciones);
   }
 }
-

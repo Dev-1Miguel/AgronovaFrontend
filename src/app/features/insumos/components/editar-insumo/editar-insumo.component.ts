@@ -25,6 +25,7 @@ import { CatalogoReferencia } from '../../../../core/models/cultivo.model';
 import { Insumo, UpdateInsumoDto } from '../../../../core/models/insumo.model';
 import { CatalogosService } from '../../../../core/service/catalogos.service';
 import { InsumosService } from '../../../../core/service/insumos.service';
+import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.util';
 
 interface InsumoForm {
   idTipoInsumo: string;
@@ -68,6 +69,7 @@ export class EditarInsumoComponent implements OnInit {
   unidadesMedida = ['Kg', 'Litros', 'Unidades', 'Bolsas', 'Galones'];
   cargando = false;
   guardando = false;
+  errorMessage = '';
   private insumoId = '';
 
   constructor(
@@ -84,7 +86,7 @@ export class EditarInsumoComponent implements OnInit {
     this.insumoId = this.route.snapshot.paramMap.get('id') ?? '';
 
     if (!this.insumoId) {
-      this.router.navigate(['/insumos']);
+      void this.router.navigate(['/insumos']);
       return;
     }
 
@@ -93,6 +95,7 @@ export class EditarInsumoComponent implements OnInit {
 
   cargarDatos(): void {
     this.cargando = true;
+    this.errorMessage = '';
 
     forkJoin({
       insumo: this.insumosService.getInsumoById(this.insumoId),
@@ -105,6 +108,7 @@ export class EditarInsumoComponent implements OnInit {
           this.insumo = this.mapearFormulario(insumo);
         },
         error: (error) => {
+          this.errorMessage = getHttpErrorMessage(error, 'No se pudo cargar el insumo en este momento.');
           console.error('Error al cargar insumo', error);
         },
       });
@@ -123,12 +127,14 @@ export class EditarInsumoComponent implements OnInit {
     };
 
     this.guardando = true;
+    this.errorMessage = '';
 
     this.insumosService.updateInsumo(this.insumoId, payload)
       .pipe(finalize(() => this.guardando = false))
       .subscribe({
         next: () => this.volverAGestion(),
         error: (error) => {
+          this.errorMessage = getHttpErrorMessage(error, 'No se pudo actualizar el insumo en este momento.');
           console.error('Error al actualizar insumo', error);
         },
       });
@@ -140,7 +146,7 @@ export class EditarInsumoComponent implements OnInit {
         && this.insumo.descripcion.trim()
         && this.insumo.cantidad !== null
         && Number(this.insumo.cantidad) >= 0
-        && this.insumo.unidadMedida
+        && this.insumo.unidadMedida,
     );
   }
 
@@ -157,4 +163,3 @@ export class EditarInsumoComponent implements OnInit {
     };
   }
 }
-

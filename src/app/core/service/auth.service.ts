@@ -49,8 +49,7 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem(this.accessTokenKey);
-    localStorage.removeItem(this.userKey);
+    this.clearSession();
   }
 
   getAccessToken(): string | null {
@@ -67,15 +66,31 @@ export class AuthService {
     try {
       return JSON.parse(user) as AuthenticatedUser;
     } catch {
+      this.clearSession();
       return null;
     }
   }
 
   isAuthenticated(): boolean {
-    return Boolean(this.getAccessToken() && this.getCurrentUser());
+    const accessToken = this.getAccessToken();
+    const user = this.getCurrentUser();
+
+    if (!accessToken || !user) {
+      if (accessToken || localStorage.getItem(this.userKey)) {
+        this.clearSession();
+      }
+      return false;
+    }
+
+    return true;
   }
 
   hasRole(rol: string): boolean {
     return this.getCurrentUser()?.rol === rol;
+  }
+
+  private clearSession(): void {
+    localStorage.removeItem(this.accessTokenKey);
+    localStorage.removeItem(this.userKey);
   }
 }

@@ -31,12 +31,12 @@ import { finalize, forkJoin } from 'rxjs';
 
 import { Agricultor } from '../../../../core/models/agricultor.model';
 import { CatalogoReferencia, Cultivo } from '../../../../core/models/cultivo.model';
-import { InsumoAsignado } from '../../../../core/models/tarea.model';
-import { CreateTareaDto } from '../../../../core/models/tarea.model';
+import { CreateTareaDto, InsumoAsignado } from '../../../../core/models/tarea.model';
 import { AgricultoresService } from '../../../../core/service/agricultores.service';
 import { CatalogosService } from '../../../../core/service/catalogos.service';
 import { CultivosService } from '../../../../core/service/cultivos.service';
 import { TareasService } from '../../../../core/service/tareas.service';
+import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.util';
 import { TareaInsumosAsignadosComponent } from '../tarea-insumos-asignados/tarea-insumos-asignados.component';
 
 interface TareaForm {
@@ -92,6 +92,7 @@ export class CrearTareaComponent implements OnInit {
   agricultores: Agricultor[] = [];
   cargandoDatos = false;
   guardando = false;
+  errorMessage = '';
 
   constructor(
     private readonly catalogosService: CatalogosService,
@@ -117,6 +118,7 @@ export class CrearTareaComponent implements OnInit {
 
   cargarDatos(): void {
     this.cargandoDatos = true;
+    this.errorMessage = '';
 
     forkJoin({
       tiposTarea: this.catalogosService.obtenerPorTipo('tipos-tarea'),
@@ -131,6 +133,7 @@ export class CrearTareaComponent implements OnInit {
           this.agricultores = agricultores;
         },
         error: (error) => {
+          this.errorMessage = getHttpErrorMessage(error, 'No se pudieron cargar los datos de la tarea en este momento.');
           console.error('Error al cargar datos de tareas', error);
         },
       });
@@ -153,6 +156,7 @@ export class CrearTareaComponent implements OnInit {
     };
 
     this.guardando = true;
+    this.errorMessage = '';
 
     this.tareasService.createTarea(payload)
       .pipe(finalize(() => this.guardando = false))
@@ -161,6 +165,7 @@ export class CrearTareaComponent implements OnInit {
           this.volverAGestion();
         },
         error: (error) => {
+          this.errorMessage = getHttpErrorMessage(error, 'No se pudo registrar la tarea en este momento.');
           console.error('Error al crear tarea', error);
         },
       });
@@ -174,7 +179,7 @@ export class CrearTareaComponent implements OnInit {
         && this.tarea.idCultivo
         && this.tarea.idTipoTarea
         && this.tarea.descripcion.trim()
-        && !this.fechasInvalidas()
+        && !this.fechasInvalidas(),
     );
   }
 
@@ -182,7 +187,7 @@ export class CrearTareaComponent implements OnInit {
     return Boolean(
       this.tarea.fechaInicio
         && this.tarea.fechaFin
-        && this.tarea.fechaInicio > this.tarea.fechaFin
+        && this.tarea.fechaInicio > this.tarea.fechaFin,
     );
   }
 
@@ -190,4 +195,3 @@ export class CrearTareaComponent implements OnInit {
     this.location.back();
   }
 }
-

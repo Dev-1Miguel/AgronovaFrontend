@@ -24,6 +24,7 @@ import { CatalogoReferencia } from '../../../../core/models/cultivo.model';
 import { CreateInsumoDto } from '../../../../core/models/insumo.model';
 import { CatalogosService } from '../../../../core/service/catalogos.service';
 import { InsumosService } from '../../../../core/service/insumos.service';
+import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.util';
 
 interface InsumoForm {
   idTipoInsumo: string;
@@ -67,6 +68,7 @@ export class CrearInsumoComponent implements OnInit {
   unidadesMedida = ['Kg', 'Litros', 'Unidades', 'Bolsas', 'Galones'];
   cargandoDatos = false;
   guardando = false;
+  errorMessage = '';
 
   constructor(
     private readonly catalogosService: CatalogosService,
@@ -82,6 +84,7 @@ export class CrearInsumoComponent implements OnInit {
 
   cargarDatos(): void {
     this.cargandoDatos = true;
+    this.errorMessage = '';
 
     forkJoin({
       tiposInsumo: this.catalogosService.obtenerPorTipo('tipos-insumo'),
@@ -92,6 +95,7 @@ export class CrearInsumoComponent implements OnInit {
           this.tiposInsumo = tiposInsumo;
         },
         error: (error) => {
+          this.errorMessage = getHttpErrorMessage(error, 'No se pudieron cargar los datos del insumo en este momento.');
           console.error('Error al cargar datos de insumos', error);
         },
       });
@@ -110,12 +114,14 @@ export class CrearInsumoComponent implements OnInit {
     };
 
     this.guardando = true;
+    this.errorMessage = '';
 
     this.insumosService.createInsumo(payload)
       .pipe(finalize(() => this.guardando = false))
       .subscribe({
         next: () => this.volverAGestion(),
         error: (error) => {
+          this.errorMessage = getHttpErrorMessage(error, 'No se pudo registrar el insumo en este momento.');
           console.error('Error al crear insumo', error);
         },
       });
@@ -127,7 +133,7 @@ export class CrearInsumoComponent implements OnInit {
         && this.insumo.descripcion.trim()
         && this.insumo.cantidad !== null
         && Number(this.insumo.cantidad) >= 0
-        && this.insumo.unidadMedida
+        && this.insumo.unidadMedida,
     );
   }
 
@@ -135,4 +141,3 @@ export class CrearInsumoComponent implements OnInit {
     this.location.back();
   }
 }
-

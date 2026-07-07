@@ -30,6 +30,7 @@ import { finalize, forkJoin } from 'rxjs';
 import { CatalogoReferencia, UpdateCultivoDto } from '../../../../core/models/cultivo.model';
 import { CatalogosService } from '../../../../core/service/catalogos.service';
 import { CultivosService } from '../../../../core/service/cultivos.service';
+import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.util';
 
 @Component({
   selector: 'app-editar-cultivo',
@@ -65,6 +66,7 @@ export class EditarCultivoComponent implements OnInit {
   ubicaciones: CatalogoReferencia[] = [];
   cargando = false;
   guardando = false;
+  errorMessage = '';
   private cultivoId = '';
 
   constructor(
@@ -87,7 +89,7 @@ export class EditarCultivoComponent implements OnInit {
     this.cultivoId = this.route.snapshot.paramMap.get('id') ?? '';
 
     if (!this.cultivoId) {
-      this.router.navigate(['/cultivos']);
+      void this.router.navigate(['/cultivos']);
       return;
     }
 
@@ -96,6 +98,7 @@ export class EditarCultivoComponent implements OnInit {
 
   cargarDatos(): void {
     this.cargando = true;
+    this.errorMessage = '';
 
     forkJoin({
       cultivo: this.cultivosService.getCultivoById(this.cultivoId),
@@ -114,6 +117,7 @@ export class EditarCultivoComponent implements OnInit {
           };
         },
         error: (error) => {
+          this.errorMessage = getHttpErrorMessage(error, 'No se pudo cargar el cultivo en este momento.');
           console.error('Error al cargar cultivo', error);
         },
       });
@@ -125,6 +129,7 @@ export class EditarCultivoComponent implements OnInit {
     }
 
     this.guardando = true;
+    this.errorMessage = '';
 
     this.cultivosService.updateCultivo(this.cultivoId, {
       nombre: this.cultivo.nombre?.trim(),
@@ -137,6 +142,7 @@ export class EditarCultivoComponent implements OnInit {
           this.volverAGestion();
         },
         error: (error) => {
+          this.errorMessage = getHttpErrorMessage(error, 'No se pudo actualizar el cultivo en este momento.');
           console.error('Error al actualizar cultivo', error);
         },
       });
@@ -146,7 +152,7 @@ export class EditarCultivoComponent implements OnInit {
     return Boolean(
       this.cultivo.nombre?.trim()
         && this.cultivo.idCategoria
-        && this.cultivo.idUbicacion
+        && this.cultivo.idUbicacion,
     );
   }
 
@@ -154,4 +160,3 @@ export class EditarCultivoComponent implements OnInit {
     this.location.back();
   }
 }
-

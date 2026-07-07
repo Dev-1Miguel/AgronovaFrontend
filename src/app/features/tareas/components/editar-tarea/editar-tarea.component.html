@@ -38,6 +38,10 @@
           Cargando tarea...
         </div>
 
+        <div class="inline-state inline-state--error" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+
         <div class="fields-grid" *ngIf="!cargando">
           <div class="field-shell">
             <div class="field-icon" aria-hidden="true">

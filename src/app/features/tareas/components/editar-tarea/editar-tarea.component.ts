@@ -37,6 +37,7 @@ import { AgricultoresService } from '../../../../core/service/agricultores.servi
 import { CatalogosService } from '../../../../core/service/catalogos.service';
 import { CultivosService } from '../../../../core/service/cultivos.service';
 import { TareasService } from '../../../../core/service/tareas.service';
+import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.util';
 import { TareaInsumosAsignadosComponent } from '../tarea-insumos-asignados/tarea-insumos-asignados.component';
 
 interface TareaForm {
@@ -92,6 +93,7 @@ export class EditarTareaComponent implements OnInit {
   agricultores: Agricultor[] = [];
   cargando = false;
   guardando = false;
+  errorMessage = '';
   private tareaId = '';
 
   constructor(
@@ -118,7 +120,7 @@ export class EditarTareaComponent implements OnInit {
     this.tareaId = this.route.snapshot.paramMap.get('id') ?? '';
 
     if (!this.tareaId) {
-      this.router.navigate(['/tareas']);
+      void this.router.navigate(['/tareas']);
       return;
     }
 
@@ -127,6 +129,7 @@ export class EditarTareaComponent implements OnInit {
 
   cargarDatos(): void {
     this.cargando = true;
+    this.errorMessage = '';
 
     forkJoin({
       tarea: this.tareasService.getTareaById(this.tareaId),
@@ -143,6 +146,7 @@ export class EditarTareaComponent implements OnInit {
           this.tarea = this.mapearFormulario(tarea);
         },
         error: (error) => {
+          this.errorMessage = getHttpErrorMessage(error, 'No se pudo cargar la tarea en este momento.');
           console.error('Error al cargar tarea', error);
         },
       });
@@ -165,6 +169,7 @@ export class EditarTareaComponent implements OnInit {
     };
 
     this.guardando = true;
+    this.errorMessage = '';
 
     this.tareasService.updateTarea(this.tareaId, payload)
       .pipe(finalize(() => this.guardando = false))
@@ -173,6 +178,7 @@ export class EditarTareaComponent implements OnInit {
           this.volverAGestion();
         },
         error: (error) => {
+          this.errorMessage = getHttpErrorMessage(error, 'No se pudo actualizar la tarea en este momento.');
           console.error('Error al actualizar tarea', error);
         },
       });
@@ -186,7 +192,7 @@ export class EditarTareaComponent implements OnInit {
         && this.tarea.idCultivo
         && this.tarea.idTipoTarea
         && this.tarea.descripcion.trim()
-        && !this.fechasInvalidas()
+        && !this.fechasInvalidas(),
     );
   }
 
@@ -194,7 +200,7 @@ export class EditarTareaComponent implements OnInit {
     return Boolean(
       this.tarea.fechaInicio
         && this.tarea.fechaFin
-        && this.tarea.fechaInicio > this.tarea.fechaFin
+        && this.tarea.fechaInicio > this.tarea.fechaFin,
     );
   }
 
@@ -217,4 +223,3 @@ export class EditarTareaComponent implements OnInit {
     };
   }
 }
-

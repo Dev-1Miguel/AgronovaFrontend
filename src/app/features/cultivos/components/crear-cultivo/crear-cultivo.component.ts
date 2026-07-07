@@ -29,6 +29,7 @@ import { finalize, forkJoin } from 'rxjs';
 import { CatalogoReferencia, CreateCultivoDto } from '../../../../core/models/cultivo.model';
 import { CatalogosService } from '../../../../core/service/catalogos.service';
 import { CultivosService } from '../../../../core/service/cultivos.service';
+import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.util';
 
 @Component({
   selector: 'app-crear-cultivo',
@@ -65,6 +66,7 @@ export class CrearCultivoComponent implements OnInit {
   ubicaciones: CatalogoReferencia[] = [];
   cargandoCatalogos = false;
   guardando = false;
+  errorMessage = '';
 
   constructor(
     private readonly catalogosService: CatalogosService,
@@ -86,6 +88,7 @@ export class CrearCultivoComponent implements OnInit {
 
   cargarCatalogos(): void {
     this.cargandoCatalogos = true;
+    this.errorMessage = '';
 
     forkJoin({
       categorias: this.catalogosService.obtenerPorTipo('categorias-cultivo'),
@@ -98,6 +101,7 @@ export class CrearCultivoComponent implements OnInit {
           this.ubicaciones = ubicaciones;
         },
         error: (error) => {
+          this.errorMessage = getHttpErrorMessage(error, 'No se pudieron cargar los catalogos del cultivo en este momento.');
           console.error('Error al cargar catalogos de cultivos', error);
         },
       });
@@ -109,6 +113,7 @@ export class CrearCultivoComponent implements OnInit {
     }
 
     this.guardando = true;
+    this.errorMessage = '';
 
     this.cultivosService.createCultivo({
       ...this.cultivo,
@@ -120,6 +125,7 @@ export class CrearCultivoComponent implements OnInit {
           this.volverAGestion();
         },
         error: (error) => {
+          this.errorMessage = getHttpErrorMessage(error, 'No se pudo registrar el cultivo en este momento.');
           console.error('Error al crear cultivo', error);
         },
       });
@@ -129,7 +135,7 @@ export class CrearCultivoComponent implements OnInit {
     return Boolean(
       this.cultivo.nombre.trim()
         && this.cultivo.idCategoria
-        && this.cultivo.idUbicacion
+        && this.cultivo.idUbicacion,
     );
   }
 
@@ -137,4 +143,3 @@ export class CrearCultivoComponent implements OnInit {
     this.location.back();
   }
 }
-
