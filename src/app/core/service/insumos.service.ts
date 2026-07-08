@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
@@ -9,9 +9,9 @@ import { CreateInsumoDto, Insumo, UpdateInsumoDto } from '../models/insumo.model
   providedIn: 'root',
 })
 export class InsumosService {
-  private readonly endpoint = `${environment.apiUrl}/insumos`;
+  private readonly http = inject(HttpClient);
 
-  constructor(private readonly http: HttpClient) {}
+  private readonly endpoint = `${environment.apiUrl}/insumos`;
 
   getInsumos(): Observable<Insumo[]> {
     return this.http.get<Insumo[]>(this.endpoint);

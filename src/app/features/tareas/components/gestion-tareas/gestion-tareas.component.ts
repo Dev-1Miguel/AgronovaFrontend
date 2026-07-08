@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
@@ -35,6 +35,7 @@ import { CatalogosService } from '../../../../core/service/catalogos.service';
 import { CultivosService } from '../../../../core/service/cultivos.service';
 import { InsumosService } from '../../../../core/service/insumos.service';
 import { TareasService } from '../../../../core/service/tareas.service';
+import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.util';
 import { TareasGanttComponent } from '../tareas-gantt/tareas-gantt.component';
 
 @Component({
@@ -59,23 +60,25 @@ import { TareasGanttComponent } from '../tareas-gantt/tareas-gantt.component';
   ],
 })
 export class GestionTareasComponent {
+  private readonly tareasService = inject(TareasService);
+  private readonly catalogosService = inject(CatalogosService);
+  private readonly cultivosService = inject(CultivosService);
+  private readonly insumosService = inject(InsumosService);
+  private readonly agricultoresService = inject(AgricultoresService);
+  private readonly router = inject(Router);
+
   busqueda = '';
   vistaActual: 'lista' | 'gantt' = 'lista';
   tareas: Tarea[] = [];
   cargandoTareas = false;
+  errorCarga = '';
+  errorAccion = '';
   private tiposTareaPorId = new Map<string, string>();
   private cultivosPorId = new Map<string, string>();
   private agricultoresPorId = new Map<string, string>();
   private insumosPorId = new Map<string, string>();
 
-  constructor(
-    private readonly tareasService: TareasService,
-    private readonly catalogosService: CatalogosService,
-    private readonly cultivosService: CultivosService,
-    private readonly insumosService: InsumosService,
-    private readonly agricultoresService: AgricultoresService,
-    private readonly router: Router,
-  ) {
+  constructor() {
     addIcons({
       addOutline,
       arrowBackOutline,
@@ -93,6 +96,7 @@ export class GestionTareasComponent {
 
   cargarTareas(): void {
     this.cargandoTareas = true;
+    this.errorCarga = '';
 
     forkJoin({
       tareas: this.tareasService.getTareas(),
@@ -111,6 +115,7 @@ export class GestionTareasComponent {
           this.tareas = tareas;
         },
         error: (error) => {
+          this.errorCarga = getHttpErrorMessage(error, 'No se pudieron cargar las tareas en este momento.');
           console.error('Error al cargar tareas', error);
         },
       });
@@ -129,24 +134,32 @@ export class GestionTareasComponent {
   }
 
   completarTarea(tarea: Tarea): void {
+    this.errorAccion = '';
+
     this.tareasService.updateTareaEstado(tarea.id, { estado: 'Completada' }).subscribe({
       next: () => {
+        this.errorAccion = '';
         this.tareas = this.tareas.map((item) =>
           item.id === tarea.id ? { ...item, estado: 'Completada' } : item
         );
       },
       error: (error) => {
+        this.errorAccion = getHttpErrorMessage(error, 'No se pudo completar la tarea en este momento.');
         console.error('Error al completar tarea', error);
       },
     });
   }
 
   eliminarTarea(tarea: Tarea): void {
+    this.errorAccion = '';
+
     this.tareasService.deleteTarea(tarea.id).subscribe({
       next: () => {
+        this.errorAccion = '';
         this.tareas = this.tareas.filter((item) => item.id !== tarea.id);
       },
       error: (error) => {
+        this.errorAccion = getHttpErrorMessage(error, 'No se pudo eliminar la tarea en este momento.');
         console.error('Error al eliminar tarea', error);
       },
     });
@@ -233,4 +246,3 @@ export class GestionTareasComponent {
     return new Map(items.map((item) => [item.id, item.descripcion]));
   }
 }
-

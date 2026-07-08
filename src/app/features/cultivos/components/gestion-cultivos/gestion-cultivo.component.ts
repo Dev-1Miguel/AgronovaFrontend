@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   IonButton,
   IonButtons,
@@ -31,6 +31,7 @@ import { finalize, forkJoin } from 'rxjs';
 import { CatalogoReferencia, Cultivo } from '../../../../core/models/cultivo.model';
 import { CatalogosService } from '../../../../core/service/catalogos.service';
 import { CultivosService } from '../../../../core/service/cultivos.service';
+import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.util';
 
 @Component({
   selector: 'app-gestion-cultivos',
@@ -53,18 +54,20 @@ import { CultivosService } from '../../../../core/service/cultivos.service';
   ],
 })
 export class CultivosPage {
+  private readonly cultivosService = inject(CultivosService);
+  private readonly catalogosService = inject(CatalogosService);
+  private readonly router = inject(Router);
+
 
   busqueda: string = '';
   cultivos: Cultivo[] = [];
   cargandoCultivos = false;
+  errorCarga = '';
+  errorAccion = '';
   private categoriasPorId = new Map<string, string>();
   private ubicacionesPorId = new Map<string, string>();
 
-  constructor(
-    private readonly cultivosService: CultivosService,
-    private readonly catalogosService: CatalogosService,
-    private readonly router: Router,
-  ) {
+  constructor() {
     addIcons({
       addOutline,
       arrowBackOutline,
@@ -82,6 +85,7 @@ export class CultivosPage {
 
   cargarCultivos(): void {
     this.cargandoCultivos = true;
+    this.errorCarga = '';
 
     forkJoin({
       cultivos: this.cultivosService.getCultivos(),
@@ -96,6 +100,7 @@ export class CultivosPage {
           this.cultivos = cultivos;
         },
         error: (error) => {
+          this.errorCarga = getHttpErrorMessage(error, 'No se pudieron cargar los cultivos en este momento.');
           console.error('Error al cargar cultivos', error);
         },
       });
@@ -114,11 +119,15 @@ export class CultivosPage {
   }
 
   eliminarCultivo(cultivo: Cultivo): void {
+    this.errorAccion = '';
+
     this.cultivosService.deleteCultivo(cultivo.id).subscribe({
       next: () => {
+        this.errorAccion = '';
         this.cultivos = this.cultivos.filter(c => c.id !== cultivo.id);
       },
       error: (error) => {
+        this.errorAccion = getHttpErrorMessage(error, 'No se pudo eliminar el cultivo en este momento.');
         console.error('Error al eliminar cultivo', error);
       },
     });
@@ -170,4 +179,3 @@ export class CultivosPage {
     return catalogos.get(id) ?? null;
   }
 }
-

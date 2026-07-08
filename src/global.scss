@@ -1,4 +1,4 @@
-/*
+﻿/*
  * App Global CSS
  * ----------------------------------------------------------------------------
  * Put style rules here that you want to apply globally. These styles are for
@@ -36,7 +36,18 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 /* @import '@ionic/angular/css/palettes/dark.system.css'; */
 
+.feedback-message {
+  padding: 14px 15px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+}
 
+.feedback-message.error {
+  color: var(--agronova-feedback-error-text);
+  background: var(--agronova-feedback-error-bg);
+  border: 1px solid var(--agronova-feedback-error-border);
+}
 .login-content .field-item input:-webkit-autofill,
 .login-content .field-item input:-webkit-autofill:hover,
 .login-content .field-item input:-webkit-autofill:focus,
@@ -48,4 +59,3 @@
   -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
   transition: background-color 9999s ease-in-out 0s;
 }
-

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
@@ -9,9 +9,9 @@ import { Agricultor, CreateAgricultorDto, UpdateAgricultorDto } from '../models/
   providedIn: 'root',
 })
 export class AgricultoresService {
-  private readonly endpoint = `${environment.apiUrl}/agricultores`;
+  private readonly http = inject(HttpClient);
 
-  constructor(private readonly http: HttpClient) {}
+  private readonly endpoint = `${environment.apiUrl}/agricultores`;
 
   getAgricultores(): Observable<Agricultor[]> {
     return this.http.get<Agricultor[]>(this.endpoint);

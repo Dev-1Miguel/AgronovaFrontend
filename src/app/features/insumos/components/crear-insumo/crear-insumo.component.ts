@@ -1,6 +1,7 @@
-import { CommonModule, Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+﻿import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   IonButton,
   IonButtons,
@@ -18,12 +19,13 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { albumsOutline, archiveOutline, arrowBackOutline, checkmarkOutline, cubeOutline, pricetagOutline } from 'ionicons/icons';
-import { finalize, forkJoin } from 'rxjs';
+import { forkJoin } from 'rxjs';
 
 import { CatalogoReferencia } from '../../../../core/models/cultivo.model';
 import { CreateInsumoDto } from '../../../../core/models/insumo.model';
 import { CatalogosService } from '../../../../core/service/catalogos.service';
 import { InsumosService } from '../../../../core/service/insumos.service';
+import { runFormRequest } from '../../../../core/utils/run-form-request.util';
 
 interface InsumoForm {
   idTipoInsumo: string;
@@ -56,6 +58,10 @@ interface InsumoForm {
   ],
 })
 export class CrearInsumoComponent implements OnInit {
+  private readonly catalogosService = inject(CatalogosService);
+  private readonly insumosService = inject(InsumosService);
+  private readonly router = inject(Router);
+
   insumo: InsumoForm = {
     idTipoInsumo: '',
     descripcion: '',
@@ -67,12 +73,9 @@ export class CrearInsumoComponent implements OnInit {
   unidadesMedida = ['Kg', 'Litros', 'Unidades', 'Bolsas', 'Galones'];
   cargandoDatos = false;
   guardando = false;
+  errorMessage = '';
 
-  constructor(
-    private readonly catalogosService: CatalogosService,
-    private readonly insumosService: InsumosService,
-    private readonly location: Location,
-  ) {
+  constructor() {
     addIcons({ albumsOutline, archiveOutline, arrowBackOutline, checkmarkOutline, cubeOutline, pricetagOutline });
   }
 
@@ -81,20 +84,22 @@ export class CrearInsumoComponent implements OnInit {
   }
 
   cargarDatos(): void {
-    this.cargandoDatos = true;
-
-    forkJoin({
-      tiposInsumo: this.catalogosService.obtenerPorTipo('tipos-insumo'),
-    })
-      .pipe(finalize(() => this.cargandoDatos = false))
-      .subscribe({
-        next: ({ tiposInsumo }) => {
-          this.tiposInsumo = tiposInsumo;
-        },
-        error: (error) => {
-          console.error('Error al cargar datos de insumos', error);
-        },
-      });
+    runFormRequest({
+      request$: forkJoin({
+        tiposInsumo: this.catalogosService.obtenerPorTipo('tipos-insumo'),
+      }),
+      setLoading: (loading) => {
+        this.cargandoDatos = loading;
+      },
+      setErrorMessage: (message) => {
+        this.errorMessage = message;
+      },
+      fallbackMessage: 'No se pudieron cargar los datos del insumo en este momento.',
+      logMessage: 'Error al cargar datos de insumos',
+      onSuccess: ({ tiposInsumo }) => {
+        this.tiposInsumo = tiposInsumo;
+      },
+    });
   }
 
   guardar(): void {
@@ -109,16 +114,18 @@ export class CrearInsumoComponent implements OnInit {
       unidadMedida: this.insumo.unidadMedida,
     };
 
-    this.guardando = true;
-
-    this.insumosService.createInsumo(payload)
-      .pipe(finalize(() => this.guardando = false))
-      .subscribe({
-        next: () => this.volverAGestion(),
-        error: (error) => {
-          console.error('Error al crear insumo', error);
-        },
-      });
+    runFormRequest({
+      request$: this.insumosService.createInsumo(payload),
+      setLoading: (loading) => {
+        this.guardando = loading;
+      },
+      setErrorMessage: (message) => {
+        this.errorMessage = message;
+      },
+      fallbackMessage: 'No se pudo registrar el insumo en este momento.',
+      logMessage: 'Error al crear insumo',
+      onSuccess: () => this.volverAGestion(),
+    });
   }
 
   formularioValido(): boolean {
@@ -127,12 +134,13 @@ export class CrearInsumoComponent implements OnInit {
         && this.insumo.descripcion.trim()
         && this.insumo.cantidad !== null
         && Number(this.insumo.cantidad) >= 0
-        && this.insumo.unidadMedida
+        && this.insumo.unidadMedida,
     );
   }
 
   volverAGestion(): void {
-    this.location.back();
+    void this.router.navigate(['/insumos']);
   }
 }
+
 

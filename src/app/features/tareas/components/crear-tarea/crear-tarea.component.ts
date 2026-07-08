@@ -1,6 +1,7 @@
-import { CommonModule, Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+﻿import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   IonButton,
   IonButtons,
@@ -27,16 +28,16 @@ import {
   readerOutline,
   reorderThreeOutline,
 } from 'ionicons/icons';
-import { finalize, forkJoin } from 'rxjs';
+import { forkJoin } from 'rxjs';
 
 import { Agricultor } from '../../../../core/models/agricultor.model';
 import { CatalogoReferencia, Cultivo } from '../../../../core/models/cultivo.model';
-import { InsumoAsignado } from '../../../../core/models/tarea.model';
-import { CreateTareaDto } from '../../../../core/models/tarea.model';
+import { CreateTareaDto, InsumoAsignado } from '../../../../core/models/tarea.model';
 import { AgricultoresService } from '../../../../core/service/agricultores.service';
 import { CatalogosService } from '../../../../core/service/catalogos.service';
 import { CultivosService } from '../../../../core/service/cultivos.service';
 import { TareasService } from '../../../../core/service/tareas.service';
+import { runFormRequest } from '../../../../core/utils/run-form-request.util';
 import { TareaInsumosAsignadosComponent } from '../tarea-insumos-asignados/tarea-insumos-asignados.component';
 
 interface TareaForm {
@@ -76,6 +77,12 @@ interface TareaForm {
   ],
 })
 export class CrearTareaComponent implements OnInit {
+  private readonly catalogosService = inject(CatalogosService);
+  private readonly cultivosService = inject(CultivosService);
+  private readonly agricultoresService = inject(AgricultoresService);
+  private readonly tareasService = inject(TareasService);
+  private readonly router = inject(Router);
+
   tarea: TareaForm = {
     nombre: '',
     fechaInicio: '',
@@ -92,14 +99,9 @@ export class CrearTareaComponent implements OnInit {
   agricultores: Agricultor[] = [];
   cargandoDatos = false;
   guardando = false;
+  errorMessage = '';
 
-  constructor(
-    private readonly catalogosService: CatalogosService,
-    private readonly cultivosService: CultivosService,
-    private readonly agricultoresService: AgricultoresService,
-    private readonly tareasService: TareasService,
-    private readonly location: Location,
-  ) {
+  constructor() {
     addIcons({
       arrowBackOutline,
       calendarOutline,
@@ -116,24 +118,26 @@ export class CrearTareaComponent implements OnInit {
   }
 
   cargarDatos(): void {
-    this.cargandoDatos = true;
-
-    forkJoin({
-      tiposTarea: this.catalogosService.obtenerPorTipo('tipos-tarea'),
-      cultivos: this.cultivosService.getCultivos(),
-      agricultores: this.agricultoresService.getAgricultores(),
-    })
-      .pipe(finalize(() => this.cargandoDatos = false))
-      .subscribe({
-        next: ({ tiposTarea, cultivos, agricultores }) => {
-          this.tiposTarea = tiposTarea;
-          this.cultivos = cultivos;
-          this.agricultores = agricultores;
-        },
-        error: (error) => {
-          console.error('Error al cargar datos de tareas', error);
-        },
-      });
+    runFormRequest({
+      request$: forkJoin({
+        tiposTarea: this.catalogosService.obtenerPorTipo('tipos-tarea'),
+        cultivos: this.cultivosService.getCultivos(),
+        agricultores: this.agricultoresService.getAgricultores(),
+      }),
+      setLoading: (loading) => {
+        this.cargandoDatos = loading;
+      },
+      setErrorMessage: (message) => {
+        this.errorMessage = message;
+      },
+      fallbackMessage: 'No se pudieron cargar los datos de la tarea en este momento.',
+      logMessage: 'Error al cargar datos de tareas',
+      onSuccess: ({ tiposTarea, cultivos, agricultores }) => {
+        this.tiposTarea = tiposTarea;
+        this.cultivos = cultivos;
+        this.agricultores = agricultores;
+      },
+    });
   }
 
   guardar(): void {
@@ -152,18 +156,20 @@ export class CrearTareaComponent implements OnInit {
       insumosAsignados: this.tarea.insumosAsignados.map((item) => ({ ...item })),
     };
 
-    this.guardando = true;
-
-    this.tareasService.createTarea(payload)
-      .pipe(finalize(() => this.guardando = false))
-      .subscribe({
-        next: () => {
-          this.volverAGestion();
-        },
-        error: (error) => {
-          console.error('Error al crear tarea', error);
-        },
-      });
+    runFormRequest({
+      request$: this.tareasService.createTarea(payload),
+      setLoading: (loading) => {
+        this.guardando = loading;
+      },
+      setErrorMessage: (message) => {
+        this.errorMessage = message;
+      },
+      fallbackMessage: 'No se pudo registrar la tarea en este momento.',
+      logMessage: 'Error al crear tarea',
+      onSuccess: () => {
+        this.volverAGestion();
+      },
+    });
   }
 
   formularioValido(): boolean {
@@ -174,11 +180,21 @@ export class CrearTareaComponent implements OnInit {
         && this.tarea.idCultivo
         && this.tarea.idTipoTarea
         && this.tarea.descripcion.trim()
+        && !this.fechasInvalidas(),
+    );
+  }
+
+  fechasInvalidas(): boolean {
+    return Boolean(
+      this.tarea.fechaInicio
+        && this.tarea.fechaFin
+        && this.tarea.fechaInicio > this.tarea.fechaFin,
     );
   }
 
   volverAGestion(): void {
-    this.location.back();
+    void this.router.navigate(['/tareas']);
   }
 }
+
 

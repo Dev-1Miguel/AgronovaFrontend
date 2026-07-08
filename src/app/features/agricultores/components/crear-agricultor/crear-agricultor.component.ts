@@ -1,6 +1,7 @@
-import { CommonModule, Location } from '@angular/common';
-import { Component } from '@angular/core';
+﻿import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   IonButton,
   IonButtons,
@@ -21,12 +22,12 @@ import {
   calendarOutline,
   checkmarkOutline,
   locationOutline,
+  peopleOutline,
   personOutline,
 } from 'ionicons/icons';
-import { finalize } from 'rxjs';
-
 import { CreateAgricultorDto } from '../../../../core/models/agricultor.model';
 import { AgricultoresService } from '../../../../core/service/agricultores.service';
+import { runFormRequest } from '../../../../core/utils/run-form-request.util';
 
 interface AgricultorForm {
   nombre: string;
@@ -58,6 +59,9 @@ interface AgricultorForm {
   ],
 })
 export class CrearAgricultorComponent {
+  private readonly agricultoresService = inject(AgricultoresService);
+  private readonly router = inject(Router);
+
   agricultor: AgricultorForm = {
     nombre: '',
     edad: null,
@@ -67,17 +71,16 @@ export class CrearAgricultorComponent {
   };
 
   guardando = false;
+  errorMessage = '';
 
-  constructor(
-    private readonly agricultoresService: AgricultoresService,
-    private readonly location: Location,
-  ) {
+  constructor() {
     addIcons({
       arrowBackOutline,
       briefcaseOutline,
       calendarOutline,
       checkmarkOutline,
       locationOutline,
+      peopleOutline,
       personOutline,
     });
   }
@@ -95,18 +98,20 @@ export class CrearAgricultorComponent {
       estado: this.agricultor.estado,
     };
 
-    this.guardando = true;
-
-    this.agricultoresService.createAgricultor(payload)
-      .pipe(finalize(() => this.guardando = false))
-      .subscribe({
-        next: () => {
-          this.volverAGestion();
-        },
-        error: (error) => {
-          console.error('Error al crear agricultor', error);
-        },
-      });
+    runFormRequest({
+      request$: this.agricultoresService.createAgricultor(payload),
+      setLoading: (loading) => {
+        this.guardando = loading;
+      },
+      setErrorMessage: (message) => {
+        this.errorMessage = message;
+      },
+      fallbackMessage: 'No se pudo registrar el agricultor en este momento.',
+      logMessage: 'Error al crear agricultor',
+      onSuccess: () => {
+        this.volverAGestion();
+      },
+    });
   }
 
   formularioValido(): boolean {
@@ -115,11 +120,13 @@ export class CrearAgricultorComponent {
         && this.agricultor.edad !== null
         && Number(this.agricultor.edad) > 0
         && this.agricultor.zona.trim()
-        && this.agricultor.experiencia.trim()
+        && this.agricultor.experiencia.trim(),
     );
   }
 
   volverAGestion(): void {
-    this.location.back();
+    void this.router.navigate(['/agricultores']);
   }
 }
+
+

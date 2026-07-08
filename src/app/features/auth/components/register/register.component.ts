@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import {
@@ -52,6 +52,9 @@ import { AuthService } from '../../../../core/service/auth.service';
   ],
 })
 export class RegisterComponent {
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+
   nombre = '';
   correo = '';
   contrasena = '';
@@ -61,10 +64,7 @@ export class RegisterComponent {
   mostrarContrasena = false;
   mostrarConfirmarContrasena = false;
 
-  constructor(
-    private readonly authService: AuthService,
-    private readonly router: Router,
-  ) {
+  constructor() {
     addIcons({
       leafOutline,
       personOutline,

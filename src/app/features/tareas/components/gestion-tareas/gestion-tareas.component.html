@@ -57,6 +57,9 @@
       [(ngModel)]="busqueda">
     </ion-searchbar>
 
+    <div class="feedback-message error" *ngIf="errorCarga && vistaActual === 'lista'">{{ errorCarga }}</div>
+    <div class="feedback-message error" *ngIf="errorAccion && vistaActual === 'lista'">{{ errorAccion }}</div>
+
     <ng-container *ngIf="vistaActual === 'lista'; else ganttView">
       <div class="list-state" *ngIf="!cargandoTareas; else loadingState">
         <div class="empty-state" *ngIf="!tareas.length">
