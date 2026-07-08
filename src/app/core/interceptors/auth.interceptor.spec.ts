@@ -12,7 +12,7 @@ describe('authInterceptor', () => {
   let router: jasmine.SpyObj<Router>;
 
   beforeEach(() => {
-    authService = jasmine.createSpyObj<AuthService>('AuthService', ['getAccessToken', 'logout']);
+    authService = jasmine.createSpyObj<AuthService>('AuthService', ['clearSession']);
     router = jasmine.createSpyObj<Router>('Router', ['navigate']);
 
     TestBed.configureTestingModule({
@@ -23,35 +23,36 @@ describe('authInterceptor', () => {
     });
   });
 
-  it('adds authorization header only to API requests', () => {
-    authService.getAccessToken.and.returnValue('token-123');
+  it('sends credentials only to API requests and does not add Authorization', () => {
     const apiRequest = new HttpRequest('GET', `${environment.apiUrl}/cultivos`);
-    let authorizationHeader = '';
+    let apiWithCredentials = false;
+    let apiHasAuthorizationHeader = true;
 
     TestBed.runInInjectionContext(() => {
       authInterceptor(apiRequest, (request) => {
-        authorizationHeader = request.headers.get('Authorization') ?? '';
+        apiWithCredentials = request.withCredentials;
+        apiHasAuthorizationHeader = request.headers.has('Authorization');
         return of(new HttpResponse({ status: 200 }));
       }).subscribe();
     });
 
-    expect(authorizationHeader).toBe('Bearer token-123');
+    expect(apiWithCredentials).toBeTrue();
+    expect(apiHasAuthorizationHeader).toBeFalse();
 
     const externalRequest = new HttpRequest('GET', 'https://example.com/health');
-    let hasAuthorizationHeader = true;
+    let externalWithCredentials = true;
 
     TestBed.runInInjectionContext(() => {
       authInterceptor(externalRequest, (request) => {
-        hasAuthorizationHeader = request.headers.has('Authorization');
+        externalWithCredentials = request.withCredentials;
         return of(new HttpResponse({ status: 200 }));
       }).subscribe();
     });
 
-    expect(hasAuthorizationHeader).toBeFalse();
+    expect(externalWithCredentials).toBeFalse();
   });
 
-  it('logs out and navigates to login on API 401', () => {
-    authService.getAccessToken.and.returnValue('token-123');
+  it('clears session and navigates to login on API 401', () => {
     const request = new HttpRequest('GET', `${environment.apiUrl}/cultivos`);
     const error = new HttpErrorResponse({ status: 401 });
     let thrownError: unknown;
@@ -63,12 +64,11 @@ describe('authInterceptor', () => {
     });
 
     expect(thrownError).toBe(error);
-    expect(authService.logout).toHaveBeenCalledTimes(1);
+    expect(authService.clearSession).toHaveBeenCalledTimes(1);
     expect(router.navigate).toHaveBeenCalledOnceWith(['/login']);
   });
 
   it('navigates to dashboard on API 403', () => {
-    authService.getAccessToken.and.returnValue('token-123');
     const request = new HttpRequest('GET', `${environment.apiUrl}/usuarios`);
     const error = new HttpErrorResponse({ status: 403 });
 
@@ -76,7 +76,7 @@ describe('authInterceptor', () => {
       authInterceptor(request, () => throwError(() => error)).subscribe({ error: () => undefined });
     });
 
-    expect(authService.logout).not.toHaveBeenCalled();
+    expect(authService.clearSession).not.toHaveBeenCalled();
     expect(router.navigate).toHaveBeenCalledOnceWith(['/dashboard']);
   });
 });

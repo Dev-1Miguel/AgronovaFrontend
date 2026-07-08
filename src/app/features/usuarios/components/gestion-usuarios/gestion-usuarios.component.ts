@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
@@ -59,6 +59,10 @@ import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.u
   ],
 })
 export class GestionUsuariosComponent {
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly usuariosService = inject(UsuariosService);
+
   busqueda = '';
   usuarios: Usuario[] = [];
   cargando = false;
@@ -73,11 +77,7 @@ export class GestionUsuariosComponent {
   estadoFormulario: 'Activo' | 'Inactivo' = 'Activo';
   private readonly currentUser: AuthenticatedUser | null;
 
-  constructor(
-    private readonly authService: AuthService,
-    private readonly router: Router,
-    private readonly usuariosService: UsuariosService,
-  ) {
+  constructor() {
     addIcons({
       arrowBackOutline,
       eyeOutline,

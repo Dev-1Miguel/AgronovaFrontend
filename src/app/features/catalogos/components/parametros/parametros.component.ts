@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
@@ -86,6 +86,9 @@ interface CatalogoConfig {
   ],
 })
 export class ParametrosComponent {
+  private readonly catalogosService = inject(CatalogosService);
+  private readonly router = inject(Router);
+
   readonly catalogos: CatalogoConfig[];
   readonly alertaButtons = [
     {
@@ -118,10 +121,7 @@ export class ParametrosComponent {
   registroEnEdicion: CatalogoReferencia | null = null;
   registroPendienteDesactivar: CatalogoReferencia | null = null;
 
-  constructor(
-    private readonly catalogosService: CatalogosService,
-    private readonly router: Router,
-  ) {
+  constructor() {
     addIcons({
       addOutline,
       arrowBackOutline,

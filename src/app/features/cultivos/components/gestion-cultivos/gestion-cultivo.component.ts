@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   IonButton,
   IonButtons,
@@ -54,6 +54,10 @@ import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.u
   ],
 })
 export class CultivosPage {
+  private readonly cultivosService = inject(CultivosService);
+  private readonly catalogosService = inject(CatalogosService);
+  private readonly router = inject(Router);
+
 
   busqueda: string = '';
   cultivos: Cultivo[] = [];
@@ -63,11 +67,7 @@ export class CultivosPage {
   private categoriasPorId = new Map<string, string>();
   private ubicacionesPorId = new Map<string, string>();
 
-  constructor(
-    private readonly cultivosService: CultivosService,
-    private readonly catalogosService: CatalogosService,
-    private readonly router: Router,
-  ) {
+  constructor() {
     addIcons({
       addOutline,
       arrowBackOutline,

@@ -1,7 +1,9 @@
 import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { firstValueFrom } from 'rxjs';
 
+import { environment } from '../../../environments/environment';
 import { AuthenticatedUser } from '../models/auth.model';
 import { AuthService } from './auth.service';
 
@@ -15,6 +17,7 @@ describe('AuthService', () => {
   };
 
   let service: AuthService;
+  let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -26,55 +29,57 @@ describe('AuthService', () => {
 
     localStorage.clear();
     service = TestBed.inject(AuthService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
+    httpMock.verify();
     localStorage.clear();
   });
 
-  it('authenticates when token and user are valid', () => {
-    storeSession(createToken(Math.floor(Date.now() / 1000) + 60), user);
+  it('stores the user returned by login without requiring a local access token', async () => {
+    const resultPromise = firstValueFrom(service.login({ correo: user.correo, contrasena: 'secreta123' }));
+    const request = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
 
-    expect(service.isAuthenticated()).toBeTrue();
-  });
+    expect(request.request.method).toBe('POST');
+    expect(request.request.withCredentials).toBeTrue();
 
-  it('clears session when token is expired', () => {
-    storeSession(createToken(Math.floor(Date.now() / 1000) - 60), user);
+    request.flush({ user });
+    await resultPromise;
 
-    expect(service.isAuthenticated()).toBeFalse();
     expect(localStorage.getItem('accessToken')).toBeNull();
-    expect(localStorage.getItem('user')).toBeNull();
+    expect(service.getCurrentUser()).toEqual(user);
   });
 
-  it('clears session when token is missing', () => {
-    localStorage.setItem('user', JSON.stringify(user));
+  it('loads the current session from the backend when no user is cached', async () => {
+    const resultPromise = firstValueFrom(service.isAuthenticated());
+    const request = httpMock.expectOne(`${environment.apiUrl}/auth/me`);
 
-    expect(service.isAuthenticated()).toBeFalse();
-    expect(localStorage.getItem('user')).toBeNull();
+    expect(request.request.method).toBe('GET');
+    expect(request.request.withCredentials).toBeTrue();
+
+    request.flush(user);
+
+    expect(await resultPromise).toBeTrue();
+    expect(service.getCurrentUser()).toEqual(user);
   });
 
-  it('clears session when user is not valid JSON', () => {
-    localStorage.setItem('accessToken', createToken(Math.floor(Date.now() / 1000) + 60));
+  it('clears the cached user when the session endpoint rejects', async () => {
     localStorage.setItem('user', '{bad-json');
 
-    expect(service.isAuthenticated()).toBeFalse();
-    expect(localStorage.getItem('accessToken')).toBeNull();
+    expect(service.getCurrentUser()).toBeNull();
     expect(localStorage.getItem('user')).toBeNull();
   });
 
-  function storeSession(token: string, currentUser: AuthenticatedUser): void {
-    localStorage.setItem('accessToken', token);
-    localStorage.setItem('user', JSON.stringify(currentUser));
-  }
+  it('clears local session and calls logout endpoint', () => {
+    localStorage.setItem('user', JSON.stringify(user));
 
-  function createToken(exp: number): string {
-    return `${encodeBase64Url({ alg: 'none' })}.${encodeBase64Url({ exp })}.signature`;
-  }
+    service.logout();
 
-  function encodeBase64Url(value: object): string {
-    return btoa(JSON.stringify(value))
-      .replace(/=/g, '')
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_');
-  }
+    const request = httpMock.expectOne(`${environment.apiUrl}/auth/logout`);
+    expect(request.request.method).toBe('POST');
+    expect(request.request.withCredentials).toBeTrue();
+    request.flush({ message: 'Sesion cerrada correctamente.' });
+    expect(service.getCurrentUser()).toBeNull();
+  });
 });

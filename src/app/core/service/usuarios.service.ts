@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
@@ -9,9 +9,9 @@ import { UpdateUsuarioEstadoRequest, UpdateUsuarioRolRequest, Usuario } from '..
   providedIn: 'root',
 })
 export class UsuariosService {
-  private readonly endpoint = `${environment.apiUrl}/usuarios`;
+  private readonly http = inject(HttpClient);
 
-  constructor(private readonly http: HttpClient) {}
+  private readonly endpoint = `${environment.apiUrl}/usuarios`;
 
   getUsuarios(q = ''): Observable<Usuario[]> {
     const params = q.trim() ? new HttpParams().set('q', q.trim()) : undefined;

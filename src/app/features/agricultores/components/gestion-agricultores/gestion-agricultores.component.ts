@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
@@ -43,16 +43,16 @@ import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.u
   ],
 })
 export class GestionAgricultoresComponent {
+  private readonly agricultoresService = inject(AgricultoresService);
+  private readonly router = inject(Router);
+
   busqueda = '';
   agricultores: Agricultor[] = [];
   cargandoAgricultores = false;
   errorCarga = '';
   errorAccion = '';
 
-  constructor(
-    private readonly agricultoresService: AgricultoresService,
-    private readonly router: Router,
-  ) {
+  constructor() {
     addIcons({ addOutline, arrowBackOutline, createOutline, peopleOutline, trashOutline });
   }
 

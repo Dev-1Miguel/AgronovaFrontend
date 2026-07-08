@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   IonButton,
@@ -39,6 +39,8 @@ import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.u
   ],
 })
 export class TareaInsumosAsignadosComponent implements OnInit {
+  private readonly insumosService = inject(InsumosService);
+
   @Input()
   set asignaciones(value: InsumoAsignado[] | null | undefined) {
     this._asignaciones = (value ?? []).map((item) => ({ ...item }));
@@ -58,7 +60,7 @@ export class TareaInsumosAsignadosComponent implements OnInit {
 
   private _asignaciones: InsumoAsignado[] = [];
 
-  constructor(private readonly insumosService: InsumosService) {
+  constructor() {
     addIcons({ addOutline, trashOutline });
   }
 

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import {
@@ -44,15 +44,15 @@ import { AuthService } from '../../../../core/service/auth.service';
   ],
 })
 export class ForgotPasswordComponent {
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+
   correo = '';
   loading = false;
   errorMessage = '';
   successMessage = '';
 
-  constructor(
-    private readonly authService: AuthService,
-    private readonly router: Router,
-  ) {
+  constructor() {
     addIcons({ leafOutline, mailOutline, arrowBackOutline });
   }
 

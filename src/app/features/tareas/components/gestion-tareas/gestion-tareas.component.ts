@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
@@ -60,6 +60,13 @@ import { TareasGanttComponent } from '../tareas-gantt/tareas-gantt.component';
   ],
 })
 export class GestionTareasComponent {
+  private readonly tareasService = inject(TareasService);
+  private readonly catalogosService = inject(CatalogosService);
+  private readonly cultivosService = inject(CultivosService);
+  private readonly insumosService = inject(InsumosService);
+  private readonly agricultoresService = inject(AgricultoresService);
+  private readonly router = inject(Router);
+
   busqueda = '';
   vistaActual: 'lista' | 'gantt' = 'lista';
   tareas: Tarea[] = [];
@@ -71,14 +78,7 @@ export class GestionTareasComponent {
   private agricultoresPorId = new Map<string, string>();
   private insumosPorId = new Map<string, string>();
 
-  constructor(
-    private readonly tareasService: TareasService,
-    private readonly catalogosService: CatalogosService,
-    private readonly cultivosService: CultivosService,
-    private readonly insumosService: InsumosService,
-    private readonly agricultoresService: AgricultoresService,
-    private readonly router: Router,
-  ) {
+  constructor() {
     addIcons({
       addOutline,
       arrowBackOutline,

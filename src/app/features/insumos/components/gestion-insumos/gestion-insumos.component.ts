@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
@@ -45,6 +45,10 @@ import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.u
   ],
 })
 export class GestionInsumosComponent {
+  private readonly insumosService = inject(InsumosService);
+  private readonly catalogosService = inject(CatalogosService);
+  private readonly router = inject(Router);
+
   busqueda = '';
   insumos: Insumo[] = [];
   cargandoInsumos = false;
@@ -52,11 +56,7 @@ export class GestionInsumosComponent {
   errorAccion = '';
   private tiposInsumoPorId = new Map<string, string>();
 
-  constructor(
-    private readonly insumosService: InsumosService,
-    private readonly catalogosService: CatalogosService,
-    private readonly router: Router,
-  ) {
+  constructor() {
     addIcons({ archiveOutline, addOutline, arrowBackOutline, createOutline, trashOutline });
   }
 

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
@@ -11,9 +11,9 @@ export type CatalogoTipo = 'categorias-cultivo' | 'tipos-insumo' | 'tipos-tarea'
   providedIn: 'root',
 })
 export class CatalogosService {
-  private readonly endpoint = `${environment.apiUrl}/catalogos`;
+  private readonly http = inject(HttpClient);
 
-  constructor(private readonly http: HttpClient) {}
+  private readonly endpoint = `${environment.apiUrl}/catalogos`;
 
   obtenerPorTipo(tipo: CatalogoTipo): Observable<CatalogoReferencia[]> {
     return this.http.get<CatalogoReferencia[]>(`${this.endpoint}/${tipo}`);

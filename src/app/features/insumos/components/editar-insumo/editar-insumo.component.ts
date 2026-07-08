@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -58,6 +58,11 @@ interface InsumoForm {
   ],
 })
 export class EditarInsumoComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly catalogosService = inject(CatalogosService);
+  private readonly insumosService = inject(InsumosService);
+
   insumo: InsumoForm = {
     idTipoInsumo: '',
     descripcion: '',
@@ -72,12 +77,7 @@ export class EditarInsumoComponent implements OnInit {
   errorMessage = '';
   private insumoId = '';
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly catalogosService: CatalogosService,
-    private readonly insumosService: InsumosService,
-  ) {
+  constructor() {
     addIcons({ albumsOutline, archiveOutline, arrowBackOutline, checkmarkOutline, cubeOutline, pricetagOutline });
   }
 

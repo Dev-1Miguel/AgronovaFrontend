@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonButton, IonContent, IonHeader, IonIcon, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
@@ -15,9 +15,11 @@ import { ADMINISTRATION_MODULES } from './administracion.modules';
   imports: [IonButton, IonContent, IonHeader, IonIcon, IonTitle, IonToolbar, ModuleCardComponent],
 })
 export class AdministracionComponent {
+  private readonly router = inject(Router);
+
   protected readonly modules = ADMINISTRATION_MODULES;
 
-  constructor(private readonly router: Router) {
+  constructor() {
     addIcons({ arrowBackOutline, people, settingsOutline, shieldCheckmarkOutline });
   }
 

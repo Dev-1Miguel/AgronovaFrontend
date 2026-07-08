@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -56,6 +56,11 @@ import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.u
   ],
 })
 export class EditarCultivoComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly catalogosService = inject(CatalogosService);
+  private readonly cultivosService = inject(CultivosService);
+
   cultivo: UpdateCultivoDto = {
     nombre: '',
     idCategoria: '',
@@ -69,12 +74,7 @@ export class EditarCultivoComponent implements OnInit {
   errorMessage = '';
   private cultivoId = '';
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly catalogosService: CatalogosService,
-    private readonly cultivosService: CultivosService,
-  ) {
+  constructor() {
     addIcons({
       arrowBackOutline,
       checkmarkOutline,

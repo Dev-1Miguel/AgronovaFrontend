@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -77,6 +77,13 @@ interface TareaForm {
   ],
 })
 export class EditarTareaComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly catalogosService = inject(CatalogosService);
+  private readonly cultivosService = inject(CultivosService);
+  private readonly agricultoresService = inject(AgricultoresService);
+  private readonly tareasService = inject(TareasService);
+
   tarea: TareaForm = {
     nombre: '',
     fechaInicio: '',
@@ -96,14 +103,7 @@ export class EditarTareaComponent implements OnInit {
   errorMessage = '';
   private tareaId = '';
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly catalogosService: CatalogosService,
-    private readonly cultivosService: CultivosService,
-    private readonly agricultoresService: AgricultoresService,
-    private readonly tareasService: TareasService,
-  ) {
+  constructor() {
     addIcons({
       arrowBackOutline,
       calendarOutline,

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
@@ -61,6 +61,9 @@ interface AgricultorForm {
   ],
 })
 export class CrearAgricultorComponent {
+  private readonly agricultoresService = inject(AgricultoresService);
+  private readonly router = inject(Router);
+
   agricultor: AgricultorForm = {
     nombre: '',
     edad: null,
@@ -72,10 +75,7 @@ export class CrearAgricultorComponent {
   guardando = false;
   errorMessage = '';
 
-  constructor(
-    private readonly agricultoresService: AgricultoresService,
-    private readonly router: Router,
-  ) {
+  constructor() {
     addIcons({
       arrowBackOutline,
       briefcaseOutline,

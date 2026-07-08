@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
@@ -56,6 +56,10 @@ import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.u
   ],
 })
 export class CrearCultivoComponent implements OnInit {
+  private readonly catalogosService = inject(CatalogosService);
+  private readonly cultivosService = inject(CultivosService);
+  private readonly router = inject(Router);
+
   cultivo: CreateCultivoDto = {
     nombre: '',
     idCategoria: '',
@@ -69,11 +73,7 @@ export class CrearCultivoComponent implements OnInit {
   guardando = false;
   errorMessage = '';
 
-  constructor(
-    private readonly catalogosService: CatalogosService,
-    private readonly cultivosService: CultivosService,
-    private readonly router: Router,
-  ) {
+  constructor() {
     addIcons({
       arrowBackOutline,
       checkmarkOutline,

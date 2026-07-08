@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
@@ -77,6 +77,12 @@ interface TareaForm {
   ],
 })
 export class CrearTareaComponent implements OnInit {
+  private readonly catalogosService = inject(CatalogosService);
+  private readonly cultivosService = inject(CultivosService);
+  private readonly agricultoresService = inject(AgricultoresService);
+  private readonly tareasService = inject(TareasService);
+  private readonly router = inject(Router);
+
   tarea: TareaForm = {
     nombre: '',
     fechaInicio: '',
@@ -95,13 +101,7 @@ export class CrearTareaComponent implements OnInit {
   guardando = false;
   errorMessage = '';
 
-  constructor(
-    private readonly catalogosService: CatalogosService,
-    private readonly cultivosService: CultivosService,
-    private readonly agricultoresService: AgricultoresService,
-    private readonly tareasService: TareasService,
-    private readonly router: Router,
-  ) {
+  constructor() {
     addIcons({
       arrowBackOutline,
       calendarOutline,
