@@ -1,5 +1,5 @@
-import { CommonModule, Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+﻿import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -19,12 +19,13 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { albumsOutline, archiveOutline, arrowBackOutline, checkmarkOutline, cubeOutline, pricetagOutline } from 'ionicons/icons';
-import { finalize, forkJoin } from 'rxjs';
+import { forkJoin } from 'rxjs';
 
 import { CatalogoReferencia } from '../../../../core/models/cultivo.model';
 import { Insumo, UpdateInsumoDto } from '../../../../core/models/insumo.model';
 import { CatalogosService } from '../../../../core/service/catalogos.service';
 import { InsumosService } from '../../../../core/service/insumos.service';
+import { runFormRequest } from '../../../../core/utils/run-form-request.util';
 
 interface InsumoForm {
   idTipoInsumo: string;
@@ -57,6 +58,11 @@ interface InsumoForm {
   ],
 })
 export class EditarInsumoComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly catalogosService = inject(CatalogosService);
+  private readonly insumosService = inject(InsumosService);
+
   insumo: InsumoForm = {
     idTipoInsumo: '',
     descripcion: '',
@@ -68,15 +74,10 @@ export class EditarInsumoComponent implements OnInit {
   unidadesMedida = ['Kg', 'Litros', 'Unidades', 'Bolsas', 'Galones'];
   cargando = false;
   guardando = false;
+  errorMessage = '';
   private insumoId = '';
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly location: Location,
-    private readonly catalogosService: CatalogosService,
-    private readonly insumosService: InsumosService,
-  ) {
+  constructor() {
     addIcons({ albumsOutline, archiveOutline, arrowBackOutline, checkmarkOutline, cubeOutline, pricetagOutline });
   }
 
@@ -84,7 +85,7 @@ export class EditarInsumoComponent implements OnInit {
     this.insumoId = this.route.snapshot.paramMap.get('id') ?? '';
 
     if (!this.insumoId) {
-      this.router.navigate(['/insumos']);
+      void this.router.navigate(['/insumos']);
       return;
     }
 
@@ -92,22 +93,24 @@ export class EditarInsumoComponent implements OnInit {
   }
 
   cargarDatos(): void {
-    this.cargando = true;
-
-    forkJoin({
-      insumo: this.insumosService.getInsumoById(this.insumoId),
-      tiposInsumo: this.catalogosService.obtenerPorTipo('tipos-insumo'),
-    })
-      .pipe(finalize(() => this.cargando = false))
-      .subscribe({
-        next: ({ insumo, tiposInsumo }) => {
-          this.tiposInsumo = tiposInsumo;
-          this.insumo = this.mapearFormulario(insumo);
-        },
-        error: (error) => {
-          console.error('Error al cargar insumo', error);
-        },
-      });
+    runFormRequest({
+      request$: forkJoin({
+        insumo: this.insumosService.getInsumoById(this.insumoId),
+        tiposInsumo: this.catalogosService.obtenerPorTipo('tipos-insumo'),
+      }),
+      setLoading: (loading) => {
+        this.cargando = loading;
+      },
+      setErrorMessage: (message) => {
+        this.errorMessage = message;
+      },
+      fallbackMessage: 'No se pudo cargar el insumo en este momento.',
+      logMessage: 'Error al cargar insumo',
+      onSuccess: ({ insumo, tiposInsumo }) => {
+        this.tiposInsumo = tiposInsumo;
+        this.insumo = this.mapearFormulario(insumo);
+      },
+    });
   }
 
   guardar(): void {
@@ -122,16 +125,18 @@ export class EditarInsumoComponent implements OnInit {
       unidadMedida: this.insumo.unidadMedida,
     };
 
-    this.guardando = true;
-
-    this.insumosService.updateInsumo(this.insumoId, payload)
-      .pipe(finalize(() => this.guardando = false))
-      .subscribe({
-        next: () => this.volverAGestion(),
-        error: (error) => {
-          console.error('Error al actualizar insumo', error);
-        },
-      });
+    runFormRequest({
+      request$: this.insumosService.updateInsumo(this.insumoId, payload),
+      setLoading: (loading) => {
+        this.guardando = loading;
+      },
+      setErrorMessage: (message) => {
+        this.errorMessage = message;
+      },
+      fallbackMessage: 'No se pudo actualizar el insumo en este momento.',
+      logMessage: 'Error al actualizar insumo',
+      onSuccess: () => this.volverAGestion(),
+    });
   }
 
   formularioValido(): boolean {
@@ -140,12 +145,12 @@ export class EditarInsumoComponent implements OnInit {
         && this.insumo.descripcion.trim()
         && this.insumo.cantidad !== null
         && Number(this.insumo.cantidad) >= 0
-        && this.insumo.unidadMedida
+        && this.insumo.unidadMedida,
     );
   }
 
   volverAGestion(): void {
-    this.location.back();
+    void this.router.navigate(['/insumos']);
   }
 
   private mapearFormulario(insumo: Insumo): InsumoForm {
@@ -157,4 +162,5 @@ export class EditarInsumoComponent implements OnInit {
     };
   }
 }
+
 

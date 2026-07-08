@@ -1,0 +1,159 @@
+<ion-header>
+  <ion-toolbar class="usuarios-toolbar">
+    <ion-title>
+      <span style="display:inline-flex;align-items:center;gap:8px;">
+        <ion-button fill="clear" (click)="volverAAdministracion()" aria-label="Volver a Administracion" style="--color:#fff;--padding-start:0;--padding-end:0;--background-hover:rgba(255,255,255,.12);min-width:40px;min-height:40px;width:40px;height:40px;margin:0;cursor:pointer;">
+          <ion-icon name="arrow-back-outline" style="font-size:16px;"></ion-icon>
+        </ion-button>
+        <span>Usuarios</span>
+      </span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="usuarios-content ion-padding">
+  <section class="usuarios-section">
+    <div class="section-heading">
+      <div class="section-icon"><ion-icon name="people-outline"></ion-icon></div>
+      <div class="section-copy">
+        <p class="section-label">ADMIN</p>
+        <h2>Gestion de usuarios</h2>
+        <p>Busca usuarios, revisa su detalle y actualiza rol o estado sin salir del flujo movil.</p>
+      </div>
+    </div>
+
+    <ion-searchbar
+      class="usuarios-searchbar"
+      placeholder="Buscar por nombre o correo"
+      [debounce]="300"
+      [(ngModel)]="busqueda"
+      (ionInput)="buscarUsuarios()">
+    </ion-searchbar>
+
+    <div class="feedback-message error" *ngIf="errorCarga">{{ errorCarga }}</div>
+    <div class="feedback-message error" *ngIf="errorAccion && !modalAbierto">{{ errorAccion }}</div>
+
+    <div class="loading-state" *ngIf="cargando">Cargando usuarios...</div>
+
+    <ng-container *ngIf="!cargando && usuarios.length > 0; else emptyStateBlock">
+      <ion-card class="usuario-card" *ngFor="let usuario of usuarios">
+        <ion-card-content>
+          <div class="card-icon" aria-hidden="true"><ion-icon name="person-outline"></ion-icon></div>
+          <div class="card-body">
+            <div class="card-main">
+              <div class="card-top-row">
+                <span class="rol-chip">{{ usuario.rol }}</span>
+                <span class="estado-chip" [class.inactivo]="usuario.estado === 'Inactivo'">{{ usuario.estado }}</span>
+              </div>
+              <h3>{{ usuario.nombre }}</h3>
+              <p class="card-copy">{{ usuario.correo }}</p>
+              <div class="card-bottom-row">
+                <ion-icon name="time-outline"></ion-icon>
+                <span>{{ formatearUltimoAcceso(usuario.ultimoAcceso) }}</span>
+              </div>
+            </div>
+            <ion-buttons class="acciones-grupo">
+              <ion-button class="accion-button ver-button" (click)="abrirDetalle(usuario)">
+                <ion-icon name="eye-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+
+    <ng-template #emptyStateBlock>
+      <div class="empty-state" *ngIf="!cargando">
+        <div class="empty-icon"><ion-icon name="people-outline"></ion-icon></div>
+        <h3>No hay usuarios para mostrar</h3>
+        <p>Prueba otro termino de busqueda o limpia el filtro para consultar todos los usuarios.</p>
+      </div>
+    </ng-template>
+  </section>
+
+  <ion-modal [isOpen]="modalAbierto" (didDismiss)="cerrarModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar class="modal-toolbar">
+          <ion-title>Detalle del usuario</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="cerrarModal()">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="modal-content ion-padding">
+        <div class="loading-state" *ngIf="cargandoDetalle">Cargando detalle...</div>
+
+        <ng-container *ngIf="usuarioDetalle as usuario">
+          <div class="detail-header">
+            <p class="section-label">USUARIO</p>
+            <h2>{{ usuario.nombre }}</h2>
+            <p>{{ usuario.correo }}</p>
+          </div>
+
+          <div class="detail-meta">
+            <div class="meta-chip">
+              <ion-icon name="shield-half-outline"></ion-icon>
+              <span>{{ usuario.rol }}</span>
+            </div>
+            <div class="meta-chip" [class.inactivo]="usuario.estado === 'Inactivo'">
+              <ion-icon name="person-outline"></ion-icon>
+              <span>{{ usuario.estado }}</span>
+            </div>
+          </div>
+
+          <p class="detail-access">Ultimo acceso: {{ formatearUltimoAcceso(usuario.ultimoAcceso) }}</p>
+
+          <div class="feedback-message error" *ngIf="errorAccion">{{ errorAccion }}</div>
+
+          <section class="control-panel">
+            <div class="panel-copy">
+              <p class="section-label">ROL</p>
+              <h3>Cambiar rol</h3>
+            </div>
+
+            <ion-segment [(ngModel)]="rolFormulario" [disabled]="bloquearCambioPropioRol || guardandoRol">
+              <ion-segment-button value="Administrador">Administrador</ion-segment-button>
+              <ion-segment-button value="Lider">Lider</ion-segment-button>
+            </ion-segment>
+
+            <p class="helper-copy" *ngIf="bloquearCambioPropioRol">Tu propio rol no se puede cambiar desde este modulo.</p>
+
+            <ion-button
+              class="guardar-button"
+              expand="block"
+              [disabled]="guardandoRol || bloquearCambioPropioRol || rolFormulario === usuario.rol"
+              (click)="guardarRol()">
+              <ion-icon name="save-outline" slot="start"></ion-icon>
+              Guardar rol
+            </ion-button>
+          </section>
+
+          <section class="control-panel">
+            <div class="panel-copy">
+              <p class="section-label">ESTADO</p>
+              <h3>Activar o desactivar</h3>
+            </div>
+
+            <ion-segment [(ngModel)]="estadoFormulario" [disabled]="bloquearCambioPropioEstado || guardandoEstado">
+              <ion-segment-button value="Activo">Activo</ion-segment-button>
+              <ion-segment-button value="Inactivo">Inactivo</ion-segment-button>
+            </ion-segment>
+
+            <p class="helper-copy" *ngIf="bloquearCambioPropioEstado">Tu propio usuario no se puede desactivar desde este modulo.</p>
+
+            <ion-button
+              class="guardar-button"
+              expand="block"
+              [disabled]="guardandoEstado || bloquearCambioPropioEstado || estadoFormulario === usuario.estado"
+              (click)="guardarEstado()">
+              <ion-icon name="save-outline" slot="start"></ion-icon>
+              Guardar estado
+            </ion-button>
+          </section>
+        </ng-container>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

@@ -17,6 +17,7 @@
         <div class="field-shell"><div class="field-icon" aria-hidden="true"><ion-icon name="briefcase-outline"></ion-icon></div><ion-item class="form-item" lines="none"><ion-input placeholder="Experiencia" [(ngModel)]="agricultor.experiencia"></ion-input></ion-item></div>
       </div>
     </ion-card-content></ion-card>
+    <div class="inline-state inline-state--error" *ngIf="errorMessage">{{ errorMessage }}</div>
     <ion-button expand="block" class="btn-guardar" [disabled]="guardando || !formularioValido()" (click)="guardar()"><ion-icon name="checkmark-outline" slot="start"></ion-icon>Registrar agricultor</ion-button>
   </div>
 </ion-content>

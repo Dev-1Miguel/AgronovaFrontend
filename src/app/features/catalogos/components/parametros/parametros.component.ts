@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
@@ -38,6 +38,7 @@ import { finalize, Observable } from 'rxjs';
 
 import { CatalogoReferencia } from '../../../../core/models/cultivo.model';
 import { CatalogosService } from '../../../../core/service/catalogos.service';
+import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.util';
 
 type CatalogoKey = 'categorias-cultivo' | 'tipos-insumo' | 'tipos-tarea' | 'ubicaciones';
 
@@ -85,6 +86,9 @@ interface CatalogoConfig {
   ],
 })
 export class ParametrosComponent {
+  private readonly catalogosService = inject(CatalogosService);
+  private readonly router = inject(Router);
+
   readonly catalogos: CatalogoConfig[];
   readonly alertaButtons = [
     {
@@ -109,16 +113,15 @@ export class ParametrosComponent {
   cargando = false;
   guardando = false;
   eliminandoId: string | null = null;
+  errorCarga = '';
+  errorAccion = '';
   modalAbierto = false;
   alertaAbierta = false;
   nombreFormulario = '';
   registroEnEdicion: CatalogoReferencia | null = null;
   registroPendienteDesactivar: CatalogoReferencia | null = null;
 
-  constructor(
-    private readonly catalogosService: CatalogosService,
-    private readonly router: Router,
-  ) {
+  constructor() {
     addIcons({
       addOutline,
       arrowBackOutline,
@@ -231,12 +234,14 @@ export class ParametrosComponent {
 
     this.catalogoActivo = siguienteCatalogo;
     this.busqueda = '';
+    this.errorAccion = '';
     this.cerrarModal();
     this.cargarCatalogoActivo();
   }
 
   cargarCatalogoActivo(): void {
     this.cargando = true;
+    this.errorCarga = '';
 
     this.configActiva.list()
       .pipe(finalize(() => this.cargando = false))
@@ -245,6 +250,10 @@ export class ParametrosComponent {
           this.registros = registros;
         },
         error: (error) => {
+          this.errorCarga = getHttpErrorMessage(
+            error,
+            `No se pudo cargar ${this.configActiva.title.toLowerCase()} en este momento.`,
+          );
           console.error(`Error al cargar ${this.configActiva.key}`, error);
         },
       });
@@ -269,12 +278,14 @@ export class ParametrosComponent {
   }
 
   abrirNuevo(): void {
+    this.errorAccion = '';
     this.registroEnEdicion = null;
     this.nombreFormulario = '';
     this.modalAbierto = true;
   }
 
   abrirEdicion(registro: CatalogoReferencia): void {
+    this.errorAccion = '';
     this.registroEnEdicion = registro;
     this.nombreFormulario = registro.nombre || '';
     this.modalAbierto = true;
@@ -284,6 +295,7 @@ export class ParametrosComponent {
     this.modalAbierto = false;
     this.registroEnEdicion = null;
     this.nombreFormulario = '';
+    this.errorAccion = '';
   }
 
   guardar(): void {
@@ -295,6 +307,7 @@ export class ParametrosComponent {
     }
 
     this.guardando = true;
+    this.errorAccion = '';
 
     const request$ = id
       ? this.configActiva.update(id, { nombre })
@@ -304,10 +317,15 @@ export class ParametrosComponent {
       .pipe(finalize(() => this.guardando = false))
       .subscribe({
         next: () => {
+          this.errorAccion = '';
           this.cerrarModal();
           this.cargarCatalogoActivo();
         },
         error: (error) => {
+          this.errorAccion = getHttpErrorMessage(
+            error,
+            `No se pudo guardar ${this.configActiva.title.toLowerCase()} en este momento.`,
+          );
           console.error(`Error al guardar ${this.configActiva.key}`, error);
         },
       });
@@ -318,6 +336,7 @@ export class ParametrosComponent {
       return;
     }
 
+    this.errorAccion = '';
     this.registroPendienteDesactivar = registro;
     this.alertaAbierta = true;
   }
@@ -339,6 +358,7 @@ export class ParametrosComponent {
     }
 
     this.eliminandoId = id;
+    this.errorAccion = '';
 
     this.configActiva.remove(id)
       .pipe(finalize(() => {
@@ -347,12 +367,17 @@ export class ParametrosComponent {
       }))
       .subscribe({
         next: () => {
+          this.errorAccion = '';
           if (this.registroEnEdicion?.id === id) {
             this.cerrarModal();
           }
           this.cargarCatalogoActivo();
         },
         error: (error) => {
+          this.errorAccion = getHttpErrorMessage(
+            error,
+            `No se pudo desactivar ${this.configActiva.title.toLowerCase()} en este momento.`,
+          );
           console.error(`Error al desactivar ${this.configActiva.key}`, error);
         },
       });

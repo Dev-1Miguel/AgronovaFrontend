@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { adminRoleGuard } from './core/guards/admin-role.guard';
 import { authGuard } from './core/guards/auth.guard';
 export const routes: Routes = [
   {
@@ -28,6 +29,18 @@ export const routes: Routes = [
       import('./layout/dashboard/dashboard.page').then((m) => m.DashboardPage),
   },
   {
+    path: 'administracion',
+    canActivate: [authGuard, adminRoleGuard],
+    loadComponent: () =>
+      import('./features/administracion/components/administracion/administracion.component').then((m) => m.AdministracionComponent),
+  },
+  {
+    path: 'usuarios',
+    canActivate: [authGuard, adminRoleGuard],
+    loadComponent: () =>
+      import('./features/usuarios/components/gestion-usuarios/gestion-usuarios.component').then((m) => m.GestionUsuariosComponent),
+  },
+  {
     path: 'cultivos',
     canActivate: [authGuard],
     loadComponent: () =>
@@ -47,13 +60,13 @@ export const routes: Routes = [
   },
   {
     path: 'parametros',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminRoleGuard],
     loadComponent: () =>
       import('./features/catalogos/components/parametros/parametros.component').then((m) => m.ParametrosComponent),
   },
   {
     path: 'categorias-cultivo',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminRoleGuard],
     loadComponent: () =>
       import('./features/catalogos/components/parametros/parametros.component').then((m) => m.ParametrosComponent),
   },
@@ -120,5 +133,9 @@ export const routes: Routes = [
     path: '',
     redirectTo: 'login',
     pathMatch: 'full',
+  },
+  {
+    path: '**',
+    redirectTo: 'login',
   },
 ];

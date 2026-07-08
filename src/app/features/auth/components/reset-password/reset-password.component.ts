@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
@@ -50,6 +50,10 @@ import { AuthService } from '../../../../core/service/auth.service';
   ],
 })
 export class ResetPasswordComponent implements OnInit {
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+
   token = '';
   contrasena = '';
   confirmarContrasena = '';
@@ -58,11 +62,7 @@ export class ResetPasswordComponent implements OnInit {
   mostrarContrasena = false;
   mostrarConfirmarContrasena = false;
 
-  constructor(
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly authService: AuthService,
-    private readonly router: Router,
-  ) {
+  constructor() {
     addIcons({
       leafOutline,
       lockClosedOutline,

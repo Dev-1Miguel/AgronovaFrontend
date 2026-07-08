@@ -23,6 +23,7 @@ import {
   personCircleOutline,
   personOutline,
   readerOutline,
+  settingsOutline,
 } from 'ionicons/icons';
 import { finalize, forkJoin } from 'rxjs';
 import { DASHBOARD_MODULES } from '../../core/models/dashboard-module.model';
@@ -31,6 +32,7 @@ import { AuthService } from '../../core/service/auth.service';
 import { CultivosService } from '../../core/service/cultivos.service';
 import { InsumosService } from '../../core/service/insumos.service';
 import { TareasService } from '../../core/service/tareas.service';
+import { getHttpErrorMessage } from '../../core/utils/http-error-message.util';
 import { ModuleCardComponent } from '../../shared/components/module-card/module-card.component';
 @Component({
   selector: 'app-dashboard',
@@ -53,7 +55,6 @@ import { ModuleCardComponent } from '../../shared/components/module-card/module-
   ],
 })
 export class DashboardPage {
-  protected readonly modules = DASHBOARD_MODULES;
   protected readonly kpis = [
     {
       value: 0,
@@ -75,7 +76,7 @@ export class DashboardPage {
     },
   ];
   protected cargandoResumen = false;
-  protected errorResumen = false;
+  protected errorResumen = '';
   protected menuUsuarioAbierto = false;
   protected currentUser: AuthenticatedUser | null = null;
   private readonly authService = inject(AuthService);
@@ -83,6 +84,7 @@ export class DashboardPage {
   private readonly tareasService = inject(TareasService);
   private readonly insumosService = inject(InsumosService);
   private readonly router = inject(Router);
+
   constructor() {
     addIcons({
       fileTrayFull,
@@ -92,29 +94,40 @@ export class DashboardPage {
       personCircleOutline,
       personOutline,
       readerOutline,
+      settingsOutline,
     });
   }
+
   get nombreUsuario(): string {
     return this.currentUser?.nombre?.trim() || 'Usuario';
   }
+
+  get modules() {
+    return DASHBOARD_MODULES.filter((module) => !module.adminOnly || this.currentUser?.rol === 'Administrador');
+  }
+
   ionViewWillEnter(): void {
     this.currentUser = this.authService.getCurrentUser();
     this.cargarResumen();
   }
+
   abrirMenuUsuario(): void {
     this.menuUsuarioAbierto = true;
   }
+
   cerrarMenuUsuario(): void {
     this.menuUsuarioAbierto = false;
   }
+
   cerrarSesion(): void {
     this.cerrarMenuUsuario();
     this.authService.logout();
     void this.router.navigate(['/login']);
   }
+
   private cargarResumen(): void {
     this.cargandoResumen = true;
-    this.errorResumen = false;
+    this.errorResumen = '';
     forkJoin({
       cultivos: this.cultivosService.getCultivos(),
       tareas: this.tareasService.getTareas(),
@@ -128,7 +141,10 @@ export class DashboardPage {
           this.kpis[2].value = insumos.length;
         },
         error: (error) => {
-          this.errorResumen = true;
+          this.errorResumen = getHttpErrorMessage(
+            error,
+            'No se pudo cargar el resumen operativo. La navegacion del Dashboard sigue disponible.',
+          );
           console.error('Error al cargar resumen del dashboard', error);
         },
       });

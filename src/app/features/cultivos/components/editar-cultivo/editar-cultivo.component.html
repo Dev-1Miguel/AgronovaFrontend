@@ -87,6 +87,8 @@
       </ion-card-content>
     </ion-card>
 
+    <div class="inline-state inline-state--error" *ngIf="errorMessage">{{ errorMessage }}</div>
+
     <ion-button
       expand="block"
       class="btn-guardar"

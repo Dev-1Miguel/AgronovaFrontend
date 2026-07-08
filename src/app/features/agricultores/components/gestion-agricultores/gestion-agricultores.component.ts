@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
@@ -20,6 +20,7 @@ import { finalize } from 'rxjs';
 
 import { Agricultor } from '../../../../core/models/agricultor.model';
 import { AgricultoresService } from '../../../../core/service/agricultores.service';
+import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.util';
 
 @Component({
   selector: 'app-gestion-agricultores',
@@ -42,14 +43,16 @@ import { AgricultoresService } from '../../../../core/service/agricultores.servi
   ],
 })
 export class GestionAgricultoresComponent {
+  private readonly agricultoresService = inject(AgricultoresService);
+  private readonly router = inject(Router);
+
   busqueda = '';
   agricultores: Agricultor[] = [];
   cargandoAgricultores = false;
+  errorCarga = '';
+  errorAccion = '';
 
-  constructor(
-    private readonly agricultoresService: AgricultoresService,
-    private readonly router: Router,
-  ) {
+  constructor() {
     addIcons({ addOutline, arrowBackOutline, createOutline, peopleOutline, trashOutline });
   }
 
@@ -59,6 +62,7 @@ export class GestionAgricultoresComponent {
 
   cargarAgricultores(): void {
     this.cargandoAgricultores = true;
+    this.errorCarga = '';
 
     this.agricultoresService.getAgricultores()
       .pipe(finalize(() => this.cargandoAgricultores = false))
@@ -67,6 +71,7 @@ export class GestionAgricultoresComponent {
           this.agricultores = agricultores;
         },
         error: (error) => {
+          this.errorCarga = getHttpErrorMessage(error, 'No se pudieron cargar los agricultores en este momento.');
           console.error('Error al cargar agricultores', error);
         },
       });
@@ -85,11 +90,15 @@ export class GestionAgricultoresComponent {
   }
 
   eliminarAgricultor(agricultor: Agricultor): void {
+    this.errorAccion = '';
+
     this.agricultoresService.deleteAgricultor(agricultor.id).subscribe({
       next: () => {
+        this.errorAccion = '';
         this.agricultores = this.agricultores.filter((item) => item.id !== agricultor.id);
       },
       error: (error) => {
+        this.errorAccion = getHttpErrorMessage(error, 'No se pudo eliminar el agricultor en este momento.');
         console.error('Error al eliminar agricultor', error);
       },
     });
@@ -109,4 +118,3 @@ export class GestionAgricultoresComponent {
     );
   }
 }
-

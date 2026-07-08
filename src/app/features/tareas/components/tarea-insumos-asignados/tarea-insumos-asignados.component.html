@@ -10,6 +10,10 @@
       Cargando insumos...
     </div>
 
+    <div *ngIf="errorMessage" class="inline-state inline-state--error">
+      {{ errorMessage }}
+    </div>
+
     <ng-container *ngIf="!cargando">
       <div class="insumos-form">
         <div class="field-shell">

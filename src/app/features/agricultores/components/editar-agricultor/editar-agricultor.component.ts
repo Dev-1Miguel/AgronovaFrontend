@@ -1,5 +1,5 @@
-import { CommonModule, Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+﻿import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -22,12 +22,12 @@ import {
   calendarOutline,
   checkmarkOutline,
   locationOutline,
+  peopleOutline,
   personOutline,
 } from 'ionicons/icons';
-import { finalize } from 'rxjs';
-
 import { UpdateAgricultorDto } from '../../../../core/models/agricultor.model';
 import { AgricultoresService } from '../../../../core/service/agricultores.service';
+import { runFormRequest } from '../../../../core/utils/run-form-request.util';
 
 interface AgricultorForm {
   nombre: string;
@@ -58,6 +58,10 @@ interface AgricultorForm {
   ],
 })
 export class EditarAgricultorComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly agricultoresService = inject(AgricultoresService);
+
   agricultor: AgricultorForm = {
     nombre: '',
     edad: null,
@@ -67,20 +71,17 @@ export class EditarAgricultorComponent implements OnInit {
 
   cargando = false;
   guardando = false;
+  errorMessage = '';
   private agricultorId = '';
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly location: Location,
-    private readonly agricultoresService: AgricultoresService,
-  ) {
+  constructor() {
     addIcons({
       arrowBackOutline,
       briefcaseOutline,
       calendarOutline,
       checkmarkOutline,
       locationOutline,
+      peopleOutline,
       personOutline,
     });
   }
@@ -89,7 +90,7 @@ export class EditarAgricultorComponent implements OnInit {
     this.agricultorId = this.route.snapshot.paramMap.get('id') ?? '';
 
     if (!this.agricultorId) {
-      this.router.navigate(['/agricultores']);
+      void this.router.navigate(['/agricultores']);
       return;
     }
 
@@ -97,23 +98,25 @@ export class EditarAgricultorComponent implements OnInit {
   }
 
   cargarAgricultor(): void {
-    this.cargando = true;
-
-    this.agricultoresService.getAgricultorById(this.agricultorId)
-      .pipe(finalize(() => this.cargando = false))
-      .subscribe({
-        next: (agricultor) => {
-          this.agricultor = {
-            nombre: agricultor.nombre,
-            edad: agricultor.edad,
-            zona: agricultor.zona,
-            experiencia: agricultor.experiencia,
-          };
-        },
-        error: (error) => {
-          console.error('Error al cargar agricultor', error);
-        },
-      });
+    runFormRequest({
+      request$: this.agricultoresService.getAgricultorById(this.agricultorId),
+      setLoading: (loading) => {
+        this.cargando = loading;
+      },
+      setErrorMessage: (message) => {
+        this.errorMessage = message;
+      },
+      fallbackMessage: 'No se pudo cargar el agricultor en este momento.',
+      logMessage: 'Error al cargar agricultor',
+      onSuccess: (agricultor) => {
+        this.agricultor = {
+          nombre: agricultor.nombre,
+          edad: agricultor.edad,
+          zona: agricultor.zona,
+          experiencia: agricultor.experiencia,
+        };
+      },
+    });
   }
 
   guardar(): void {
@@ -128,18 +131,20 @@ export class EditarAgricultorComponent implements OnInit {
       experiencia: this.agricultor.experiencia.trim(),
     };
 
-    this.guardando = true;
-
-    this.agricultoresService.updateAgricultor(this.agricultorId, payload)
-      .pipe(finalize(() => this.guardando = false))
-      .subscribe({
-        next: () => {
-          this.volverAGestion();
-        },
-        error: (error) => {
-          console.error('Error al actualizar agricultor', error);
-        },
-      });
+    runFormRequest({
+      request$: this.agricultoresService.updateAgricultor(this.agricultorId, payload),
+      setLoading: (loading) => {
+        this.guardando = loading;
+      },
+      setErrorMessage: (message) => {
+        this.errorMessage = message;
+      },
+      fallbackMessage: 'No se pudo actualizar el agricultor en este momento.',
+      logMessage: 'Error al actualizar agricultor',
+      onSuccess: () => {
+        this.volverAGestion();
+      },
+    });
   }
 
   formularioValido(): boolean {
@@ -148,11 +153,13 @@ export class EditarAgricultorComponent implements OnInit {
         && this.agricultor.edad !== null
         && Number(this.agricultor.edad) > 0
         && this.agricultor.zona.trim()
-        && this.agricultor.experiencia.trim()
+        && this.agricultor.experiencia.trim(),
     );
   }
 
   volverAGestion(): void {
-    this.location.back();
+    void this.router.navigate(['/agricultores']);
   }
 }
+
+

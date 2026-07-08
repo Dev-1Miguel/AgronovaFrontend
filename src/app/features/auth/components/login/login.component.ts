@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
@@ -44,6 +44,10 @@ import { AuthService } from '../../../../core/service/auth.service';
   ],
 })
 export class LoginComponent implements OnInit {
+  private readonly authService = inject(AuthService);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+
   correo = '';
   contrasena = '';
   loading = false;
@@ -51,19 +55,14 @@ export class LoginComponent implements OnInit {
   successMessage = '';
   mostrarContrasena = false;
 
-  constructor(
-    private readonly authService: AuthService,
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly router: Router,
-  ) {}
-
   ngOnInit(): void {
     addIcons({ leafOutline, mailOutline, lockClosedOutline, eyeOutline, eyeOffOutline });
 
-    if (this.authService.isAuthenticated()) {
-      void this.router.navigate(['/dashboard']);
-      return;
-    }
+    this.authService.isAuthenticated().subscribe((isAuthenticated) => {
+      if (isAuthenticated) {
+        void this.router.navigate(['/dashboard']);
+      }
+    });
 
     const message = this.activatedRoute.snapshot.queryParamMap.get('message');
     this.successMessage = this.getSuccessMessage(message);
@@ -114,3 +113,4 @@ export class LoginComponent implements OnInit {
     }
   }
 }
+

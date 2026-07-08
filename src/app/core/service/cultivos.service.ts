@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
@@ -14,9 +14,9 @@ import {
   providedIn: 'root',
 })
 export class CultivosService {
-  private readonly endpoint = `${environment.apiUrl}/cultivos`;
+  private readonly http = inject(HttpClient);
 
-  constructor(private readonly http: HttpClient) {}
+  private readonly endpoint = `${environment.apiUrl}/cultivos`;
 
   getCultivos(): Observable<Cultivo[]> {
     return this.http.get<Cultivo[]>(this.endpoint);
