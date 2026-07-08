@@ -1,6 +1,7 @@
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   IonButton,
   IonButtons,
@@ -99,7 +100,7 @@ export class CrearTareaComponent implements OnInit {
     private readonly cultivosService: CultivosService,
     private readonly agricultoresService: AgricultoresService,
     private readonly tareasService: TareasService,
-    private readonly location: Location,
+    private readonly router: Router,
   ) {
     addIcons({
       arrowBackOutline,
@@ -192,6 +193,6 @@ export class CrearTareaComponent implements OnInit {
   }
 
   volverAGestion(): void {
-    this.location.back();
+    void this.router.navigate(['/tareas']);
   }
 }

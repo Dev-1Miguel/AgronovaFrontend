@@ -1,4 +1,4 @@
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -99,7 +99,6 @@ export class EditarTareaComponent implements OnInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly location: Location,
     private readonly catalogosService: CatalogosService,
     private readonly cultivosService: CultivosService,
     private readonly agricultoresService: AgricultoresService,
@@ -205,7 +204,7 @@ export class EditarTareaComponent implements OnInit {
   }
 
   volverAGestion(): void {
-    this.location.back();
+    void this.router.navigate(['/tareas']);
   }
 
   private mapearFormulario(tarea: Tarea): TareaForm {

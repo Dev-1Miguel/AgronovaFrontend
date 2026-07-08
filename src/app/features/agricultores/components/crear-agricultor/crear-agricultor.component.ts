@@ -1,6 +1,7 @@
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   IonButton,
   IonButtons,
@@ -73,7 +74,7 @@ export class CrearAgricultorComponent {
 
   constructor(
     private readonly agricultoresService: AgricultoresService,
-    private readonly location: Location,
+    private readonly router: Router,
   ) {
     addIcons({
       arrowBackOutline,
@@ -126,6 +127,6 @@ export class CrearAgricultorComponent {
   }
 
   volverAGestion(): void {
-    this.location.back();
+    void this.router.navigate(['/agricultores']);
   }
 }

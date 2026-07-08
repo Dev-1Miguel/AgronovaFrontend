@@ -1,6 +1,7 @@
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   IonButton,
   IonButtons,
@@ -71,7 +72,7 @@ export class CrearCultivoComponent implements OnInit {
   constructor(
     private readonly catalogosService: CatalogosService,
     private readonly cultivosService: CultivosService,
-    private readonly location: Location,
+    private readonly router: Router,
   ) {
     addIcons({
       arrowBackOutline,
@@ -140,6 +141,6 @@ export class CrearCultivoComponent implements OnInit {
   }
 
   volverAGestion(): void {
-    this.location.back();
+    void this.router.navigate(['/cultivos']);
   }
 }

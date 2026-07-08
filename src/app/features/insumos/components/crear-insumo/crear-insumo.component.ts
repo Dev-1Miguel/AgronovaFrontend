@@ -1,6 +1,7 @@
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   IonButton,
   IonButtons,
@@ -73,7 +74,7 @@ export class CrearInsumoComponent implements OnInit {
   constructor(
     private readonly catalogosService: CatalogosService,
     private readonly insumosService: InsumosService,
-    private readonly location: Location,
+    private readonly router: Router,
   ) {
     addIcons({ albumsOutline, archiveOutline, arrowBackOutline, checkmarkOutline, cubeOutline, pricetagOutline });
   }
@@ -138,6 +139,6 @@ export class CrearInsumoComponent implements OnInit {
   }
 
   volverAGestion(): void {
-    this.location.back();
+    void this.router.navigate(['/insumos']);
   }
 }

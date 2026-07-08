@@ -75,7 +75,7 @@ export class AuthService {
     const accessToken = this.getAccessToken();
     const user = this.getCurrentUser();
 
-    if (!accessToken || !user) {
+    if (!accessToken || !user || this.isTokenExpired(accessToken)) {
       if (accessToken || localStorage.getItem(this.userKey)) {
         this.clearSession();
       }
@@ -92,5 +92,26 @@ export class AuthService {
   private clearSession(): void {
     localStorage.removeItem(this.accessTokenKey);
     localStorage.removeItem(this.userKey);
+  }
+
+  private isTokenExpired(token: string): boolean {
+    const [, payload] = token.split('.');
+
+    if (!payload) {
+      return true;
+    }
+
+    try {
+      const decoded = JSON.parse(atob(this.normalizeBase64Url(payload))) as { exp?: number };
+
+      return typeof decoded.exp !== 'number' || decoded.exp * 1000 <= Date.now();
+    } catch {
+      return true;
+    }
+  }
+
+  private normalizeBase64Url(value: string): string {
+    const base64 = value.replace(/-/g, '+').replace(/_/g, '/');
+    return base64.padEnd(base64.length + ((4 - base64.length % 4) % 4), '=');
   }
 }
