@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+﻿import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -25,12 +25,12 @@ import {
   leafOutline,
   locationOutline,
 } from 'ionicons/icons';
-import { finalize, forkJoin } from 'rxjs';
+import { forkJoin } from 'rxjs';
 
 import { CatalogoReferencia, UpdateCultivoDto } from '../../../../core/models/cultivo.model';
 import { CatalogosService } from '../../../../core/service/catalogos.service';
 import { CultivosService } from '../../../../core/service/cultivos.service';
-import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.util';
+import { runFormRequest } from '../../../../core/utils/run-form-request.util';
 
 @Component({
   selector: 'app-editar-cultivo',
@@ -96,30 +96,30 @@ export class EditarCultivoComponent implements OnInit {
   }
 
   cargarDatos(): void {
-    this.cargando = true;
-    this.errorMessage = '';
-
-    forkJoin({
-      cultivo: this.cultivosService.getCultivoById(this.cultivoId),
-      categorias: this.catalogosService.obtenerPorTipo('categorias-cultivo'),
-      ubicaciones: this.catalogosService.obtenerPorTipo('ubicaciones'),
-    })
-      .pipe(finalize(() => this.cargando = false))
-      .subscribe({
-        next: ({ cultivo, categorias, ubicaciones }) => {
-          this.categorias = categorias;
-          this.ubicaciones = ubicaciones;
-          this.cultivo = {
-            nombre: cultivo.nombre,
-            idCategoria: cultivo.idCategoria ?? '',
-            idUbicacion: cultivo.idUbicacion ?? '',
-          };
-        },
-        error: (error) => {
-          this.errorMessage = getHttpErrorMessage(error, 'No se pudo cargar el cultivo en este momento.');
-          console.error('Error al cargar cultivo', error);
-        },
-      });
+    runFormRequest({
+      request$: forkJoin({
+        cultivo: this.cultivosService.getCultivoById(this.cultivoId),
+        categorias: this.catalogosService.obtenerPorTipo('categorias-cultivo'),
+        ubicaciones: this.catalogosService.obtenerPorTipo('ubicaciones'),
+      }),
+      setLoading: (loading) => {
+        this.cargando = loading;
+      },
+      setErrorMessage: (message) => {
+        this.errorMessage = message;
+      },
+      fallbackMessage: 'No se pudo cargar el cultivo en este momento.',
+      logMessage: 'Error al cargar cultivo',
+      onSuccess: ({ cultivo, categorias, ubicaciones }) => {
+        this.categorias = categorias;
+        this.ubicaciones = ubicaciones;
+        this.cultivo = {
+          nombre: cultivo.nombre,
+          idCategoria: cultivo.idCategoria ?? '',
+          idUbicacion: cultivo.idUbicacion ?? '',
+        };
+      },
+    });
   }
 
   guardar(): void {
@@ -127,24 +127,24 @@ export class EditarCultivoComponent implements OnInit {
       return;
     }
 
-    this.guardando = true;
-    this.errorMessage = '';
-
-    this.cultivosService.updateCultivo(this.cultivoId, {
-      nombre: this.cultivo.nombre?.trim(),
-      idCategoria: this.cultivo.idCategoria,
-      idUbicacion: this.cultivo.idUbicacion,
-    })
-      .pipe(finalize(() => this.guardando = false))
-      .subscribe({
-        next: () => {
-          this.volverAGestion();
-        },
-        error: (error) => {
-          this.errorMessage = getHttpErrorMessage(error, 'No se pudo actualizar el cultivo en este momento.');
-          console.error('Error al actualizar cultivo', error);
-        },
-      });
+    runFormRequest({
+      request$: this.cultivosService.updateCultivo(this.cultivoId, {
+        nombre: this.cultivo.nombre?.trim(),
+        idCategoria: this.cultivo.idCategoria,
+        idUbicacion: this.cultivo.idUbicacion,
+      }),
+      setLoading: (loading) => {
+        this.guardando = loading;
+      },
+      setErrorMessage: (message) => {
+        this.errorMessage = message;
+      },
+      fallbackMessage: 'No se pudo actualizar el cultivo en este momento.',
+      logMessage: 'Error al actualizar cultivo',
+      onSuccess: () => {
+        this.volverAGestion();
+      },
+    });
   }
 
   formularioValido(): boolean {
@@ -159,3 +159,5 @@ export class EditarCultivoComponent implements OnInit {
     void this.router.navigate(['/cultivos']);
   }
 }
+
+

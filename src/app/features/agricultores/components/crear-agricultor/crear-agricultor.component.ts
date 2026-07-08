@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+﻿import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -25,11 +25,9 @@ import {
   peopleOutline,
   personOutline,
 } from 'ionicons/icons';
-import { finalize } from 'rxjs';
-
 import { CreateAgricultorDto } from '../../../../core/models/agricultor.model';
 import { AgricultoresService } from '../../../../core/service/agricultores.service';
-import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.util';
+import { runFormRequest } from '../../../../core/utils/run-form-request.util';
 
 interface AgricultorForm {
   nombre: string;
@@ -100,20 +98,20 @@ export class CrearAgricultorComponent {
       estado: this.agricultor.estado,
     };
 
-    this.guardando = true;
-    this.errorMessage = '';
-
-    this.agricultoresService.createAgricultor(payload)
-      .pipe(finalize(() => this.guardando = false))
-      .subscribe({
-        next: () => {
-          this.volverAGestion();
-        },
-        error: (error) => {
-          this.errorMessage = getHttpErrorMessage(error, 'No se pudo registrar el agricultor en este momento.');
-          console.error('Error al crear agricultor', error);
-        },
-      });
+    runFormRequest({
+      request$: this.agricultoresService.createAgricultor(payload),
+      setLoading: (loading) => {
+        this.guardando = loading;
+      },
+      setErrorMessage: (message) => {
+        this.errorMessage = message;
+      },
+      fallbackMessage: 'No se pudo registrar el agricultor en este momento.',
+      logMessage: 'Error al crear agricultor',
+      onSuccess: () => {
+        this.volverAGestion();
+      },
+    });
   }
 
   formularioValido(): boolean {
@@ -130,3 +128,5 @@ export class CrearAgricultorComponent {
     void this.router.navigate(['/agricultores']);
   }
 }
+
+

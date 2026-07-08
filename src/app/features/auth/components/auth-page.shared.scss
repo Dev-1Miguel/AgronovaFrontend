@@ -1,4 +1,4 @@
-:host {
+﻿:host {
   --auth-green-dark: #234f31;
   --auth-surface: #ffffff;
   --auth-text: #1f2d1f;
@@ -213,6 +213,7 @@
   -webkit-text-fill-color: var(--auth-text);
 }
 
+
 .password-toggle {
   --padding-start: 10px;
   --padding-end: 10px;
@@ -300,3 +301,4 @@
     padding: 26px 24px;
   }
 }
+

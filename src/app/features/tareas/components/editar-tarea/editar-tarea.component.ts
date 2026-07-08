@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+﻿import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,7 +28,7 @@ import {
   readerOutline,
   reorderThreeOutline,
 } from 'ionicons/icons';
-import { finalize, forkJoin } from 'rxjs';
+import { forkJoin } from 'rxjs';
 
 import { Agricultor } from '../../../../core/models/agricultor.model';
 import { CatalogoReferencia, Cultivo } from '../../../../core/models/cultivo.model';
@@ -37,7 +37,7 @@ import { AgricultoresService } from '../../../../core/service/agricultores.servi
 import { CatalogosService } from '../../../../core/service/catalogos.service';
 import { CultivosService } from '../../../../core/service/cultivos.service';
 import { TareasService } from '../../../../core/service/tareas.service';
-import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.util';
+import { runFormRequest } from '../../../../core/utils/run-form-request.util';
 import { TareaInsumosAsignadosComponent } from '../tarea-insumos-asignados/tarea-insumos-asignados.component';
 
 interface TareaForm {
@@ -127,28 +127,28 @@ export class EditarTareaComponent implements OnInit {
   }
 
   cargarDatos(): void {
-    this.cargando = true;
-    this.errorMessage = '';
-
-    forkJoin({
-      tarea: this.tareasService.getTareaById(this.tareaId),
-      tiposTarea: this.catalogosService.obtenerPorTipo('tipos-tarea'),
-      cultivos: this.cultivosService.getCultivos(),
-      agricultores: this.agricultoresService.getAgricultores(),
-    })
-      .pipe(finalize(() => this.cargando = false))
-      .subscribe({
-        next: ({ tarea, tiposTarea, cultivos, agricultores }) => {
-          this.tiposTarea = tiposTarea;
-          this.cultivos = cultivos;
-          this.agricultores = agricultores;
-          this.tarea = this.mapearFormulario(tarea);
-        },
-        error: (error) => {
-          this.errorMessage = getHttpErrorMessage(error, 'No se pudo cargar la tarea en este momento.');
-          console.error('Error al cargar tarea', error);
-        },
-      });
+    runFormRequest({
+      request$: forkJoin({
+        tarea: this.tareasService.getTareaById(this.tareaId),
+        tiposTarea: this.catalogosService.obtenerPorTipo('tipos-tarea'),
+        cultivos: this.cultivosService.getCultivos(),
+        agricultores: this.agricultoresService.getAgricultores(),
+      }),
+      setLoading: (loading) => {
+        this.cargando = loading;
+      },
+      setErrorMessage: (message) => {
+        this.errorMessage = message;
+      },
+      fallbackMessage: 'No se pudo cargar la tarea en este momento.',
+      logMessage: 'Error al cargar tarea',
+      onSuccess: ({ tarea, tiposTarea, cultivos, agricultores }) => {
+        this.tiposTarea = tiposTarea;
+        this.cultivos = cultivos;
+        this.agricultores = agricultores;
+        this.tarea = this.mapearFormulario(tarea);
+      },
+    });
   }
 
   guardar(): void {
@@ -167,20 +167,20 @@ export class EditarTareaComponent implements OnInit {
       insumosAsignados: this.tarea.insumosAsignados.map((item) => ({ ...item })),
     };
 
-    this.guardando = true;
-    this.errorMessage = '';
-
-    this.tareasService.updateTarea(this.tareaId, payload)
-      .pipe(finalize(() => this.guardando = false))
-      .subscribe({
-        next: () => {
-          this.volverAGestion();
-        },
-        error: (error) => {
-          this.errorMessage = getHttpErrorMessage(error, 'No se pudo actualizar la tarea en este momento.');
-          console.error('Error al actualizar tarea', error);
-        },
-      });
+    runFormRequest({
+      request$: this.tareasService.updateTarea(this.tareaId, payload),
+      setLoading: (loading) => {
+        this.guardando = loading;
+      },
+      setErrorMessage: (message) => {
+        this.errorMessage = message;
+      },
+      fallbackMessage: 'No se pudo actualizar la tarea en este momento.',
+      logMessage: 'Error al actualizar tarea',
+      onSuccess: () => {
+        this.volverAGestion();
+      },
+    });
   }
 
   formularioValido(): boolean {
@@ -222,3 +222,5 @@ export class EditarTareaComponent implements OnInit {
     };
   }
 }
+
+

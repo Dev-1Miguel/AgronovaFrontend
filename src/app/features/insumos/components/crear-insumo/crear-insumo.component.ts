@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+﻿import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,13 +19,13 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { albumsOutline, archiveOutline, arrowBackOutline, checkmarkOutline, cubeOutline, pricetagOutline } from 'ionicons/icons';
-import { finalize, forkJoin } from 'rxjs';
+import { forkJoin } from 'rxjs';
 
 import { CatalogoReferencia } from '../../../../core/models/cultivo.model';
 import { CreateInsumoDto } from '../../../../core/models/insumo.model';
 import { CatalogosService } from '../../../../core/service/catalogos.service';
 import { InsumosService } from '../../../../core/service/insumos.service';
-import { getHttpErrorMessage } from '../../../../core/utils/http-error-message.util';
+import { runFormRequest } from '../../../../core/utils/run-form-request.util';
 
 interface InsumoForm {
   idTipoInsumo: string;
@@ -84,22 +84,22 @@ export class CrearInsumoComponent implements OnInit {
   }
 
   cargarDatos(): void {
-    this.cargandoDatos = true;
-    this.errorMessage = '';
-
-    forkJoin({
-      tiposInsumo: this.catalogosService.obtenerPorTipo('tipos-insumo'),
-    })
-      .pipe(finalize(() => this.cargandoDatos = false))
-      .subscribe({
-        next: ({ tiposInsumo }) => {
-          this.tiposInsumo = tiposInsumo;
-        },
-        error: (error) => {
-          this.errorMessage = getHttpErrorMessage(error, 'No se pudieron cargar los datos del insumo en este momento.');
-          console.error('Error al cargar datos de insumos', error);
-        },
-      });
+    runFormRequest({
+      request$: forkJoin({
+        tiposInsumo: this.catalogosService.obtenerPorTipo('tipos-insumo'),
+      }),
+      setLoading: (loading) => {
+        this.cargandoDatos = loading;
+      },
+      setErrorMessage: (message) => {
+        this.errorMessage = message;
+      },
+      fallbackMessage: 'No se pudieron cargar los datos del insumo en este momento.',
+      logMessage: 'Error al cargar datos de insumos',
+      onSuccess: ({ tiposInsumo }) => {
+        this.tiposInsumo = tiposInsumo;
+      },
+    });
   }
 
   guardar(): void {
@@ -114,18 +114,18 @@ export class CrearInsumoComponent implements OnInit {
       unidadMedida: this.insumo.unidadMedida,
     };
 
-    this.guardando = true;
-    this.errorMessage = '';
-
-    this.insumosService.createInsumo(payload)
-      .pipe(finalize(() => this.guardando = false))
-      .subscribe({
-        next: () => this.volverAGestion(),
-        error: (error) => {
-          this.errorMessage = getHttpErrorMessage(error, 'No se pudo registrar el insumo en este momento.');
-          console.error('Error al crear insumo', error);
-        },
-      });
+    runFormRequest({
+      request$: this.insumosService.createInsumo(payload),
+      setLoading: (loading) => {
+        this.guardando = loading;
+      },
+      setErrorMessage: (message) => {
+        this.errorMessage = message;
+      },
+      fallbackMessage: 'No se pudo registrar el insumo en este momento.',
+      logMessage: 'Error al crear insumo',
+      onSuccess: () => this.volverAGestion(),
+    });
   }
 
   formularioValido(): boolean {
@@ -142,3 +142,5 @@ export class CrearInsumoComponent implements OnInit {
     void this.router.navigate(['/insumos']);
   }
 }
+
+
